@@ -1,0 +1,91 @@
+.parallax-system--hero.isHidden {
+  opacity: 0;
+}
+
+.parallax-system--display--card {
+  --card-top: 87vh;
+  --card-translate-y: 0px;
+  top: var(--card-top);
+  transform: translateX(-50%) translateY(var(--card-translate-y));
+}
+.parallax-system--display--card.isCentered {
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.parallax-system--display--card.isScrollingIn {
+  --card-top: 87vh;
+}
+.parallax-system--display--card.isScrollingOut {
+  transform: translateX(-50%);
+}
+
+[data-parallax-system--display--notification="1"] {
+  top: 32px;
+  left: -64px;
+}
+
+[data-parallax-system--display--notification="2"] {
+  top: 260px;
+  right: -32px;
+}
+
+[data-parallax-system--display--notification="3"] {
+  top: 530px;
+  right: 112px;
+}
+
+[data-parallax-system--display--notification="4"] {
+  top: 360px;
+  left: -32px;
+}
+
+.parallax-system--display--phase1 [data-parallax-system--display--notification="1"], .parallax-system--display--phase2 [data-parallax-system--display--notification="1"], .parallax-system--display--phase3 [data-parallax-system--display--notification="1"], .parallax-system--display--phase4 [data-parallax-system--display--notification="1"] {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.parallax-system--display--phase2 [data-parallax-system--display--notification="2"], .parallax-system--display--phase3 [data-parallax-system--display--notification="2"], .parallax-system--display--phase4 [data-parallax-system--display--notification="2"] {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.parallax-system--display--phase3 [data-parallax-system--display--notification="3"], .parallax-system--display--phase4 [data-parallax-system--display--notification="3"] {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.parallax-system--display--phase4 [data-parallax-system--display--notification="4"] {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.parallax-system--journey--0.isLoaded {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: none !important;
+}
+.parallax-system--journey--0.isVisible {
+  display: flex !important;
+}
+.parallax-system--journey--0.isRelative {
+  position: relative;
+}
+
+.parallax-system--journey--spacer.isHidden {
+  display: none;
+}
+
+.parallax-system--qualities.isFixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.parallax-system--qualities--spacer.isVisible {
+  display: block;
+}
+
+/*# sourceMappingURL=main.css.map */

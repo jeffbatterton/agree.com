@@ -1,0 +1,17 @@
+{
+  "name": "agree.com-marketing-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass:watch": "sass --watch src/scss:public/css",
+    "sass:build": "sass src/scss:public/css --style=compressed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "sass": "^1.97.1"
+  }
+}

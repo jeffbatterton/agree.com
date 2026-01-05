@@ -5,6 +5,12 @@ html {
   font-style: normal;
 }
 
+.big-numbers {
+  font-family: "Letterboard Lite";
+  font-weight: 600;
+  font-style: normal;
+}
+
 .parallax-system--hero.isHidden {
   opacity: 0;
 }

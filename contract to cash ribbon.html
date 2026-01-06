@@ -14,17 +14,17 @@
       <section>viewport height</section>
       <section>viewport height</section>
     </div>
+
+    <canvas class="contract-to-cash-ribbon--canvas" data-contract-to-cash-ribbon="canvas"></canvas>
   </main>
 
 <script>
-  // Create canvas element dynamically
-  const main = document.querySelector("[data-contract-to-cash-ribbon='main']");
-  const canvas = document.createElement("canvas");
-  canvas.className = "contract-to-cash-ribbon--canvas";
-  canvas.setAttribute("data-contract-to-cash-ribbon", "canvas");
-  main.appendChild(canvas);
-
-  const ctx = canvas.getContext("2d");
+  // Get canvas element from HTML
+  const canvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
+  if (!canvas) {
+    console.warn("Canvas element not found for contract-to-cash-ribbon");
+  } else {
+    const ctx = canvas.getContext("2d");
 
   /* ==========================
       Baseline / layout
@@ -278,11 +278,12 @@
     }
   }
 
-  const ro = new ResizeObserver(() => resize());
-  ro.observe(canvas);
-  window.addEventListener("resize", resize);
-  resize();
-  startAnimation();
+    const ro = new ResizeObserver(() => resize());
+    ro.observe(canvas);
+    window.addEventListener("resize", resize);
+    resize();
+    startAnimation();
+  }
 </script>
 </body>
 </html>

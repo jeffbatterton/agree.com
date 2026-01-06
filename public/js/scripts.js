@@ -230,6 +230,17 @@ function updateScroll() {
       journeySpacer.classList.remove('isHidden');
     }
   }
+  
+  // Translate canvas up relative to scroll when display scroll < 50% to make it appear fixed
+  const ribbonCanvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
+  if (ribbonCanvas) {
+    if (progress < 50) {
+      const scrollY = window.scrollY || window.pageYOffset;
+      ribbonCanvas.style.transform = `translateY(${scrollY}px)`;
+    } else {
+      ribbonCanvas.style.transform = '';
+    }
+  }
 }
 
 // Track scroll position and double scroll rate when display scroll < 100%

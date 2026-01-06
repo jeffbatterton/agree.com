@@ -50,6 +50,12 @@ footer {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  top: -10px;
+
+  &.isFixed {
+    position: fixed;
+    height: auto;
+  }
 }
 
 .contract-to-cash-ribbon--main {

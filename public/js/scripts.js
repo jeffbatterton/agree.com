@@ -2,6 +2,9 @@
 // Parallax System //
 /////////////////////
 
+// Canvas isFixed threshold - adjust this value to change when canvas switches from fixed to absolute
+const CANVAS_ISFIXED_THRESHOLD = 25;
+
 function updateScroll() {
   const display = document.querySelector('[data-attr-parallax-system="display"]');
   if (!display) return;
@@ -231,14 +234,13 @@ function updateScroll() {
     }
   }
   
-  // Translate canvas up relative to scroll when display scroll < 50% to make it appear fixed
+  // Toggle isFixed class on canvas based on display scroll (only after ribbon is initialized)
   const ribbonCanvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
-  if (ribbonCanvas) {
-    if (progress < 50) {
-      const scrollY = window.scrollY || window.pageYOffset;
-      ribbonCanvas.style.transform = `translateY(${scrollY}px)`;
+  if (ribbonCanvas && window.ribbonInitialized) {
+    if (progress < CANVAS_ISFIXED_THRESHOLD) {
+      ribbonCanvas.classList.add('isFixed');
     } else {
-      ribbonCanvas.style.transform = '';
+      ribbonCanvas.classList.remove('isFixed');
     }
   }
 }
@@ -621,6 +623,10 @@ if (!canvas) {
       // Only start animation if initialization was successful (width and height are valid)
       if (width > 0 && height > 0) {
         startAnimation();
+        // Mark ribbon as initialized so isFixed class can be applied
+        window.ribbonInitialized = true;
+        // Trigger updateScroll to apply isFixed class on initial load
+        updateScroll();
       }
     });
   });

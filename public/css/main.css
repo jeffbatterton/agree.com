@@ -168,7 +168,6 @@ footer {
 
 .parallax-system--journey {
   position: relative;
-  background-color: #fff;
 }
 
 .parallax-system--journey--0.isLoaded {
@@ -194,7 +193,6 @@ footer {
 }
 
 .parallax-system--qualities {
-  background: #fff;
   position: relative;
 }
 .parallax-system--qualities.isFixed {

@@ -1,4 +1,26 @@
+@import "tailwindcss";
 
+:root {
+  --white: #FFFFFFFF;
+  --black: #15182CFF;
+  --black-faint: #F3F3F4FF;
+  --ink: #1E2148FF;
+  --ink-dark: #15183AFF;
+  --slate: #545A8AFF;
+  --slate-dark: #3A3F63FF;
+  --purple: #4D3CFFFF;
+  --purple-faint: #EDEBFFFF;
+  --blue: #3C9AFFFF;
+  --red: #FF3C3FFF;
+  --pink: #F433ABFF;
+  --pink-dark: #C62C8AFF;
+  --green: #22C76AFF;
+  --green-dark: #1E9E5AFF;
+  --orange: #FD5B16FF;
+  --orange-dark: #C24712FF;
+  --yellow: #F2A900FF;
+  --yellow-dark: #C88A00FF;
+}
 
 html, body {
   height: 100%;

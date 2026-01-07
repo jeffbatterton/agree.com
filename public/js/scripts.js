@@ -206,13 +206,13 @@ function updateScroll() {
       journey0.classList.add('isVisible');
       // Add opacity: 0 to hero when journey--0 is first shown
       if (hero) {
-        hero.classList.add('isHidden');
+        hero.classList.add('opacity-0');
       }
     } else {
       journey0.classList.remove('isVisible');
       // Reset hero opacity when journey--0 is hidden
       if (hero) {
-        hero.classList.remove('isHidden');
+        hero.classList.remove('opacity-0');
       }
     }
     
@@ -634,3 +634,131 @@ if (!canvas) {
 ////////////////////////////////////
 // End of Contract to Cash Ribbon //
 ////////////////////////////////////
+
+///////////////////
+// Shiny Buttons //
+///////////////////
+document.querySelectorAll("[data-attr-button-shiny]").forEach((btn) => {
+  const OUTER = 200;     // starts influencing
+  const INNER = 100;     // full influence
+  const BASE = 90;       // base angle when far away
+  let raf = 0;
+
+  const clamp01 = (n) => Math.max(0, Math.min(1, n));
+  const smoothstep = (t) => t * t * (3 - 2 * t);
+
+  // Normalize degrees to [0, 360)
+  const norm = (deg) => ((deg % 360) + 360) % 360;
+
+  // Shortest signed difference from a->b in degrees, range (-180..180]
+  const shortestDelta = (a, b) => {
+    let d = norm(b) - norm(a);
+    if (d > 180) d -= 360;
+    if (d <= -180) d += 360;
+    return d;
+  };
+
+  const update = (clientX, clientY) => {
+    const r = btn.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+
+    const dx = clientX - cx;
+    const dy = clientY - cy;
+
+    const dist = Math.hypot(dx, dy);
+
+    // Outside OUTER: reset
+    if (dist > OUTER) {
+      btn.style.setProperty("--glow-angle", `${BASE}deg`);
+      return;
+    }
+
+    // Mouse angle in degrees (0..360)
+    const mouseAngle = norm(Math.atan2(dy, dx) * (180 / Math.PI) + 90);
+
+    // Proximity: 0 at OUTER, 1 at INNER (and inside)
+    let p = (OUTER - dist) / (OUTER - INNER);
+    p = smoothstep(clamp01(p)); // optional smoothing
+
+    // Blend BASE -> mouseAngle along shortest rotation
+    const out = norm(BASE + shortestDelta(BASE, mouseAngle) * p);
+
+    btn.style.setProperty("--glow-angle", `${out}deg`);
+  };
+
+  const onMove = (e) => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      update(e.clientX, e.clientY);
+    });
+  };
+
+  window.addEventListener("pointermove", onMove);
+});
+//////////////////////////
+// End of Shiny Buttons //
+//////////////////////////
+
+////////////////////
+// Customer Logos //
+////////////////////
+(() => {
+  const TRACK_SEL = "[data-customer-logos]";
+
+  function setupTrack(track) {
+    if (track.dataset.loopReady === "true") return;
+    track.dataset.loopReady = "true";
+
+    // Find the first child div (the set containing logos)
+    const firstSet = track.querySelector(":scope > div");
+    if (!firstSet) return;
+
+    // Clone the set and append to the track if less than 2 sets exist
+    const sets = Array.from(track.querySelectorAll(":scope > div"));
+    if (sets.length < 2) {
+      const clone = firstSet.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    }
+
+    const updateDistance = () => {
+      // Measure the width of the first set using getBoundingClientRect().width
+      const w = firstSet.getBoundingClientRect().width;
+      // Set CSS custom property --loop-distance on the track element (negative for left translation)
+      track.style.setProperty("--loop-distance", `-${w}px`);
+    };
+
+    // Wait for images to load before calculating distance
+    const imgs = Array.from(track.querySelectorAll("img"));
+    const pending = imgs.filter((img) => !img.complete);
+
+    if (pending.length === 0) {
+      updateDistance();
+    } else {
+      let done = 0;
+      const onDone = () => {
+        done++;
+        if (done >= pending.length) updateDistance();
+      };
+      pending.forEach((img) => {
+        img.addEventListener("load", onDone, { once: true });
+        img.addEventListener("error", onDone, { once: true });
+      });
+    }
+
+    // Handle window resize with debounce (150ms timeout)
+    let t;
+    window.addEventListener("resize", () => {
+      clearTimeout(t);
+      t = setTimeout(updateDistance, 150);
+    });
+  }
+
+  // Query all track elements using [data-customer-logos] selector
+  document.querySelectorAll(TRACK_SEL).forEach(setupTrack);
+})();
+///////////////////////////
+// End of Customer Logos //
+///////////////////////////

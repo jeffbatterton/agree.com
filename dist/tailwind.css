@@ -262,6 +262,9 @@
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
+  .h-\[32px\] {
+    height: 32px;
+  }
   .h-\[40px\] {
     height: 40px;
   }
@@ -288,6 +291,9 @@
   }
   .w-8 {
     width: calc(var(--spacing) * 8);
+  }
+  .w-\[112px\] {
+    width: 112px;
   }
   .w-\[120px\] {
     width: 120px;
@@ -389,6 +395,9 @@
   }
   .bg-\(--black-faint\) {
     background-color: var(--black-faint);
+  }
+  .bg-\(--ink\) {
+    background-color: var(--ink);
   }
   .bg-\(--purple\) {
     background-color: var(--purple);
@@ -510,6 +519,9 @@
   }
   .pl-\[400px\] {
     padding-left: 400px;
+  }
+  .pl-\[500px\] {
+    padding-left: 500px;
   }
   .text-center {
     text-align: center;

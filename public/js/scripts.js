@@ -55,17 +55,6 @@ function calculateDisplayProgress(displayRect) {
   }
 }
 
-function calculateCTAScrollProgress(ctaRect) {
-  const viewportHeight = window.innerHeight;
-  const ctaTop = ctaRect.top;
-  
-  if (ctaTop <= viewportHeight && ctaTop >= 0) {
-    return ((viewportHeight - ctaTop) / viewportHeight) * 100;
-  } else if (ctaTop < 0) {
-    return 100;
-  }
-  return 0;
-}
 
 function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
   const viewportHeight = window.innerHeight;
@@ -295,22 +284,9 @@ function updateScroll() {
   handleDisplayPhases(progress, card);
   handleCardAnimation(progress, card);
   
-  // Handle CTA and qualities
-  const cta = document.querySelector('[data-parallax-system="cta"]');
-  let ctaScrollProgress = 0;
-  if (cta) {
-    ctaScrollProgress = Math.min(100, calculateCTAScrollProgress(cta.getBoundingClientRect()));
-  }
-  
-  const qualities = document.querySelector('[data-parallax-system="qualities"]');
+  // Handle qualities spacer
   const qualitiesSpacer = document.querySelector('[data-parallax-system="qualities--spacer"]');
-  if (ctaScrollProgress > 0) {
-    qualities?.classList.add('isFixed');
-    qualitiesSpacer?.classList.add('isVisible');
-  } else {
-    qualities?.classList.remove('isFixed');
-    qualitiesSpacer?.classList.remove('isVisible');
-  }
+  // Note: Qualities spacer visibility logic removed - was previously controlled by CTA scroll
   
   // Handle journey--0 visibility
   const journey0 = document.querySelector('[data-parallax-system="journey--0"]');

@@ -7,7 +7,9 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-white: #fff;
     --spacing: 0.25rem;
+    --font-weight-normal: 400;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -163,9 +165,6 @@
   }
 }
 @layer utilities {
-  .visible {
-    visibility: visible;
-  }
   .absolute {
     position: absolute;
   }
@@ -181,17 +180,41 @@
   .top-4 {
     top: calc(var(--spacing) * 4);
   }
+  .top-8 {
+    top: calc(var(--spacing) * 8);
+  }
+  .top-\[260px\] {
+    top: 260px;
+  }
+  .top-\[360px\] {
+    top: 360px;
+  }
+  .top-\[530px\] {
+    top: 530px;
+  }
+  .-right-8 {
+    right: calc(var(--spacing) * -8);
+  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
   .right-4 {
     right: calc(var(--spacing) * 4);
   }
+  .right-\[112px\] {
+    right: 112px;
+  }
   .bottom-8 {
     bottom: calc(var(--spacing) * 8);
   }
   .bottom-\[54px\] {
     bottom: 54px;
+  }
+  .-left-8 {
+    left: calc(var(--spacing) * -8);
+  }
+  .-left-16 {
+    left: calc(var(--spacing) * -16);
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
@@ -205,8 +228,14 @@
   .z-0 {
     z-index: 0;
   }
+  .z-1 {
+    z-index: 1;
+  }
   .z-2 {
     z-index: 2;
+  }
+  .m-0 {
+    margin: calc(var(--spacing) * 0);
   }
   .m-6 {
     margin: calc(var(--spacing) * 6);
@@ -336,6 +365,12 @@
   .bg-\(--black\) {
     background-color: var(--black);
   }
+  .bg-\(--purple\) {
+    background-color: var(--purple);
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
   .bg-linear-to-b {
     --tw-gradient-position: to bottom;
     @supports (background-image: linear-gradient(in lab, red, red)) {
@@ -406,6 +441,9 @@
     --tw-gradient-to: var(--yellow);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
+  .p-0 {
+    padding: calc(var(--spacing) * 0);
+  }
   .px-8 {
     padding-inline: calc(var(--spacing) * 8);
   }
@@ -438,6 +476,16 @@
   }
   .text-center {
     text-align: center;
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
+  .text-\(--black\) {
+    color: var(--black);
   }
   .text-\(--slate\) {
     color: var(--slate);
@@ -495,28 +543,6 @@
   --text-overline-font-weight: 500;
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
-}
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-html {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  color: var(--black);
-}
-footer {
-  position: relative;
-  z-index: 1;
-  background: #fff;
-}
-.big-numbers {
-  font-family: "Letterboard Lite";
-  font-weight: 600;
-  font-style: normal;
 }
 .contract-to-cash-ribbon--canvas {
   width: 100%;
@@ -587,48 +613,7 @@ footer {
   transform: scale(0);
   height: 80px;
 }
-.parallax-system--display--notification--copy {
-  flex-flow: column;
-  flex: 1;
-  display: flex;
-}
-.parallax-system--display--notification--copy--company {
-  opacity: .5;
-}
-.parallax-system--display--notification--copy--timestamp {
-  opacity: .5;
-  position: absolute;
-  inset: 16px 16px auto auto;
-}
-[data-parallax-system--display--notification="1"] {
-  top: 32px;
-  left: -64px;
-}
-[data-parallax-system--display--notification="2"] {
-  top: 260px;
-  right: -32px;
-}
-[data-parallax-system--display--notification="3"] {
-  top: 530px;
-  right: 112px;
-}
-[data-parallax-system--display--notification="4"] {
-  top: 360px;
-  left: -32px;
-}
-.parallax-system--display--phase1 [data-parallax-system--display--notification="1"], .parallax-system--display--phase2 [data-parallax-system--display--notification="1"], .parallax-system--display--phase3 [data-parallax-system--display--notification="1"], .parallax-system--display--phase4 [data-parallax-system--display--notification="1"] {
-  transform: scale(1);
-  opacity: 1;
-}
-.parallax-system--display--phase2 [data-parallax-system--display--notification="2"], .parallax-system--display--phase3 [data-parallax-system--display--notification="2"], .parallax-system--display--phase4 [data-parallax-system--display--notification="2"] {
-  transform: scale(1);
-  opacity: 1;
-}
-.parallax-system--display--phase3 [data-parallax-system--display--notification="3"], .parallax-system--display--phase4 [data-parallax-system--display--notification="3"] {
-  transform: scale(1);
-  opacity: 1;
-}
-.parallax-system--display--phase4 [data-parallax-system--display--notification="4"] {
+.parallax-system--display--phase1 [data-parallax-system--display--notification="1"], .parallax-system--display--phase2 [data-parallax-system--display--notification="1"], .parallax-system--display--phase2 [data-parallax-system--display--notification="2"], .parallax-system--display--phase3 [data-parallax-system--display--notification="1"], .parallax-system--display--phase3 [data-parallax-system--display--notification="2"], .parallax-system--display--phase3 [data-parallax-system--display--notification="3"], .parallax-system--display--phase4 [data-parallax-system--display--notification="1"], .parallax-system--display--phase4 [data-parallax-system--display--notification="2"], .parallax-system--display--phase4 [data-parallax-system--display--notification="3"], .parallax-system--display--phase4 [data-parallax-system--display--notification="4"] {
   transform: scale(1);
   opacity: 1;
 }
@@ -667,10 +652,6 @@ footer {
 }
 .parallax-system--qualities--spacer.isVisible {
   display: block;
-}
-.parallax-system--cta {
-  background: rebeccapurple;
-  position: relative;
 }
 @layer components {
   .text-body {
@@ -980,7 +961,7 @@ footer {
   .journey-visuals--agreement--signature {
     display: none;
     position: absolute;
-    left: 0 35px;
+    left: 35px;
     bottom: 54px;
   }
   .journey-visuals--phase-3 .journey-visuals--agreement--signature {
@@ -1112,6 +1093,10 @@ footer {
   inherits: false;
   initial-value: 100%;
 }
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -1131,6 +1116,7 @@ footer {
       --tw-gradient-from-position: 0%;
       --tw-gradient-via-position: 50%;
       --tw-gradient-to-position: 100%;
+      --tw-font-weight: initial;
     }
   }
 }

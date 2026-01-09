@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full m-0 p-0 font-sans font-normal text-(--black)" style="font-optical-sizing: auto;">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -10,7 +10,7 @@
   <link rel="preload" href="public/fonts/LetterboardLite-Semibold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./dist/tailwind.css">
 </head>
-<body class="antialiased">
+<body class="antialiased h-full m-0 p-0">
   <div class="contract-to-cash-ribbon--main" data-contract-to-cash-ribbon="main">
     <div class="contract-to-cash-ribbon--content" data-contract-to-cash-ribbon="content">
       <section class="fixed top-0 left-0 w-full h-[98vh] flex flex-col justify-start items-center z-0 pb-[13vh]" data-parallax-system="hero">
@@ -83,7 +83,7 @@
       <section class="parallax-system--display relative bg-linear-to-b from-(--purple) to-(--purple-dark) h-[200vh] w-full z-2" data-parallax-system="display">
         <div class="parallax-system--display--card" data-parallax-system="display--card">
           <img src="public/img/screenshot.png" loading="lazy" alt="" class="rounded-[12px]" />
-          <div data-parallax-system--display--notification="1" class="parallax-system--display--notification">
+          <div data-parallax-system--display--notification="1" class="parallax-system--display--notification top-8 -left-16">
             <img src="public/img/avatars/Beehiiv.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
               <div class="text-body opacity-50">
@@ -95,7 +95,7 @@
               yesterday
             </div>
           </div>
-          <div data-parallax-system--display--notification="2" class="parallax-system--display--notification">
+          <div data-parallax-system--display--notification="2" class="parallax-system--display--notification top-[260px] -right-8">
             <img src="public/img/avatars/Deel.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
               <div class="text-body opacity-50">
@@ -107,7 +107,7 @@
               1hr ago
             </div>
           </div>
-          <div data-parallax-system--display--notification="3" class="parallax-system--display--notification">
+          <div data-parallax-system--display--notification="3" class="parallax-system--display--notification top-[530px] right-[112px]">
             <div class="h-12">
               <img src="public/img/avatars/Agree Agent.svg" loading="lazy" alt="" class="image" />
             </div>
@@ -121,7 +121,7 @@
               5m ago
             </div>
           </div>
-          <div data-parallax-system--display--notification="4" class="parallax-system--display--notification">
+          <div data-parallax-system--display--notification="4" class="parallax-system--display--notification top-[360px] -left-8">
             <img src="public/img/avatars/Anthropic.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
               <div class="text-body opacity-50">
@@ -413,11 +413,11 @@
     <canvas class="contract-to-cash-ribbon--canvas" data-contract-to-cash-ribbon="canvas" data-contract-to-cash-ribbon--height="11"></canvas>
   </div>
 
-  <section class="min-h-screen parallax-system--cta" data-parallax-system="cta">
+  <section class="min-h-screen relative bg-(--purple)" data-parallax-system="cta">
     <h1>cta</h1>
   </section>
   
-  <footer>
+  <footer class="relative z-1 bg-white">
     <h1>footer</h1>
   </footer>
 

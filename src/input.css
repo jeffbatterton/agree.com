@@ -126,8 +126,10 @@ footer {
   backdrop-filter: blur(8px);
   --card-top: 87vh;
   --card-translate-y: 0px;
+  --card-scale: 0.9;
   top: var(--card-top);
-  transform: translateX(-50%) translateY(var(--card-translate-y));
+  transform: translateX(-50%) translateY(var(--card-translate-y)) scale(var(--card-scale));
+  transform-origin: top center;
   padding: 16px;
   border-radius: 28px;
 }

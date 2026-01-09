@@ -256,6 +256,9 @@
   .w-full {
     width: 100%;
   }
+  .max-w-\[1024px\] {
+    max-width: 1024px;
+  }
   .flex-1 {
     flex: 1;
   }
@@ -330,9 +333,6 @@
   .bg-\(--black\) {
     background-color: var(--black);
   }
-  .bg-\(--purple\) {
-    background-color: var(--purple);
-  }
   .bg-linear-to-b {
     --tw-gradient-position: to bottom;
     @supports (background-image: linear-gradient(in lab, red, red)) {
@@ -345,10 +345,6 @@
     @supports (background-image: linear-gradient(in lab, red, red)) {
       --tw-gradient-position: to bottom left in oklab;
     }
-    background-image: linear-gradient(var(--tw-gradient-stops));
-  }
-  .bg-gradient-to-b {
-    --tw-gradient-position: to bottom in oklab;
     background-image: linear-gradient(var(--tw-gradient-stops));
   }
   .from-\(--green-dark\) {
@@ -379,10 +375,6 @@
     --tw-gradient-from: var(--yellow-dark);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
-  .from-\[var\(--purple\)\] {
-    --tw-gradient-from: var(--purple);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
   .to-\(--green\) {
     --tw-gradient-to: var(--green);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -409,10 +401,6 @@
   }
   .to-\(--yellow\) {
     --tw-gradient-to: var(--yellow);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .to-\[var\(--purple-dark\)\] {
-    --tw-gradient-to: var(--purple-dark);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .px-8 {
@@ -559,8 +547,10 @@ footer {
   backdrop-filter: blur(8px);
   --card-top: 87vh;
   --card-translate-y: 0px;
+  --card-scale: 0.9;
   top: var(--card-top);
-  transform: translateX(-50%) translateY(var(--card-translate-y));
+  transform: translateX(-50%) translateY(var(--card-translate-y)) scale(var(--card-scale));
+  transform-origin: top center;
   padding: 16px;
   border-radius: 28px;
 }

@@ -145,6 +145,8 @@ function updateScroll() {
       card.classList.add('isScrollingOut');
       card.style.setProperty('--card-top', `${centerTop + cardTranslateY}px`);
       card.style.removeProperty('--card-translate-y');
+      // Keep scale at 1 when scrolling out
+      card.style.setProperty('--card-scale', '1');
     } else {
       // Display scroll < trigger point, use scroll-in logic
       // Initialize scroll tracking to 0 so scroll delta is calculated from page start
@@ -192,12 +194,21 @@ function updateScroll() {
         card.classList.add('isCentered');
         card.style.removeProperty('--card-top');
         card.style.removeProperty('--card-translate-y');
+        // Scale is at 1 when centered
+        card.style.setProperty('--card-scale', '1');
       } else {
         // Apply parallax (scroll-in)
         const cardTranslateY = -scrollDelta * cardScrollInRate;
         card.classList.add('isScrollingIn');
         card.style.setProperty('--card-top', '87vh');
         card.style.setProperty('--card-translate-y', `${cardTranslateY}px`);
+        
+        // Animate scale from 0.9 to 1 as it scrolls in
+        // Calculate scale progress based on scroll delta
+        const maxScrollForScale = scrollToReachCenter; // Use same distance as reaching center
+        const scaleProgress = Math.min(1, Math.max(0, scrollDelta / maxScrollForScale));
+        const cardScale = 0.9 + (scaleProgress * 0.1); // 0.9 to 1.0
+        card.style.setProperty('--card-scale', cardScale.toString());
       }
     }
   }
@@ -518,6 +529,12 @@ window.addEventListener('scroll', function() {
 
 // Initialize scroll tracking on page load
 window.cardInitialScrollY = 0;
+
+// Initialize card scale on page load
+const card = document.querySelector('[data-parallax-system="display--card"]');
+if (card) {
+  card.style.setProperty('--card-scale', '0.9');
+}
 
 // Initialize journey--0 styles on page load
 const journey0 = document.querySelector('[data-parallax-system="journey--0"]');

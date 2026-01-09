@@ -148,12 +148,6 @@
 .parallax-system--qualities {
   position: relative;
 }
-.parallax-system--qualities.isFixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
 
 .parallax-system--qualities--spacer {
   height: 100vh;
@@ -187,6 +181,14 @@
     line-height: var(--text-label-line-height);
   }
 
+  .text-big-numbers {
+    font-family: "Letterboard Lite";
+    font-size: 6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+  }
+
   .text-hero {
     font-size: 6.5rem;
     font-style: normal;
@@ -206,6 +208,27 @@
     font-style: normal;
     font-weight: 800;
     line-height: 1;
+  }
+
+  .text-heading-three {
+    font-size: 3.5rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 100%;
+  }
+
+  .text-heading-four {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .text-heading-five {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.25;
   }
 
   .container-width {

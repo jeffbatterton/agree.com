@@ -5,6 +5,10 @@
 // Canvas isFixed threshold - adjust this value to change when canvas switches from fixed to absolute
 const CANVAS_ISFIXED_THRESHOLD = 25;
 
+// Track programmatic scrolling to prevent tab activation during scroll
+let isProgrammaticScroll = false;
+let programmaticScrollTarget = null;
+
 function updateScroll() {
   const display = document.querySelector('[data-parallax-system="display"]');
   if (!display) return;
@@ -384,7 +388,13 @@ function updateScroll() {
   }
 
   // Use the section closest to the 50% threshold as active
-  activeJourney = closestSection;
+  // But skip if we're programmatically scrolling to a specific section
+  if (!isProgrammaticScroll) {
+    activeJourney = closestSection;
+  } else {
+    // Keep the programmatic scroll target active during scroll
+    activeJourney = programmaticScrollTarget;
+  }
 
   // Update tab states
   tabs.forEach(tab => {
@@ -407,6 +417,19 @@ document.addEventListener('DOMContentLoaded', function() {
       const tabId = this.getAttribute('data-button-tab');
       if (!tabId) return;
       
+      // Activate the clicked tab immediately
+      tabs.forEach(t => {
+        if (t.getAttribute('data-button-tab') === tabId) {
+          t.classList.add('isActive');
+        } else {
+          t.classList.remove('isActive');
+        }
+      });
+      
+      // Set programmatic scroll flag to prevent other tabs from activating
+      isProgrammaticScroll = true;
+      programmaticScrollTarget = tabId;
+      
       // Find the corresponding journey section
       const section = document.querySelector(`[data-journey="${tabId}"]`);
       if (!section) return;
@@ -424,6 +447,13 @@ document.addEventListener('DOMContentLoaded', function() {
         top: targetScrollY,
         behavior: 'smooth'
       });
+      
+      // Clear programmatic scroll flag after scroll completes
+      // Estimate scroll duration (typically 500-1000ms for smooth scroll)
+      setTimeout(() => {
+        isProgrammaticScroll = false;
+        programmaticScrollTarget = null;
+      }, 1000);
     });
   });
 });

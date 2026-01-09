@@ -482,6 +482,7 @@
   --orange-dark: #C24712FF;
   --yellow: #F2A900FF;
   --yellow-dark: #C88A00FF;
+  --yellow-faint: #FFF8E6FF;
   --text-label-font-size: 0.875rem;
   --text-label-font-style: normal;
   --text-label-font-weight: 500;
@@ -904,6 +905,52 @@ footer {
     font-weight: 400;
     line-height: 110%;
     margin: 0;
+  }
+  .journey-visuals--agreement--variable {
+    position: relative;
+  }
+  .journey-visuals--agreement--2 .journey-visuals--agreement--variable::before {
+    font-size: 7px;
+    padding: 1px 2px 0 2px;
+    color: var(--yellow);
+    font-weight: 600;
+    font-family: "Inter";
+    content: attr(data-text);
+    position: absolute;
+    border-radius: 4px;
+    inset: -2px 0;
+    background: var(--yellow-faint);
+    border: 1px solid var(--yellow);
+    text-align: center;
+    animation: bounce-in .25s linear forwards;
+  }
+  .journey-bullet {
+    opacity: .4;
+    transition: opacity 0.125s linear;
+  }
+  .journey-bullet.isActive {
+    opacity: 1;
+    animation: bounce-in 0.25s linear forwards;
+  }
+  .journey-bullet--check {
+    opacity: 0;
+  }
+  .journey-bullet.isActive .journey-bullet--check {
+    opacity: 1;
+  }
+  @keyframes bounce-in {
+    from {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    75% {
+      transform: scale(.75);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 }
 @property --tw-rotate-x {

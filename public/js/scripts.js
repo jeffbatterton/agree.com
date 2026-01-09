@@ -377,6 +377,61 @@ function updateScroll() {
     }
   });
   
+  // Animate journey visuals from bottom with opacity as sections scroll in
+  const journeyVisuals = document.querySelectorAll('[data-journey-visual]');
+  journeyVisuals.forEach(visual => {
+    const visualJourneyId = visual.getAttribute('data-journey-visual');
+    if (!visualJourneyId) return;
+    
+    // Find the parent journey section
+    const parentSection = document.querySelector(`[data-journey="${visualJourneyId}"]`);
+    if (!parentSection) return;
+    
+    const sectionRect = parentSection.getBoundingClientRect();
+    const sectionTop = sectionRect.top;
+    const sectionHeight = sectionRect.height;
+    const viewportHeight = window.innerHeight;
+    
+    // Calculate scroll progress for the section
+    // 0% when section top enters viewport, 100% when section is fully in view
+    let scrollProgress = 0;
+    
+    if (sectionTop <= viewportHeight && sectionTop >= -sectionHeight) {
+      // Section is in or entering viewport
+      // Progress: 0 when sectionTop = viewportHeight, 1 when sectionTop = 0
+      scrollProgress = Math.max(0, Math.min(1, (viewportHeight - sectionTop) / (viewportHeight + sectionHeight * 0.5)));
+    } else if (sectionTop < -sectionHeight) {
+      // Section has fully scrolled past
+      scrollProgress = 1;
+    }
+    
+    // Calculate initial translateY to position element outside parent section bounds
+    // Start from below the parent section (use section height as offset)
+    const initialTranslateY = sectionHeight * 0.5; // Start 50% of section height below
+    
+    // Animate from bottom (translateY from initialTranslateY to 0), opacity (0 to 1), and scale (0.25 to 1)
+    // Animation happens in first 50% of scroll progress
+    const animationProgress = Math.min(1, scrollProgress / 0.5);
+    const translateY = initialTranslateY * (1 - animationProgress); // From outside bounds to 0px
+    const opacity = animationProgress; // 0 to 1
+    const scale = 0.25 + (animationProgress * 0.75); // 0.25 to 1.0
+    
+    visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
+    visual.style.opacity = opacity;
+    
+    // When agreements visual animation completes, activate the first bullet (reversible)
+    if (visualJourneyId === 'agreements') {
+      const bullet = parentSection.querySelector('[data-journey-bullet="1"]');
+      if (bullet) {
+        if (animationProgress >= 1) {
+          bullet.classList.add('isActive');
+        } else {
+          bullet.classList.remove('isActive');
+        }
+      }
+    }
+  });
+  
   // Animate tabs top position when connectors section starts exiting (1:1 with scroll)
   if (connectorsScrollPercentage >= 50 && buttonTabs) {
     // Find connectors section to calculate scroll position

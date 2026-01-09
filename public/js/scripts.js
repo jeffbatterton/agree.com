@@ -275,6 +275,9 @@ function updateScroll() {
   let activeJourney = null;
   let closestSection = null;
   let closestDistance = Infinity;
+  
+  // Track connectors section scroll state for tabs positioning
+  let connectorsScrollPercentage = 0;
 
   journeySections.forEach(section => {
     const journeyId = section.getAttribute('data-journey');
@@ -283,6 +286,68 @@ function updateScroll() {
     const rect = section.getBoundingClientRect();
     const sectionTop = rect.top;
     const sectionBottom = rect.bottom;
+    const sectionHeight = rect.height;
+    
+    // Get the immediate child div for animation
+    const childDiv = section.querySelector(':scope > div');
+    
+    // Calculate scroll percentage (how much of the section has scrolled through viewport)
+    // Percentage: 0% = section top enters viewport bottom, 100% = section bottom exits viewport top
+    let scrollPercentage = 0;
+    
+    if (sectionBottom < 0) {
+      // Section has fully scrolled past (bottom above viewport top)
+      scrollPercentage = 100;
+    } else if (sectionTop > viewportHeight) {
+      // Section hasn't entered yet (top below viewport bottom)
+      scrollPercentage = 0;
+    } else {
+      // Section is in viewport - calculate percentage based on position
+      // When sectionTop = viewportHeight: 0% (just entering)
+      // When sectionBottom = 0: 100% (just exiting)
+      // The scroll range is from viewportHeight to -sectionHeight
+      const scrollRange = viewportHeight + sectionHeight;
+      const scrolledAmount = viewportHeight - sectionTop;
+      scrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / scrollRange) * 100));
+    }
+    
+    // Track connectors section scroll percentage
+    const isConnectors = journeyId === 'connectors';
+    if (isConnectors) {
+      connectorsScrollPercentage = scrollPercentage;
+    }
+    
+    // Map scroll percentage to animation value
+    // 0-25%: animate from 0.8 to 1.0
+    // 25-50%: stay at 1.0
+    // 50-100%: animate from 1.0 to 0.4 scale and 0 opacity (except for connectors section)
+    let opacity = 0.8;
+    let scale = 0.8;
+    let translateY = 0;
+    
+    if (scrollPercentage <= 25) {
+      // 0-25%: animate from 0.8 to 1.0
+      const progress = scrollPercentage / 25; // 0 to 1
+      opacity = 0.8 + (progress * 0.2); // 0.8 to 1.0
+      scale = 0.8 + (progress * 0.2); // 0.8 to 1.0
+    } else if (scrollPercentage >= 50 && !isConnectors) {
+      // 50-100%: animate from 1.0 to 0.4 scale and 0 opacity (skip for connectors)
+      const progress = (scrollPercentage - 50) / 50; // 0 to 1
+      opacity = 1.0 - (progress * 1.0); // 1.0 to 0
+      scale = 1.0 - (progress * 0.6); // 1.0 to 0.4
+      // Add translateY to create illusion of exiting faster than scroll
+      translateY = -progress * 400; // Translate up by up to 400px
+    } else {
+      // 25-50%: stay at max, or connectors section stays at max after 50%
+      opacity = 1.0;
+      scale = 1.0;
+    }
+    
+    // Apply opacity and transforms to the immediate child div
+    if (childDiv) {
+      childDiv.style.opacity = opacity;
+      childDiv.style.transform = `translateY(${translateY}px) scale(${scale})`;
+    }
     
     // Check if section has scrolled 50% into viewport
     // This means the section top has reached or passed 50% of viewport height
@@ -296,6 +361,27 @@ function updateScroll() {
       }
     }
   });
+  
+  // Animate tabs top position when connectors section starts exiting (1:1 with scroll)
+  if (connectorsScrollPercentage >= 50 && buttonTabs) {
+    // Find connectors section to calculate scroll position
+    const connectorsSection = document.querySelector('[data-journey="connectors"]');
+    if (connectorsSection) {
+      const connectorsRect = connectorsSection.getBoundingClientRect();
+      const connectorsTop = connectorsRect.top;
+      
+      // Calculate how much connectors has scrolled past viewport top
+      // When connectorsTop is negative, it means it's scrolled past
+      // We want tabs to move up at 1:1 rate with this scroll
+      const scrollAmount = connectorsTop < 0 ? Math.abs(connectorsTop) : 0;
+      
+      // Apply top position (negative to move up)
+      buttonTabs.style.top = `${-scrollAmount}px`;
+    }
+  } else if (buttonTabs) {
+    // Reset top when connectors section is not exiting
+    buttonTabs.style.top = '';
+  }
 
   // Use the section closest to the 50% threshold as active
   activeJourney = closestSection;

@@ -1,243 +1,329 @@
-/////////////////////
-// Parallax System //
-/////////////////////
+// ============================================
+// CONFIGURATION CONSTANTS
+// ============================================
 
-// Canvas isFixed threshold - adjust this value to change when canvas switches from fixed to absolute
+// Canvas configuration
 const CANVAS_ISFIXED_THRESHOLD = 25;
 
-// Track programmatic scrolling to prevent tab activation during scroll
+// Journey section phase configuration
+const JOURNEY_PHASE_1_PERCENTAGE = 37;
+const JOURNEY_PHASE_2_PERCENTAGE = 43;
+const JOURNEY_PHASE_3_PERCENTAGE = 48;
+const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;
+
+// Display scroll phase configuration
+const DISPLAY_SCROLL_PHASE_1_START = 2;
+const DISPLAY_SCROLL_PHASE_2_START = 8;
+const DISPLAY_SCROLL_PHASE_3_START = 14;
+const DISPLAY_SCROLL_PHASE_4_START = 20;
+const DISPLAY_SCROLL_PHASE_END = 62;
+
+// Card scroll configuration
+const CARD_SCROLL_IN_RATE = 0.75;
+const CARD_SCROLL_OUT_RATE = 0.9;
+const CARD_SCROLL_OUT_TRIGGER = 50;
+const CARD_HEIGHT = 730;
+const CARD_START_TOP_VH = 87;
+
+// Journey section animation configuration
+const JOURNEY_ANIMATION_ENTRY_END = 25;
+const JOURNEY_ANIMATION_EXIT_START = 50;
+const JOURNEY_EXIT_TRANSLATE_Y = 400;
+
+// ============================================
+// STATE VARIABLES
+// ============================================
+
 let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
+let lastScrollY = window.scrollY || window.pageYOffset;
+let isAdjustingScroll = false;
 
-// Phase class configuration for journey sections
-const JOURNEY_PHASE_1_PERCENTAGE = 37; // Scroll percentage to add phase-1 class
-const JOURNEY_PHASE_2_PERCENTAGE = 43; // Scroll percentage to add phase-2 class
-const JOURNEY_PHASE_3_PERCENTAGE = 48; // Scroll percentage to add phase-3 class (when section is 100% scrolled in)
-const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58; // Scroll percentage to start exit animation for journey visuals
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+function calculateDisplayProgress(displayRect) {
+  const displayHeight = displayRect.height;
+  const displayTop = displayRect.top;
+  
+  if (displayTop > 0) {
+    return -(displayTop / displayHeight) * 100;
+  } else {
+    const progress = (-displayTop / displayHeight) * 100;
+    return Math.max(0, Math.min(110, progress));
+  }
+}
+
+function calculateCTAScrollProgress(ctaRect) {
+  const viewportHeight = window.innerHeight;
+  const ctaTop = ctaRect.top;
+  
+  if (ctaTop <= viewportHeight && ctaTop >= 0) {
+    return ((viewportHeight - ctaTop) / viewportHeight) * 100;
+  } else if (ctaTop < 0) {
+    return 100;
+  }
+  return 0;
+}
+
+function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
+  const viewportHeight = window.innerHeight;
+  const sectionTop = sectionRect.top;
+  const sectionBottom = sectionRect.bottom;
+  
+  if (sectionBottom < 0) {
+    return 100;
+  } else if (sectionTop > viewportHeight) {
+    return 0;
+  } else {
+    const scrollRange = viewportHeight + sectionHeight;
+    const scrolledAmount = viewportHeight - sectionTop;
+    return Math.min(100, Math.max(0, (scrolledAmount / scrollRange) * 100));
+  }
+}
+
+// ============================================
+// DISPLAY SECTION HANDLERS
+// ============================================
+
+function handleDisplayPhases(progress, card) {
+  if (!card) return;
+  
+  let currentPhase = 0;
+  if (progress >= DISPLAY_SCROLL_PHASE_4_START) {
+    currentPhase = 4;
+  } else if (progress >= DISPLAY_SCROLL_PHASE_3_START) {
+    currentPhase = 3;
+  } else if (progress >= DISPLAY_SCROLL_PHASE_2_START) {
+    currentPhase = 2;
+  } else if (progress >= DISPLAY_SCROLL_PHASE_1_START) {
+    currentPhase = 1;
+  }
+  
+  const phaseClasses = ['parallax-system--display--phase1', 'parallax-system--display--phase2', 
+                        'parallax-system--display--phase3', 'parallax-system--display--phase4'];
+  
+  if (progress >= DISPLAY_SCROLL_PHASE_END) {
+    card.classList.remove(...phaseClasses);
+  } else {
+    card.classList.remove(...phaseClasses);
+    if (currentPhase > 0) {
+      card.classList.add(`parallax-system--display--phase${currentPhase}`);
+    }
+  }
+}
+
+function handleCardAnimation(progress, card) {
+  if (!card) return;
+  
+  card.classList.remove('isScrollingOut', 'isCentered', 'isScrollingIn');
+  
+  if (progress >= CARD_SCROLL_OUT_TRIGGER) {
+    handleCardScrollOut(progress, card);
+  } else {
+    handleCardScrollIn(card);
+  }
+}
+
+function handleCardScrollOut(progress, card) {
+  const scrollOutProgress = (progress - CARD_SCROLL_OUT_TRIGGER) / (100 - CARD_SCROLL_OUT_TRIGGER);
+  const viewportHeight = window.innerHeight;
+  const centerTop = (viewportHeight / 2) - (CARD_HEIGHT / 2);
+  const scrollOutDistance = centerTop + CARD_HEIGHT;
+  const cardTranslateY = -scrollOutDistance * scrollOutProgress * CARD_SCROLL_OUT_RATE;
+  
+  card.classList.add('isScrollingOut');
+  card.style.setProperty('--card-top', `${centerTop + cardTranslateY}px`);
+  card.style.removeProperty('--card-translate-y');
+  card.style.setProperty('--card-scale', '1');
+}
+
+function handleCardScrollIn(card) {
+  if (typeof window.cardInitialScrollY === 'undefined') {
+    window.cardInitialScrollY = 0;
+  }
+  
+  const currentScrollY = window.scrollY || window.pageYOffset;
+  const scrollDelta = currentScrollY - window.cardInitialScrollY;
+  const viewportHeight = window.innerHeight;
+  
+  const cardStartTop = CARD_START_TOP_VH * viewportHeight / 100;
+  const cardStartCenter = cardStartTop + (CARD_HEIGHT / 2);
+  const targetCenter = viewportHeight / 2;
+  const centerDistance = cardStartCenter - targetCenter;
+  const scrollToReachCenter = centerDistance / CARD_SCROLL_IN_RATE;
+  
+  if (scrollDelta >= scrollToReachCenter && !card.dataset.scrolledPastCenter) {
+    card.dataset.scrollYAtCenter = currentScrollY.toString();
+    card.dataset.scrolledPastCenter = 'true';
+  }
+  
+  if (card.dataset.scrollYAtCenter) {
+    const scrollYAtCenter = parseFloat(card.dataset.scrollYAtCenter);
+    if (currentScrollY < scrollYAtCenter) {
+      delete card.dataset.scrolledPastCenter;
+      delete card.dataset.scrollYAtCenter;
+    }
+  }
+  
+  if (card.dataset.scrolledPastCenter) {
+    card.classList.add('isCentered');
+    card.style.removeProperty('--card-top');
+    card.style.removeProperty('--card-translate-y');
+    card.style.setProperty('--card-scale', '1');
+  } else {
+    const cardTranslateY = -scrollDelta * CARD_SCROLL_IN_RATE;
+    card.classList.add('isScrollingIn');
+    card.style.setProperty('--card-top', '87vh');
+    card.style.setProperty('--card-translate-y', `${cardTranslateY}px`);
+    
+    const maxScrollForScale = scrollToReachCenter;
+    const scaleProgress = Math.min(1, Math.max(0, scrollDelta / maxScrollForScale));
+    const cardScale = 0.9 + (scaleProgress * 0.1);
+    card.style.setProperty('--card-scale', cardScale.toString());
+  }
+}
+
+// ============================================
+// JOURNEY SECTIONS HANDLERS
+// ============================================
+
+function handleJourneySectionAnimation(section, scrollPercentage, isConnectors) {
+  const childDiv = section.querySelector(':scope > div');
+  if (!childDiv) return;
+  
+  let opacity = 0.8;
+  let scale = 0.8;
+  let translateY = 0;
+  
+  if (scrollPercentage <= JOURNEY_ANIMATION_ENTRY_END) {
+    const progress = scrollPercentage / JOURNEY_ANIMATION_ENTRY_END;
+    opacity = 0.8 + (progress * 0.2);
+    scale = 0.8 + (progress * 0.2);
+  } else if (scrollPercentage >= JOURNEY_ANIMATION_EXIT_START && !isConnectors) {
+    const progress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_START) / (100 - JOURNEY_ANIMATION_EXIT_START);
+    opacity = 1.0 - (progress * 1.0);
+    scale = 1.0 - (progress * 0.6);
+    translateY = -progress * JOURNEY_EXIT_TRANSLATE_Y;
+  } else {
+    opacity = 1.0;
+    scale = 1.0;
+  }
+  
+  childDiv.style.opacity = opacity;
+  childDiv.style.transform = `translateY(${translateY}px) scale(${scale})`;
+}
+
+function handleJourneyPhaseClasses(section, scrollPercentage, isInViewport) {
+  if (isInViewport) {
+    if (scrollPercentage >= JOURNEY_PHASE_1_PERCENTAGE) {
+      section.classList.add('journey-visuals--phase-1');
+    } else {
+      section.classList.remove('journey-visuals--phase-1');
+    }
+    
+    if (scrollPercentage >= JOURNEY_PHASE_2_PERCENTAGE) {
+      section.classList.add('journey-visuals--phase-2');
+    } else {
+      section.classList.remove('journey-visuals--phase-2');
+    }
+    
+    if (scrollPercentage >= JOURNEY_PHASE_3_PERCENTAGE) {
+      section.classList.add('journey-visuals--phase-3');
+    } else {
+      section.classList.remove('journey-visuals--phase-3');
+    }
+  } else {
+    section.classList.remove('journey-visuals--phase-1', 'journey-visuals--phase-2', 'journey-visuals--phase-3');
+  }
+}
+
+function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight) {
+  const visualJourneyId = visual.getAttribute('data-journey-visual');
+  if (!visualJourneyId) return;
+  
+  const viewportHeight = window.innerHeight;
+  const sectionTop = sectionRect.top;
+  
+  let scrollProgress = 0;
+  if (sectionTop <= viewportHeight && sectionTop >= -sectionHeight) {
+    scrollProgress = Math.max(0, Math.min(1, (viewportHeight - sectionTop) / (viewportHeight + sectionHeight * 0.5)));
+  } else if (sectionTop < -sectionHeight) {
+    scrollProgress = 1;
+  }
+  
+  const initialTranslateY = sectionHeight * 0.5;
+  const isAgreements = visualJourneyId === 'agreements';
+  let agreementsScrollPercentage = 0;
+  
+  if (isAgreements) {
+    agreementsScrollPercentage = calculateJourneyScrollPercentage(sectionRect, sectionHeight);
+  }
+  
+  const animationProgress = Math.min(1, scrollProgress / 0.5);
+  let translateY = initialTranslateY * (1 - animationProgress);
+  let opacity = animationProgress;
+  let scale = 0.25 + (animationProgress * 0.75);
+  
+  if (isAgreements && agreementsScrollPercentage > JOURNEY_VISUAL_EXIT_START_PERCENTAGE) {
+    const exitRange = 100 - JOURNEY_VISUAL_EXIT_START_PERCENTAGE;
+    const exitProgress = (agreementsScrollPercentage - JOURNEY_VISUAL_EXIT_START_PERCENTAGE) / exitRange;
+    const exitTranslateY = exitProgress * viewportHeight * 4;
+    translateY += exitTranslateY;
+    opacity = Math.max(0, opacity - (exitProgress * opacity));
+    scale = scale * (1 - exitProgress * 0.5);
+  }
+  
+  visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
+  visual.style.opacity = opacity;
+}
+
+// ============================================
+// MAIN UPDATE FUNCTION
+// ============================================
 
 function updateScroll() {
   const display = document.querySelector('[data-parallax-system="display"]');
   if (!display) return;
   
   const displayRect = display.getBoundingClientRect();
-  const displayHeight = displayRect.height;
-  const displayTop = displayRect.top; // Distance from viewport top (negative when scrolled past)
-  const displayBottom = displayRect.bottom; // Distance from viewport top
+  const progress = calculateDisplayProgress(displayRect);
   
-  // Calculate progress:
-  // Negative values when display hasn't reached viewport top yet
-  // 0% when top of display reaches viewport top (displayTop = 0)
-  // 100% when bottom of display reaches viewport top (displayBottom = 0)
-  
-  let progress = 0;
-  
-  if (displayTop > 0) {
-    // Display hasn't reached viewport top yet - show negative value
-    // Calculate how far away it is as a percentage of display height
-    progress = -(displayTop / displayHeight) * 100;
-  } else {
-    // Display is scrolling through viewport or has scrolled past
-    // displayTop goes from 0 to -displayHeight and continues decreasing
-    // Progress = how far past the top we've scrolled / total height
-    progress = (-displayTop / displayHeight) * 100;
-    progress = Math.max(0, Math.min(110, progress)); // Clamp between 0 and 110
-  }
-  
-  // Display scroll phases (adjustable)
-  const displayScrollPhase1Start = 2;  
-  const displayScrollPhase2Start = 8; 
-  const displayScrollPhase3Start = 14; 
-  const displayScrollPhase4Start = 20;
-  const displayScrollPhaseEnd = 62;
-  
-  // Determine current phase
-  let currentPhase = 0;
-  if (progress >= displayScrollPhase4Start) {
-    currentPhase = 4;
-  } else if (progress >= displayScrollPhase3Start) {
-    currentPhase = 3;
-  } else if (progress >= displayScrollPhase2Start) {
-    currentPhase = 2;
-  } else if (progress >= displayScrollPhase1Start) {
-    currentPhase = 1;
-  }
-  
-  // Apply phase class to card
+  // Handle display phases and card animation
   const card = document.querySelector('[data-parallax-system="display--card"]');
-  if (card) {
-    if (progress >= displayScrollPhaseEnd) {
-      // Remove all phase classes when display scroll reaches phase end
-      card.classList.remove('parallax-system--display--phase1', 'parallax-system--display--phase2', 'parallax-system--display--phase3', 'parallax-system--display--phase4');
-    } else {
-      // Remove all phase classes first
-      card.classList.remove('parallax-system--display--phase1', 'parallax-system--display--phase2', 'parallax-system--display--phase3', 'parallax-system--display--phase4');
-      
-      // Add current phase class if phase > 0
-      if (currentPhase > 0) {
-        card.classList.add(`parallax-system--display--phase${currentPhase}`);
-      }
-    }
-  }
+  handleDisplayPhases(progress, card);
+  handleCardAnimation(progress, card);
   
-  // Calculate CTA scroll percentage
+  // Handle CTA and qualities
   const cta = document.querySelector('[data-parallax-system="cta"]');
   let ctaScrollProgress = 0;
   if (cta) {
-    const ctaRect = cta.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const ctaTop = ctaRect.top;
-    
-    // 0% when cta top hits viewport bottom (ctaTop = viewportHeight)
-    // 100% when cta top hits viewport top (ctaTop = 0)
-    // Progress = (viewportHeight - ctaTop) / viewportHeight * 100
-    if (ctaTop <= viewportHeight && ctaTop >= 0) {
-      ctaScrollProgress = ((viewportHeight - ctaTop) / viewportHeight) * 100;
-    } else if (ctaTop < 0) {
-      ctaScrollProgress = 100;
-    } else {
-      ctaScrollProgress = 0;
-    }
-    
-    // Cap at 100%
-    ctaScrollProgress = Math.min(100, ctaScrollProgress);
+    ctaScrollProgress = Math.min(100, calculateCTAScrollProgress(cta.getBoundingClientRect()));
   }
   
-  // Fix qualities section and show spacer when CTA scroll > 0%
   const qualities = document.querySelector('[data-parallax-system="qualities"]');
   const qualitiesSpacer = document.querySelector('[data-parallax-system="qualities--spacer"]');
-  
   if (ctaScrollProgress > 0) {
-    if (qualities) {
-      qualities.classList.add('isFixed');
-    }
-    
-    if (qualitiesSpacer) {
-      qualitiesSpacer.classList.add('isVisible');
-    }
+    qualities?.classList.add('isFixed');
+    qualitiesSpacer?.classList.add('isVisible');
   } else {
-    // Reset when CTA scroll <= 0%
-    if (qualities) {
-      qualities.classList.remove('isFixed');
-    }
-    
-    if (qualitiesSpacer) {
-      qualitiesSpacer.classList.remove('isVisible');
-    }
+    qualities?.classList.remove('isFixed');
+    qualitiesSpacer?.classList.remove('isVisible');
   }
   
-  // Card scroll rates (adjustable)
-  const cardScrollInRate = 0.75; // Adjust this value to change card scroll-in rate (0.5 = half speed)
-  const cardScrollOutRate = .9; // Adjust this value to change card scroll-out rate
-  const cardScrollOutTrigger = 50; // Adjust this value to change when scroll-out begins (percentage of display scroll)
-  
-  if (card) {
-    // Remove all state classes first
-    card.classList.remove('isScrollingOut', 'isCentered', 'isScrollingIn');
-    
-    if (progress >= cardScrollOutTrigger) {
-      // Display scroll >= trigger point, apply scroll-out animation
-      // Calculate scroll-out progress from trigger point (progress can exceed 100%)
-      const scrollOutProgress = (progress - cardScrollOutTrigger) / (100 - cardScrollOutTrigger); // Can exceed 1
-      
-      const viewportHeight = window.innerHeight;
-      const cardHeight = 730;
-      const centerTop = (viewportHeight / 2) - (cardHeight / 2);
-      
-      // Calculate how far the card should move from center to fully exit viewport
-      // Card needs to move from center to beyond viewport top (centerTop + cardHeight to clear it)
-      const scrollOutDistance = centerTop + cardHeight; // Distance from center to fully off viewport top
-      const cardTranslateY = -scrollOutDistance * scrollOutProgress * cardScrollOutRate;
-      
-      card.classList.add('isScrollingOut');
-      card.style.setProperty('--card-top', `${centerTop + cardTranslateY}px`);
-      card.style.removeProperty('--card-translate-y');
-      // Keep scale at 1 when scrolling out
-      card.style.setProperty('--card-scale', '1');
-    } else {
-      // Display scroll < trigger point, use scroll-in logic
-      // Initialize scroll tracking to 0 so scroll delta is calculated from page start
-      if (typeof window.cardInitialScrollY === 'undefined') {
-        window.cardInitialScrollY = 0;
-      }
-      
-      const currentScrollY = window.scrollY || window.pageYOffset;
-      const scrollDelta = currentScrollY - window.cardInitialScrollY;
-      const viewportHeight = window.innerHeight;
-      const cardHeight = 730;
-      
-      // Calculate the scroll position where card would reach center
-      const cardStartTop = 87 * viewportHeight / 100;
-      const cardStartCenter = cardStartTop + (cardHeight / 2);
-      const targetCenter = viewportHeight / 2;
-      const centerDistance = cardStartCenter - targetCenter;
-      
-      // Calculate scroll position needed to reach center (accounting for parallax rate)
-      const scrollToReachCenter = centerDistance / cardScrollInRate;
-      
-      if (scrollDelta >= scrollToReachCenter && !card.dataset.scrolledPastCenter) {
-        // Card has reached center, fix it there
-        card.dataset.scrollYAtCenter = currentScrollY.toString();
-        card.dataset.scrolledPastCenter = 'true';
-      }
-      
-      // Check if we've scrolled back before the center position
-      if (card.dataset.scrollYAtCenter) {
-        const scrollYAtCenter = parseFloat(card.dataset.scrollYAtCenter);
-        if (currentScrollY < scrollYAtCenter) {
-          // Scrolled back before center, remove fixed state
-          delete card.dataset.scrolledPastCenter;
-          delete card.dataset.scrollYAtCenter;
-        }
-      }
-      
-      // Clear scroll-out tracking when below trigger
-      if (card.dataset.scrollYAt60) {
-        delete card.dataset.scrollYAt60;
-      }
-      
-      if (card.dataset.scrolledPastCenter) {
-        // Card is fixed at center
-        card.classList.add('isCentered');
-        card.style.removeProperty('--card-top');
-        card.style.removeProperty('--card-translate-y');
-        // Scale is at 1 when centered
-        card.style.setProperty('--card-scale', '1');
-      } else {
-        // Apply parallax (scroll-in)
-        const cardTranslateY = -scrollDelta * cardScrollInRate;
-        card.classList.add('isScrollingIn');
-        card.style.setProperty('--card-top', '87vh');
-        card.style.setProperty('--card-translate-y', `${cardTranslateY}px`);
-        
-        // Animate scale from 0.9 to 1 as it scrolls in
-        // Calculate scale progress based on scroll delta
-        const maxScrollForScale = scrollToReachCenter; // Use same distance as reaching center
-        const scaleProgress = Math.min(1, Math.max(0, scrollDelta / maxScrollForScale));
-        const cardScale = 0.9 + (scaleProgress * 0.1); // 0.9 to 1.0
-        card.style.setProperty('--card-scale', cardScale.toString());
-      }
-    }
-  }
-  
-  // Show journey--0 when display scroll reaches 50%
+  // Handle journey--0 visibility
   const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
   const hero = document.querySelector('[data-parallax-system="hero"]');
   if (journey0) {
     if (progress >= 50) {
       journey0.classList.add('isVisible');
-      // Add opacity: 0 to hero when journey--0 is first shown
-      if (hero) {
-        hero.classList.add('opacity-0');
-      }
+      hero?.classList.add('opacity-0');
     } else {
       journey0.classList.remove('isVisible');
-      // Reset hero opacity when journey--0 is hidden
-      if (hero) {
-        hero.classList.remove('opacity-0');
-      }
+      hero?.classList.remove('opacity-0');
     }
     
-    // Set journey--0 to position: relative when display scroll reaches 100%
     if (progress >= 100) {
       journey0.classList.add('isRelative');
     } else {
@@ -245,7 +331,7 @@ function updateScroll() {
     }
   }
   
-  // Hide journey--spacer when display scroll reaches 100%
+  // Handle journey spacer
   const journeySpacer = document.querySelector('[data-parallax-system="journey--spacer"]');
   if (journeySpacer) {
     if (progress >= 100) {
@@ -255,7 +341,7 @@ function updateScroll() {
     }
   }
   
-  // Toggle isFixed class on canvas based on display scroll (only after ribbon is initialized)
+  // Handle ribbon canvas
   const ribbonCanvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
   if (ribbonCanvas && window.ribbonInitialized) {
     if (progress < CANVAS_ISFIXED_THRESHOLD) {
@@ -265,256 +351,93 @@ function updateScroll() {
     }
   }
   
-  // Handle button tabs fixed behavior based on opener element
+  // Handle button tabs
   const buttonTabs = document.querySelector('[data-button-tabs]');
   const buttonTabsOpener = document.querySelector('[data-button-tabs-opener]');
   const buttonTabsSpacer = document.querySelector('[data-button-tabs-spacer]');
   
   if (buttonTabs && buttonTabsOpener) {
     const openerRect = buttonTabsOpener.getBoundingClientRect();
-    // Check if the bottom of the opener has left the viewport
     if (openerRect.bottom < 0) {
-      // Opener bottom has left viewport, add fixed class and show spacer
       buttonTabs.classList.add('fixed');
-      if (buttonTabsSpacer) {
-        buttonTabsSpacer.classList.remove('hidden');
-      }
+      buttonTabsSpacer?.classList.remove('hidden');
     } else {
-      // Opener is still in viewport, remove fixed class and hide spacer
       buttonTabs.classList.remove('fixed');
-      if (buttonTabsSpacer) {
-        buttonTabsSpacer.classList.add('hidden');
-      }
+      buttonTabsSpacer?.classList.add('hidden');
     }
   }
-
-  // Handle journey tab activation based on scroll position
+  
+  // Handle journey sections
   const journeySections = document.querySelectorAll('[data-journey]');
   const tabs = document.querySelectorAll('[data-button-tab]');
   const viewportHeight = window.innerHeight;
-  const activationThreshold = viewportHeight * 0.5; // 50% of viewport
+  const activationThreshold = viewportHeight * 0.5;
   let activeJourney = null;
   let closestSection = null;
   let closestDistance = Infinity;
-  
-  // Track connectors section scroll state for tabs positioning
   let connectorsScrollPercentage = 0;
-
+  
   journeySections.forEach(section => {
     const journeyId = section.getAttribute('data-journey');
     if (!journeyId) return;
-
+    
     const rect = section.getBoundingClientRect();
-    const sectionTop = rect.top;
-    const sectionBottom = rect.bottom;
     const sectionHeight = rect.height;
-    
-    // Get the immediate child div for animation
-    const childDiv = section.querySelector(':scope > div');
-    
-    // Calculate scroll percentage (how much of the section has scrolled through viewport)
-    // Percentage: 0% = section top enters viewport bottom, 100% = section bottom exits viewport top
-    let scrollPercentage = 0;
-    
-    if (sectionBottom < 0) {
-      // Section has fully scrolled past (bottom above viewport top)
-      scrollPercentage = 100;
-    } else if (sectionTop > viewportHeight) {
-      // Section hasn't entered yet (top below viewport bottom)
-      scrollPercentage = 0;
-    } else {
-      // Section is in viewport - calculate percentage based on position
-      // When sectionTop = viewportHeight: 0% (just entering)
-      // When sectionBottom = 0: 100% (just exiting)
-      // The scroll range is from viewportHeight to -sectionHeight
-      const scrollRange = viewportHeight + sectionHeight;
-      const scrolledAmount = viewportHeight - sectionTop;
-      scrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / scrollRange) * 100));
-    }
-    
-    // Track connectors section scroll percentage
+    const scrollPercentage = calculateJourneyScrollPercentage(rect, sectionHeight);
     const isConnectors = journeyId === 'connectors';
+    
     if (isConnectors) {
       connectorsScrollPercentage = scrollPercentage;
     }
     
-    // Map scroll percentage to animation value
-    // 0-25%: animate from 0.8 to 1.0
-    // 25-50%: stay at 1.0
-    // 50-100%: animate from 1.0 to 0.4 scale and 0 opacity (except for connectors section)
-    let opacity = 0.8;
-    let scale = 0.8;
-    let translateY = 0;
+    handleJourneySectionAnimation(section, scrollPercentage, isConnectors);
     
-    if (scrollPercentage <= 25) {
-      // 0-25%: animate from 0.8 to 1.0
-      const progress = scrollPercentage / 25; // 0 to 1
-      opacity = 0.8 + (progress * 0.2); // 0.8 to 1.0
-      scale = 0.8 + (progress * 0.2); // 0.8 to 1.0
-    } else if (scrollPercentage >= 50 && !isConnectors) {
-      // 50-100%: animate from 1.0 to 0.4 scale and 0 opacity (skip for connectors)
-      const progress = (scrollPercentage - 50) / 50; // 0 to 1
-      opacity = 1.0 - (progress * 1.0); // 1.0 to 0
-      scale = 1.0 - (progress * 0.6); // 1.0 to 0.4
-      // Add translateY to create illusion of exiting faster than scroll
-      translateY = -progress * 400; // Translate up by up to 400px
-    } else {
-      // 25-50%: stay at max, or connectors section stays at max after 50%
-      opacity = 1.0;
-      scale = 1.0;
-    }
-    
-    // Apply opacity and transforms to the immediate child div
-    if (childDiv) {
-      childDiv.style.opacity = opacity;
-      childDiv.style.transform = `translateY(${translateY}px) scale(${scale})`;
-    }
-    
-    // Check if section has scrolled 50% into viewport
-    // This means the section top has reached or passed 50% of viewport height
-    // And the section is still visible
-    if (sectionTop <= activationThreshold && sectionBottom > activationThreshold) {
-      // Section is at 50% scroll point
-      const distance = Math.abs(sectionTop - activationThreshold);
+    if (rect.top <= activationThreshold && rect.bottom > activationThreshold) {
+      const distance = Math.abs(rect.top - activationThreshold);
       if (distance < closestDistance) {
         closestDistance = distance;
         closestSection = journeyId;
       }
     }
     
-    // Handle phase classes based on scroll percentage
-    // Only apply phase classes when section is in viewport
-    const isInViewport = sectionTop <= viewportHeight && sectionBottom >= 0;
-    
-    if (isInViewport) {
-      // Add/remove phase classes based on scroll percentage thresholds (reversible)
-      if (scrollPercentage >= JOURNEY_PHASE_1_PERCENTAGE) {
-        section.classList.add('journey-visuals--phase-1');
-      } else {
-        section.classList.remove('journey-visuals--phase-1');
-      }
-      
-      if (scrollPercentage >= JOURNEY_PHASE_2_PERCENTAGE) {
-        section.classList.add('journey-visuals--phase-2');
-      } else {
-        section.classList.remove('journey-visuals--phase-2');
-      }
-      
-      if (scrollPercentage >= JOURNEY_PHASE_3_PERCENTAGE) {
-        section.classList.add('journey-visuals--phase-3');
-      } else {
-        section.classList.remove('journey-visuals--phase-3');
-      }
-    } else {
-      // Remove phase classes when section is out of view
-      section.classList.remove('journey-visuals--phase-1');
-      section.classList.remove('journey-visuals--phase-2');
-      section.classList.remove('journey-visuals--phase-3');
-    }
+    const isInViewport = rect.top <= viewportHeight && rect.bottom >= 0;
+    handleJourneyPhaseClasses(section, scrollPercentage, isInViewport);
   });
   
-  // Animate journey visuals from bottom with opacity as sections scroll in
+  // Handle journey visuals
   const journeyVisuals = document.querySelectorAll('[data-journey-visual]');
   journeyVisuals.forEach(visual => {
     const visualJourneyId = visual.getAttribute('data-journey-visual');
     if (!visualJourneyId) return;
     
-    // Find the parent journey section
     const parentSection = document.querySelector(`[data-journey="${visualJourneyId}"]`);
     if (!parentSection) return;
     
     const sectionRect = parentSection.getBoundingClientRect();
-    const sectionTop = sectionRect.top;
     const sectionHeight = sectionRect.height;
-    const viewportHeight = window.innerHeight;
-    
-    // Calculate scroll progress for the section
-    // 0% when section top enters viewport, 100% when section is fully in view
-    let scrollProgress = 0;
-    
-    if (sectionTop <= viewportHeight && sectionTop >= -sectionHeight) {
-      // Section is in or entering viewport
-      // Progress: 0 when sectionTop = viewportHeight, 1 when sectionTop = 0
-      scrollProgress = Math.max(0, Math.min(1, (viewportHeight - sectionTop) / (viewportHeight + sectionHeight * 0.5)));
-    } else if (sectionTop < -sectionHeight) {
-      // Section has fully scrolled past
-      scrollProgress = 1;
-    }
-    
-    // Calculate initial translateY to position element outside parent section bounds
-    // Start from below the parent section (use section height as offset)
-    const initialTranslateY = sectionHeight * 0.5; // Start 50% of section height below
-    
-    // For agreements section, also check scroll percentage for exit animation
-    const isAgreements = visualJourneyId === 'agreements';
-    let agreementsScrollPercentage = 0;
-    
-    if (isAgreements) {
-      // Calculate scroll percentage for agreements section (same as in journeySections loop)
-      if (sectionRect.bottom < 0) {
-        agreementsScrollPercentage = 100;
-      } else if (sectionRect.top > viewportHeight) {
-        agreementsScrollPercentage = 0;
-      } else {
-        const scrollRange = viewportHeight + sectionHeight;
-        const scrolledAmount = viewportHeight - sectionRect.top;
-        agreementsScrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / scrollRange) * 100));
-      }
-    }
-    
-    // Animate from bottom (translateY from initialTranslateY to 0), opacity (0 to 1), and scale (0.25 to 1)
-    // Animation happens in first 50% of scroll progress
-    const animationProgress = Math.min(1, scrollProgress / 0.5);
-    let translateY = initialTranslateY * (1 - animationProgress); // From outside bounds to 0px
-    let opacity = animationProgress; // 0 to 1
-    let scale = 0.25 + (animationProgress * 0.75); // 0.25 to 1.0
-    
-    // For agreements section, add exit animation when scrolling out
-    if (isAgreements && agreementsScrollPercentage > JOURNEY_VISUAL_EXIT_START_PERCENTAGE) {
-      const exitRange = 100 - JOURNEY_VISUAL_EXIT_START_PERCENTAGE;
-      const exitProgress = (agreementsScrollPercentage - JOURNEY_VISUAL_EXIT_START_PERCENTAGE) / exitRange; // 0 to 1 as section exits
-      const exitTranslateY = exitProgress * viewportHeight * 4; // Translate down at 4x scroll rate
-      translateY += exitTranslateY;
-      opacity = Math.max(0, opacity - (exitProgress * opacity)); // Fade out
-      // Scale down more on exit (from current scale to 0.5)
-      scale = scale * (1 - exitProgress * 0.5); // Scale down to 50% of current scale
-    }
-    
-    visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
-    visual.style.opacity = opacity;
+    handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight);
   });
   
-  // Animate tabs top position when connectors section starts exiting (1:1 with scroll)
+  // Handle tabs animation
   if (connectorsScrollPercentage >= 50 && buttonTabs) {
-    // Find connectors section to calculate scroll position
     const connectorsSection = document.querySelector('[data-journey="connectors"]');
     if (connectorsSection) {
       const connectorsRect = connectorsSection.getBoundingClientRect();
       const connectorsTop = connectorsRect.top;
-      
-      // Calculate how much connectors has scrolled past viewport top
-      // When connectorsTop is negative, it means it's scrolled past
-      // We want tabs to move up at 1:1 rate with this scroll
       const scrollAmount = connectorsTop < 0 ? Math.abs(connectorsTop) : 0;
-      
-      // Apply top position (negative to move up)
       buttonTabs.style.top = `${-scrollAmount}px`;
     }
   } else if (buttonTabs) {
-    // Reset top when connectors section is not exiting
     buttonTabs.style.top = '';
   }
-
-  // Use the section closest to the 50% threshold as active
-  // But skip if we're programmatically scrolling to a specific section
+  
+  // Update active tab
   if (!isProgrammaticScroll) {
     activeJourney = closestSection;
   } else {
-    // Keep the programmatic scroll target active during scroll
     activeJourney = programmaticScrollTarget;
   }
-
-  // Update tab states
+  
   tabs.forEach(tab => {
     const tabId = tab.getAttribute('data-button-tab');
     if (tabId === activeJourney) {
@@ -525,63 +448,45 @@ function updateScroll() {
   });
 }
 
-// Handle button tab clicks for smooth scrolling
-document.addEventListener('DOMContentLoaded', function() {
-  const tabs = document.querySelectorAll('[data-button-tab]');
+// ============================================
+// EVENT HANDLERS
+// ============================================
+
+function handleTabClick(e) {
+  e.preventDefault();
+  const tabId = this.getAttribute('data-button-tab');
+  if (!tabId) return;
   
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function(e) {
-      e.preventDefault();
-      const tabId = this.getAttribute('data-button-tab');
-      if (!tabId) return;
-      
-      // Activate the clicked tab immediately
-      tabs.forEach(t => {
-        if (t.getAttribute('data-button-tab') === tabId) {
-          t.classList.add('isActive');
-        } else {
-          t.classList.remove('isActive');
-        }
-      });
-      
-      // Set programmatic scroll flag to prevent other tabs from activating
-      isProgrammaticScroll = true;
-      programmaticScrollTarget = tabId;
-      
-      // Find the corresponding journey section
-      const section = document.querySelector(`[data-journey="${tabId}"]`);
-      if (!section) return;
-      
-      // Get the section's position relative to the document
-      const sectionRect = section.getBoundingClientRect();
-      const sectionTop = sectionRect.top + window.scrollY;
-      
-      // Scroll to position where section top is at the top of the viewport
-      // This will make the section fully scroll into view
-      const targetScrollY = sectionTop;
-      
-      // Smooth scroll to target position
-      window.scrollTo({
-        top: targetScrollY,
-        behavior: 'smooth'
-      });
-      
-      // Clear programmatic scroll flag after scroll completes
-      // Estimate scroll duration (typically 500-1000ms for smooth scroll)
-      setTimeout(() => {
-        isProgrammaticScroll = false;
-        programmaticScrollTarget = null;
-      }, 1000);
-    });
+  const tabs = document.querySelectorAll('[data-button-tab]');
+  tabs.forEach(t => {
+    if (t.getAttribute('data-button-tab') === tabId) {
+      t.classList.add('isActive');
+    } else {
+      t.classList.remove('isActive');
+    }
   });
-});
+  
+  isProgrammaticScroll = true;
+  programmaticScrollTarget = tabId;
+  
+  const section = document.querySelector(`[data-journey="${tabId}"]`);
+  if (!section) return;
+  
+  const sectionRect = section.getBoundingClientRect();
+  const sectionTop = sectionRect.top + window.scrollY;
+  
+  window.scrollTo({
+    top: sectionTop,
+    behavior: 'smooth'
+  });
+  
+  setTimeout(() => {
+    isProgrammaticScroll = false;
+    programmaticScrollTarget = null;
+  }, 1000);
+}
 
-// Track scroll position and double scroll rate when display scroll < 100%
-let lastScrollY = window.scrollY || window.pageYOffset;
-let isAdjustingScroll = false;
-
-window.addEventListener('wheel', function(event) {
-  // Check if display scroll is less than 100%
+function handleWheel(event) {
   const display = document.querySelector('[data-parallax-system="display"]');
   if (!display) {
     updateScroll();
@@ -589,26 +494,13 @@ window.addEventListener('wheel', function(event) {
   }
   
   const displayRect = display.getBoundingClientRect();
-  const displayHeight = displayRect.height;
-  const displayTop = displayRect.top;
+  const progress = calculateDisplayProgress(displayRect);
   
-  let progress = 0;
-  if (displayTop > 0) {
-    // Show negative values when display hasn't reached viewport top
-    progress = -(displayTop / displayHeight) * 100;
-  } else if (displayRect.bottom <= 0) {
-    progress = 100;
-  } else {
-    progress = (-displayTop / displayHeight) * 100;
-    progress = Math.max(0, Math.min(100, progress));
-  }
-  
-  // Double scroll rate when progress < 100%
   if (progress < 100 && !isAdjustingScroll) {
     event.preventDefault();
     isAdjustingScroll = true;
     
-    const scrollAmount = event.deltaY * 2; // Double the scroll amount
+    const scrollAmount = event.deltaY * 2;
     const currentScrollY = window.scrollY || window.pageYOffset;
     const newScrollY = Math.max(0, currentScrollY + scrollAmount);
     
@@ -617,7 +509,6 @@ window.addEventListener('wheel', function(event) {
       behavior: 'auto'
     });
     
-    // Update scroll after a brief delay
     setTimeout(() => {
       isAdjustingScroll = false;
       lastScrollY = window.scrollY || window.pageYOffset;
@@ -626,119 +517,116 @@ window.addEventListener('wheel', function(event) {
   } else {
     updateScroll();
   }
-}, { passive: false });
-
-window.addEventListener('scroll', function() {
-  if (!isAdjustingScroll) {
-    updateScroll();
-  }
-});
-
-// Initialize scroll tracking on page load
-window.cardInitialScrollY = 0;
-
-// Initialize card scale on page load
-const card = document.querySelector('[data-parallax-system="display--card"]');
-if (card) {
-  card.style.setProperty('--card-scale', '0.9');
 }
 
-// Initialize journey--0 styles on page load
-const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
-if (journey0) {
-  journey0.classList.add('isLoaded');
-}
+// ============================================
+// INITIALIZATION
+// ============================================
 
-// Initialize button tabs spacer height on page load
 function initializeButtonTabsSpacer() {
   const buttonTabs = document.querySelector('[data-button-tabs]');
   const buttonTabsSpacer = document.querySelector('[data-button-tabs-spacer]');
   if (buttonTabs && buttonTabsSpacer) {
-    // Use getBoundingClientRect for more reliable height measurement
     const tabsRect = buttonTabs.getBoundingClientRect();
     const tabsHeight = tabsRect.height;
     if (tabsHeight > 0) {
       buttonTabsSpacer.style.height = tabsHeight + 'px';
     } else {
-      // If height is still 0, try again after a short delay
       setTimeout(initializeButtonTabsSpacer, 100);
     }
   }
 }
 
-// Initialize on page load
-updateScroll();
-
-// Initialize button tabs spacer height after page load
-// Use requestAnimationFrame to ensure DOM is fully rendered
-requestAnimationFrame(() => {
+function initialize() {
+  window.cardInitialScrollY = 0;
+  
+  const card = document.querySelector('[data-parallax-system="display--card"]');
+  if (card) {
+    card.style.setProperty('--card-scale', '0.9');
+  }
+  
+  const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
+  if (journey0) {
+    journey0.classList.add('isLoaded');
+  }
+  
+  // Initialize button tabs spacer
   requestAnimationFrame(() => {
-    initializeButtonTabsSpacer();
+    requestAnimationFrame(() => {
+      initializeButtonTabsSpacer();
+    });
   });
-});
-////////////////////////////
-// End of Parallax System //
-////////////////////////////
+  
+  // Setup tab click handlers
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('[data-button-tab]');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', handleTabClick);
+    });
+  });
+  
+  // Setup scroll and wheel handlers
+  window.addEventListener('wheel', handleWheel, { passive: false });
+  window.addEventListener('scroll', function() {
+    if (!isAdjustingScroll) {
+      updateScroll();
+    }
+  });
+  
+  // Initial scroll update
+  updateScroll();
+}
 
-// Get canvas element from HTML
+// Initialize on load
+initialize();
+
+// ============================================
+// CONTRACT TO CASH RIBBON
+// ============================================
+
 const canvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
 if (!canvas) {
   console.warn("Canvas element not found for contract-to-cash-ribbon");
 } else {
   const ctx = canvas.getContext("2d");
 
-  // CONTRACT TO CASH RIBBON CONFIG
-
+  // CONFIGURATION
   const ENABLE_MOTION = true;
   const LINES = 33;
   const SPACING = 7;
   const LINE_WIDTH = 1;
   const PIN_X = 0.20;
-
   const SEED = Math.random() * 10000;
   const STEPS = 260;
-
   const TIME_SPEED = 0.003;
   const PHASE_DRIFT_SPEED = 0.55;
-
   const BASE_TWIST = 0.26;
   const TWIST_AMP = 0.78;
-
   const TWIST_CYCLES = 1.55;
   const H2_RATIO = 2.25;
   const H3_RATIO = 3.65;
-
   const H2_GAIN = 0.62;
   const H3_GAIN = 0.28;
-
   const PHASE_PER_LINE = 0.18;
-
   const START_TWIST_START = 0.00;
   const START_TWIST_END = 0.1;
   const START_TWIST_POWER = 2.0;
   const START_TWIST_TOTAL = Math.PI;
-
   const EXIT_TWIST_START = 0.84;
   const EXIT_TWIST_END = 0.985;
   const EXIT_TWIST_POWER = 1.9;
   const EXIT_TWIST_TOTAL = Math.PI;
-
   const EXIT_LEFT_START = 0.84;
   const EXIT_LEFT_END = 0.998;
   const EXIT_LEFT_POWER = 1.7;
   const EXIT_LEFT_PX = 520;
-
   const PERSPECTIVE = 760;
   const Z_Y_TILT = 0.05;
-
   const GRADIENT_A = { r: 244, g: 51,  b: 171, a: .25 };
   const GRADIENT_B = { r: 242, g: 169, b: 0,   a: .25 };
   const GRADIENT_C = { r: 77,  g: 60,  b: 255, a: .25 };
 
-  /* ==========================
-      Helpers
-      ========================== */
-
+  // HELPER FUNCTIONS
   const TAU = Math.PI * 2;
 
   function hash1(n) {
@@ -797,57 +685,46 @@ if (!canvas) {
     }
   }
 
-  /* ==========================
-      Geometry + draw
-      ========================== */
-
+  // STATE
   let width = 0, height = 0, dpr = 1;
   let offsets = [];
   let t = 0;
   let isAnimating = false;
   let frameCount = 0;
-  let skipFrames = 0; // Skip every N frames for performance
+  let skipFrames = 0;
 
+  // INITIALIZATION
   function init() {
-    // Use offsetWidth/offsetHeight instead of getBoundingClientRect to avoid layout thrashing
     dpr = Math.min(2, window.devicePixelRatio || 1);
     width = canvas.offsetWidth;
     height = canvas.offsetHeight;
 
-    // Safety check: if dimensions are invalid or too large, don't initialize
     if (width <= 0 || height <= 0) {
       console.warn("Canvas dimensions are invalid:", width, height);
       return;
     }
     
-    // Lock canvas dimensions to prevent resizing on browser resize
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
 
-    // Safety check: limit canvas height to prevent performance issues
-    // If canvas is larger than 5000px, cap it (this is a very large canvas)
     const maxHeight = 5000;
     if (height > maxHeight) {
       console.warn(`Canvas height (${height}px) exceeds maximum (${maxHeight}px). Limiting for performance.`);
       height = maxHeight;
     }
 
-    // Adjust frame skipping based on canvas size for performance
-    // Larger canvases need more frame skipping
     if (height > 3000) {
-      skipFrames = 1; // Skip every other frame for very large canvases
+      skipFrames = 1;
     } else if (height > 2000) {
-      skipFrames = 0; // Draw every frame for medium canvases
+      skipFrames = 0;
     } else {
-      skipFrames = 0; // Draw every frame for small canvases
+      skipFrames = 0;
     }
 
-    // Set canvas drawing buffer dimensions (with device pixel ratio for crisp rendering)
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Initialize offsets array
     offsets = [];
     const mid = (LINES - 1) / 2;
     for (let i = 0; i < LINES; i++) {
@@ -859,8 +736,8 @@ if (!canvas) {
     }
   }
 
+  // DRAWING
   function draw() {
-    // Don't draw if dimensions are invalid
     if (width <= 0 || height <= 0) {
       if (ENABLE_MOTION) {
         isAnimating = false;
@@ -869,7 +746,6 @@ if (!canvas) {
     }
 
     frameCount++;
-    // Skip drawing frames for performance on large canvases
     const shouldDraw = skipFrames === 0 || frameCount % (skipFrames + 1) === 0;
 
     if (shouldDraw) {
@@ -880,16 +756,13 @@ if (!canvas) {
     }
 
     const x0 = width * PIN_X;
-
     const basePA = hash1(SEED + 10.1) * TAU;
     const basePB = hash1(SEED + 20.2) * TAU;
     const basePC = hash1(SEED + 30.3) * TAU;
-
     const drift = ENABLE_MOTION ? (t * PHASE_DRIFT_SPEED) : 0;
     const pA = basePA + drift;
     const pB = basePB - drift * 0.7;
     const pC = basePC + drift * 0.35;
-
     const sign = (hash1(SEED + 99.9) < 0.5) ? -1 : 1;
 
     if (shouldDraw) {
@@ -901,34 +774,23 @@ if (!canvas) {
         const s0 = offsets[i];
         const gT = (s0 - minOff) / denom;
         ctx.strokeStyle = gradientColor(gT);
-
         const lp = (i - (LINES - 1) / 2) * PHASE_PER_LINE;
         ctx.beginPath();
 
         for (let j = 0; j <= STEPS; j++) {
           const u = j / STEPS;
           const y = u * height;
-
           const a1 = Math.sin(u * TWIST_CYCLES * TAU + pA + lp);
           const a2 = Math.sin(u * (TWIST_CYCLES * H2_RATIO) * TAU + pB - lp * 0.65);
           const a3 = Math.sin(u * (TWIST_CYCLES * H3_RATIO) * TAU + pC + lp * 0.35);
-
-          const thetaField =
-            sign * (BASE_TWIST + TWIST_AMP * (a1 + H2_GAIN * a2 + H3_GAIN * a3));
-
+          const thetaField = sign * (BASE_TWIST + TWIST_AMP * (a1 + H2_GAIN * a2 + H3_GAIN * a3));
           const startF = fadeOut01(u, START_TWIST_START, START_TWIST_END, START_TWIST_POWER);
           const exitF  = ramp01(u, EXIT_TWIST_START, EXIT_TWIST_END, EXIT_TWIST_POWER);
-
-          const theta = thetaField
-            + sign * startF * START_TWIST_TOTAL
-            + sign * exitF  * EXIT_TWIST_TOTAL;
-
+          const theta = thetaField + sign * startF * START_TWIST_TOTAL + sign * exitF * EXIT_TWIST_TOTAL;
           const exitLeftF = ramp01(u, EXIT_LEFT_START, EXIT_LEFT_END, EXIT_LEFT_POWER);
           const exitLeft = -EXIT_LEFT_PX * exitLeftF;
-
           const xObj = (x0 + exitLeft) + (s0 * Math.cos(theta));
           const zObj = (s0 * Math.sin(theta));
-
           const x = projectX(xObj, x0, zObj);
           const y2 = y + zObj * Z_Y_TILT;
 
@@ -956,39 +818,32 @@ if (!canvas) {
     }
   }
 
-  // Initialize once on load - wait for canvas to be properly sized
-  // Use double requestAnimationFrame to ensure layout is complete
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       init();
-      // Only start animation if initialization was successful (width and height are valid)
       if (width > 0 && height > 0) {
         startAnimation();
-        // Mark ribbon as initialized so isFixed class can be applied
         window.ribbonInitialized = true;
-        // Trigger updateScroll to apply isFixed class on initial load
         updateScroll();
       }
     });
   });
 }
 
-///////////////////
-// Shiny Buttons //
-///////////////////
+// ============================================
+// SHINY BUTTONS
+// ============================================
+
 document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
-  const OUTER = 200;     // starts influencing
-  const INNER = 100;     // full influence
-  const BASE = 90;       // base angle when far away
+  const OUTER = 200;
+  const INNER = 100;
+  const BASE = 90;
   let raf = 0;
 
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
   const smoothstep = (t) => t * t * (3 - 2 * t);
-
-  // Normalize degrees to [0, 360)
   const norm = (deg) => ((deg % 360) + 360) % 360;
 
-  // Shortest signed difference from a->b in degrees, range (-180..180]
   const shortestDelta = (a, b) => {
     let d = norm(b) - norm(a);
     if (d > 180) d -= 360;
@@ -1000,28 +855,19 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     const r = btn.getBoundingClientRect();
     const cx = r.left + r.width / 2;
     const cy = r.top + r.height / 2;
-
     const dx = clientX - cx;
     const dy = clientY - cy;
-
     const dist = Math.hypot(dx, dy);
 
-    // Outside OUTER: reset
     if (dist > OUTER) {
       btn.style.setProperty("--glow-angle", `${BASE}deg`);
       return;
     }
 
-    // Mouse angle in degrees (0..360)
     const mouseAngle = norm(Math.atan2(dy, dx) * (180 / Math.PI) + 90);
-
-    // Proximity: 0 at OUTER, 1 at INNER (and inside)
     let p = (OUTER - dist) / (OUTER - INNER);
-    p = smoothstep(clamp01(p)); // optional smoothing
-
-    // Blend BASE -> mouseAngle along shortest rotation
+    p = smoothstep(clamp01(p));
     const out = norm(BASE + shortestDelta(BASE, mouseAngle) * p);
-
     btn.style.setProperty("--glow-angle", `${out}deg`);
   };
 
@@ -1035,13 +881,11 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
 
   window.addEventListener("pointermove", onMove);
 });
-//////////////////////////
-// End of Shiny Buttons //
-//////////////////////////
 
-////////////////////
-// Customer Logos //
-////////////////////
+// ============================================
+// CUSTOMER LOGOS
+// ============================================
+
 (() => {
   const TRACK_SEL = "[data-customer-logos]";
 
@@ -1049,11 +893,9 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     if (track.dataset.loopReady === "true") return;
     track.dataset.loopReady = "true";
 
-    // Find the first child div (the set containing logos)
     const firstSet = track.querySelector(":scope > div");
     if (!firstSet) return;
 
-    // Clone the set and append to the track if less than 2 sets exist
     const sets = Array.from(track.querySelectorAll(":scope > div"));
     if (sets.length < 2) {
       const clone = firstSet.cloneNode(true);
@@ -1062,13 +904,10 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     }
 
     const updateDistance = () => {
-      // Measure the width of the first set using getBoundingClientRect().width
       const w = firstSet.getBoundingClientRect().width;
-      // Set CSS custom property --loop-distance on the track element (negative for left translation)
       track.style.setProperty("--loop-distance", `-${w}px`);
     };
 
-    // Wait for images to load before calculating distance
     const imgs = Array.from(track.querySelectorAll("img"));
     const pending = imgs.filter((img) => !img.complete);
 
@@ -1086,7 +925,6 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
       });
     }
 
-    // Handle window resize with debounce (150ms timeout)
     let t;
     window.addEventListener("resize", () => {
       clearTimeout(t);
@@ -1094,9 +932,5 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     });
   }
 
-  // Query all track elements using [data-customer-logos] selector
   document.querySelectorAll(TRACK_SEL).forEach(setupTrack);
 })();
-///////////////////////////
-// End of Customer Logos //
-///////////////////////////

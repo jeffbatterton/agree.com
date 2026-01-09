@@ -680,9 +680,6 @@ requestAnimationFrame(() => {
 // End of Parallax System //
 ////////////////////////////
 
-/////////////////////////////
-// Contract to Cash Ribbon //
-/////////////////////////////
 // Get canvas element from HTML
 const canvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
 if (!canvas) {
@@ -690,9 +687,7 @@ if (!canvas) {
 } else {
   const ctx = canvas.getContext("2d");
 
-  /* ==========================
-      Baseline / layout
-      ========================== */
+  // CONTRACT TO CASH RIBBON CONFIG
 
   const ENABLE_MOTION = true;
   const LINES = 33;
@@ -703,16 +698,8 @@ if (!canvas) {
   const SEED = Math.random() * 10000;
   const STEPS = 260;
 
-  /* ==========================
-      Motion
-      ========================== */
-
   const TIME_SPEED = 0.003;
   const PHASE_DRIFT_SPEED = 0.55;
-
-  /* ==========================
-      Torsion field
-      ========================== */
 
   const BASE_TWIST = 0.26;
   const TWIST_AMP = 0.78;
@@ -726,12 +713,8 @@ if (!canvas) {
 
   const PHASE_PER_LINE = 0.18;
 
-  /* ==========================
-      Entry / Exit twists
-      ========================== */
-
   const START_TWIST_START = 0.00;
-  const START_TWIST_END = 0.16;
+  const START_TWIST_END = 0.1;
   const START_TWIST_POWER = 2.0;
   const START_TWIST_TOTAL = Math.PI;
 
@@ -745,16 +728,8 @@ if (!canvas) {
   const EXIT_LEFT_POWER = 1.7;
   const EXIT_LEFT_PX = 520;
 
-  /* ==========================
-      3D projection
-      ========================== */
-
   const PERSPECTIVE = 760;
   const Z_Y_TILT = 0.05;
-
-  /* ==========================
-      Gradient (RGBA)
-      ========================== */
 
   const GRADIENT_A = { r: 244, g: 51,  b: 171, a: .25 };
   const GRADIENT_B = { r: 242, g: 169, b: 0,   a: .25 };
@@ -844,6 +819,10 @@ if (!canvas) {
       console.warn("Canvas dimensions are invalid:", width, height);
       return;
     }
+    
+    // Lock canvas dimensions to prevent resizing on browser resize
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
 
     // Safety check: limit canvas height to prevent performance issues
     // If canvas is larger than 5000px, cap it (this is a very large canvas)
@@ -993,9 +972,6 @@ if (!canvas) {
     });
   });
 }
-////////////////////////////////////
-// End of Contract to Cash Ribbon //
-////////////////////////////////////
 
 ///////////////////
 // Shiny Buttons //

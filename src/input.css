@@ -552,11 +552,56 @@ footer {
     margin: 0;
   }
 
+  .journey-visuals--agreement p:nth-child(n + 7):nth-child(-n + 13) {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease-out;
+  }
+
+  .journey-visuals--phase-1 .journey-visuals--agreement p:nth-child(n + 7):nth-child(-n + 13) {
+    animation: journey-visuals--agreement--p 0.25s ease-out forwards;
+  }
+
+  .journey-visuals--agreement p:nth-child(7) {
+    animation-delay: 0.05s !important;
+  }
+
+  .journey-visuals--agreement p:nth-child(8) {
+    animation-delay: 0.1s !important;
+  }
+
+  .journey-visuals--agreement p:nth-child(9) {
+    animation-delay: 0.15s !important;
+  }
+
+  .journey-visuals--agreement p:nth-child(10) {
+    animation-delay: 0.2s !important;
+  }
+
+  .journey-visuals--agreement p:nth-child(11) {
+    animation-delay: 0.25s !important;
+  }
+
+  .journey-visuals--agreement p:nth-child(12) {
+    animation-delay: 0.3s !important;
+  }
+
+  .journey-visuals--agreement p:nth-child(13) {
+    animation-delay: 0.35s !important;
+  }
+
+  @keyframes journey-visuals--agreement--p {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .journey-visuals--agreement--variable {
     position: relative;
   }
 
-  .journey-visuals--agreement--2 .journey-visuals--agreement--variable::before {
+  .journey-visuals--phase-2 .journey-visuals--agreement--variable::before {
     font-size: 7px;
     padding: 1px 2px 0 2px;
     color: var(--yellow);
@@ -569,7 +614,69 @@ footer {
     background: var(--yellow-faint);
     border: 1px solid var(--yellow);
     text-align: center;
-    animation: bounce-in .25s linear forwards;
+    animation: journey-visuals--agreement--variable .25s linear forwards;
+    transform: scale(2);
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+  }
+
+  .journey-visuals--agreement--variable-2::before {
+    animation-delay: 0.1s !important;
+  }
+  
+  .journey-visuals--agreement--variable-3::before {
+    animation-delay: 0.2s !important;
+  }
+
+  @keyframes journey-visuals--agreement--variable {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .journey-visuals--agreement--signature {
+    display: none;
+    position: absolute;
+    left: 0
+    35px;
+    bottom: 54px;
+  }
+
+  .journey-visuals--phase-3 .journey-visuals--agreement--signature {
+    display: block;
+  }
+
+  .journey-visuals--phase-3 .journey-visuals--agreement--signature path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: journey-visuals--agreement--signature 3s ease-out forwards;
+  }
+  
+  .journey-visuals--agreement--signature path:nth-of-type(2) {
+    animation-delay: .2s !important;
+  }
+
+  .journey-visuals--agreement--signature path:nth-of-type(3) {
+    animation-delay: .3s !important;
+  }
+
+  .journey-visuals--agreement--signature path:nth-of-type(4) {
+    animation-delay: .5s !important;
+  }
+
+  .journey-visuals--agreement--signature path:nth-of-type(5) {
+    animation-delay: .6s !important;
+  }
+
+  .journey-visuals--agreement--signature path:nth-of-type(6) {
+    animation-delay: 1s !important;
+  }
+
+  @keyframes journey-visuals--agreement--signature  {
+    to {
+      stroke-dashoffset: 0;
+    }
   }
 
   .journey-bullet {
@@ -577,7 +684,9 @@ footer {
     transition: opacity 0.125s linear;
   }
 
-  .journey-bullet.isActive {
+  .journey-visuals--phase-1 .journey-bullet-1,
+  .journey-visuals--phase-2 .journey-bullet-2,
+  .journey-visuals--phase-3 .journey-bullet-3 {
     opacity: 1;
     animation: bounce-in 0.25s linear forwards;
   }
@@ -586,10 +695,12 @@ footer {
     opacity: 0;
   }
 
-  .journey-bullet.isActive .journey-bullet--check {
+  .journey-visuals--phase-1 .journey-bullet-1 .journey-bullet--check,
+  .journey-visuals--phase-2 .journey-bullet-2 .journey-bullet--check,
+  .journey-visuals--phase-3 .journey-bullet-3 .journey-bullet--check {
     opacity: 1;
   }
-
+  
   @keyframes bounce-in {
     from {
       transform: scale(0);

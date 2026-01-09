@@ -9,6 +9,11 @@ const CANVAS_ISFIXED_THRESHOLD = 25;
 let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
 
+// Phase class configuration for journey sections
+const JOURNEY_PHASE_1_PERCENTAGE = 37; // Scroll percentage to add phase-1 class
+const JOURNEY_PHASE_2_PERCENTAGE = 43; // Scroll percentage to add phase-2 class
+const JOURNEY_PHASE_3_PERCENTAGE = 49; // Scroll percentage to add phase-3 class (when section is 100% scrolled in)
+
 function updateScroll() {
   const display = document.querySelector('[data-parallax-system="display"]');
   if (!display) return;
@@ -375,6 +380,36 @@ function updateScroll() {
         closestSection = journeyId;
       }
     }
+    
+    // Handle phase classes based on scroll percentage
+    // Only apply phase classes when section is in viewport
+    const isInViewport = sectionTop <= viewportHeight && sectionBottom >= 0;
+    
+    if (isInViewport) {
+      // Add/remove phase classes based on scroll percentage thresholds (reversible)
+      if (scrollPercentage >= JOURNEY_PHASE_1_PERCENTAGE) {
+        section.classList.add('journey-visuals--phase-1');
+      } else {
+        section.classList.remove('journey-visuals--phase-1');
+      }
+      
+      if (scrollPercentage >= JOURNEY_PHASE_2_PERCENTAGE) {
+        section.classList.add('journey-visuals--phase-2');
+      } else {
+        section.classList.remove('journey-visuals--phase-2');
+      }
+      
+      if (scrollPercentage >= JOURNEY_PHASE_3_PERCENTAGE) {
+        section.classList.add('journey-visuals--phase-3');
+      } else {
+        section.classList.remove('journey-visuals--phase-3');
+      }
+    } else {
+      // Remove phase classes when section is out of view
+      section.classList.remove('journey-visuals--phase-1');
+      section.classList.remove('journey-visuals--phase-2');
+      section.classList.remove('journey-visuals--phase-3');
+    }
   });
   
   // Animate journey visuals from bottom with opacity as sections scroll in
@@ -418,18 +453,6 @@ function updateScroll() {
     
     visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
     visual.style.opacity = opacity;
-    
-    // When agreements visual animation completes, activate the first bullet (reversible)
-    if (visualJourneyId === 'agreements') {
-      const bullet = parentSection.querySelector('[data-journey-bullet="1"]');
-      if (bullet) {
-        if (animationProgress >= 1) {
-          bullet.classList.add('isActive');
-        } else {
-          bullet.classList.remove('isActive');
-        }
-      }
-    }
   });
   
   // Animate tabs top position when connectors section starts exiting (1:1 with scroll)

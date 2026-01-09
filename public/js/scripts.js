@@ -6,7 +6,7 @@
 const CANVAS_ISFIXED_THRESHOLD = 25;
 
 function updateScroll() {
-  const display = document.querySelector('[data-attr-parallax-system="display"]');
+  const display = document.querySelector('[data-parallax-system="display"]');
   if (!display) return;
   
   const displayRect = display.getBoundingClientRect();
@@ -53,7 +53,7 @@ function updateScroll() {
   }
   
   // Apply phase class to card
-  const card = document.querySelector('[data-attr-parallax-system="display--card"]');
+  const card = document.querySelector('[data-parallax-system="display--card"]');
   if (card) {
     if (progress >= displayScrollPhaseEnd) {
       // Remove all phase classes when display scroll reaches phase end
@@ -70,7 +70,7 @@ function updateScroll() {
   }
   
   // Calculate CTA scroll percentage
-  const cta = document.querySelector('[data-attr-parallax-system="cta"]');
+  const cta = document.querySelector('[data-parallax-system="cta"]');
   let ctaScrollProgress = 0;
   if (cta) {
     const ctaRect = cta.getBoundingClientRect();
@@ -93,8 +93,8 @@ function updateScroll() {
   }
   
   // Fix qualities section and show spacer when CTA scroll > 0%
-  const qualities = document.querySelector('[data-attr-parallax-system="qualities"]');
-  const qualitiesSpacer = document.querySelector('[data-attr-parallax-system="qualities--spacer"]');
+  const qualities = document.querySelector('[data-parallax-system="qualities"]');
+  const qualitiesSpacer = document.querySelector('[data-parallax-system="qualities--spacer"]');
   
   if (ctaScrollProgress > 0) {
     if (qualities) {
@@ -199,8 +199,8 @@ function updateScroll() {
   }
   
   // Show journey--0 when display scroll reaches 50%
-  const journey0 = document.querySelector('[data-attr-parallax-system="journey--0"]');
-  const hero = document.querySelector('[data-attr-parallax-system="hero"]');
+  const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
+  const hero = document.querySelector('[data-parallax-system="hero"]');
   if (journey0) {
     if (progress >= 50) {
       journey0.classList.add('isVisible');
@@ -225,7 +225,7 @@ function updateScroll() {
   }
   
   // Hide journey--spacer when display scroll reaches 100%
-  const journeySpacer = document.querySelector('[data-attr-parallax-system="journey--spacer"]');
+  const journeySpacer = document.querySelector('[data-parallax-system="journey--spacer"]');
   if (journeySpacer) {
     if (progress >= 100) {
       journeySpacer.classList.add('isHidden');
@@ -243,7 +243,104 @@ function updateScroll() {
       ribbonCanvas.classList.remove('isFixed');
     }
   }
+  
+  // Handle button tabs fixed behavior based on opener element
+  const buttonTabs = document.querySelector('[data-button-tabs]');
+  const buttonTabsOpener = document.querySelector('[data-button-tabs-opener]');
+  const buttonTabsSpacer = document.querySelector('[data-button-tabs-spacer]');
+  
+  if (buttonTabs && buttonTabsOpener) {
+    const openerRect = buttonTabsOpener.getBoundingClientRect();
+    // Check if the bottom of the opener has left the viewport
+    if (openerRect.bottom < 0) {
+      // Opener bottom has left viewport, add fixed class and show spacer
+      buttonTabs.classList.add('fixed');
+      if (buttonTabsSpacer) {
+        buttonTabsSpacer.classList.remove('hidden');
+      }
+    } else {
+      // Opener is still in viewport, remove fixed class and hide spacer
+      buttonTabs.classList.remove('fixed');
+      if (buttonTabsSpacer) {
+        buttonTabsSpacer.classList.add('hidden');
+      }
+    }
+  }
+
+  // Handle journey tab activation based on scroll position
+  const journeySections = document.querySelectorAll('[data-journey]');
+  const tabs = document.querySelectorAll('[data-button-tab]');
+  const viewportHeight = window.innerHeight;
+  const activationThreshold = viewportHeight * 0.5; // 50% of viewport
+  let activeJourney = null;
+  let closestSection = null;
+  let closestDistance = Infinity;
+
+  journeySections.forEach(section => {
+    const journeyId = section.getAttribute('data-journey');
+    if (!journeyId) return;
+
+    const rect = section.getBoundingClientRect();
+    const sectionTop = rect.top;
+    const sectionBottom = rect.bottom;
+    
+    // Check if section has scrolled 50% into viewport
+    // This means the section top has reached or passed 50% of viewport height
+    // And the section is still visible
+    if (sectionTop <= activationThreshold && sectionBottom > activationThreshold) {
+      // Section is at 50% scroll point
+      const distance = Math.abs(sectionTop - activationThreshold);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestSection = journeyId;
+      }
+    }
+  });
+
+  // Use the section closest to the 50% threshold as active
+  activeJourney = closestSection;
+
+  // Update tab states
+  tabs.forEach(tab => {
+    const tabId = tab.getAttribute('data-button-tab');
+    if (tabId === activeJourney) {
+      tab.classList.add('isActive');
+    } else {
+      tab.classList.remove('isActive');
+    }
+  });
 }
+
+// Handle button tab clicks for smooth scrolling
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('[data-button-tab]');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      const tabId = this.getAttribute('data-button-tab');
+      if (!tabId) return;
+      
+      // Find the corresponding journey section
+      const section = document.querySelector(`[data-journey="${tabId}"]`);
+      if (!section) return;
+      
+      // Get the section's position relative to the document
+      const sectionRect = section.getBoundingClientRect();
+      const sectionTop = sectionRect.top + window.scrollY;
+      
+      // Scroll to position where section top is at the top of the viewport
+      // This will make the section fully scroll into view
+      const targetScrollY = sectionTop;
+      
+      // Smooth scroll to target position
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: 'smooth'
+      });
+    });
+  });
+});
 
 // Track scroll position and double scroll rate when display scroll < 100%
 let lastScrollY = window.scrollY || window.pageYOffset;
@@ -251,7 +348,7 @@ let isAdjustingScroll = false;
 
 window.addEventListener('wheel', function(event) {
   // Check if display scroll is less than 100%
-  const display = document.querySelector('[data-attr-parallax-system="display"]');
+  const display = document.querySelector('[data-parallax-system="display"]');
   if (!display) {
     updateScroll();
     return;
@@ -307,13 +404,38 @@ window.addEventListener('scroll', function() {
 window.cardInitialScrollY = 0;
 
 // Initialize journey--0 styles on page load
-const journey0 = document.querySelector('[data-attr-parallax-system="journey--0"]');
+const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
 if (journey0) {
   journey0.classList.add('isLoaded');
 }
 
+// Initialize button tabs spacer height on page load
+function initializeButtonTabsSpacer() {
+  const buttonTabs = document.querySelector('[data-button-tabs]');
+  const buttonTabsSpacer = document.querySelector('[data-button-tabs-spacer]');
+  if (buttonTabs && buttonTabsSpacer) {
+    // Use getBoundingClientRect for more reliable height measurement
+    const tabsRect = buttonTabs.getBoundingClientRect();
+    const tabsHeight = tabsRect.height;
+    if (tabsHeight > 0) {
+      buttonTabsSpacer.style.height = tabsHeight + 'px';
+    } else {
+      // If height is still 0, try again after a short delay
+      setTimeout(initializeButtonTabsSpacer, 100);
+    }
+  }
+}
+
 // Initialize on page load
 updateScroll();
+
+// Initialize button tabs spacer height after page load
+// Use requestAnimationFrame to ensure DOM is fully rendered
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    initializeButtonTabsSpacer();
+  });
+});
 ////////////////////////////
 // End of Parallax System //
 ////////////////////////////
@@ -638,7 +760,7 @@ if (!canvas) {
 ///////////////////
 // Shiny Buttons //
 ///////////////////
-document.querySelectorAll("[data-attr-button-shiny]").forEach((btn) => {
+document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
   const OUTER = 200;     // starts influencing
   const INNER = 100;     // full influence
   const BASE = 90;       // base angle when far away

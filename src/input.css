@@ -301,6 +301,13 @@ footer {
     line-height: 1.1;
   }
 
+  .text-heading-two {
+    font-size: 3.75rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 1;
+  }
+
   .container-width {
     max-width: 1120px;
   }
@@ -310,13 +317,14 @@ footer {
     font-style: var(--text-label-font-style);
     font-weight: var(--text-label-font-weight);
     line-height: var(--text-label-line-height);
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     border-radius: 0.75rem;
     height: 40px;
     padding: 0 0.75rem;
     background: var(--yellow);
+    width: fit-content;
   }
 
   .button-flat-with-icon {
@@ -340,8 +348,8 @@ footer {
     font-style: normal;
     font-weight: 700;
     line-height: 110%;
-    display: flex;
-    width: 11.875rem;
+    display: inline-flex;
+    width: fit-content;
     padding: 1rem 2rem;
     position: relative;
     justify-content: center;
@@ -370,7 +378,7 @@ footer {
   .button-shiny::after {
     content: "";
     position: absolute;
-    inset: -2px;
+    inset: -1px;
     border-radius: 13px;
     pointer-events: none;
     border-radius: 0.8125rem;
@@ -387,12 +395,23 @@ footer {
 
   .button-shiny-secondary {
     color: var(--black);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.80) 100%);
+    background-color: rgba(255, 255, 255, 0.50);
+    box-shadow: 0 1px 0 0 #FFF inset, 0 -8px 8px 0 rgba(255, 255, 255, 0.10) inset;
+  }
+
+  .button-shiny-secondary::after {
+    background: conic-gradient(from var(--glow-angle) at 50% 50%, rgba(242, 169, 0, 0.10) 0deg, rgba(255, 255, 255, 0.00) 54.00000214576721deg, rgba(255, 255, 255, 0.00) 149.40000772476196deg, rgba(255, 255, 255, 0.35) 180deg, rgba(255, 255, 255, 0.00) 237.60000944137573deg, rgba(255, 255, 255, 0.00) 306.00000858306885deg, rgba(242, 169, 0, 0.10) 360deg);
+  }
+
+  .button-shiny-tertiary {
+    color: var(--black);
     background: var(--white);
     box-shadow: none;
   }
 
-  .button-shiny-secondary::before,
-  .button-shiny-secondary::after {
+  .button-shiny-tertiary::before,
+  .button-shiny-tertiary::after {
     display: none;
   }
 
@@ -401,7 +420,7 @@ footer {
     font-style: var(--text-label-font-style);
     font-weight: var(--text-label-font-weight);
     line-height: var(--text-label-line-height);
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     border-radius: 0.75rem;
@@ -410,6 +429,8 @@ footer {
     gap: 0.25rem;
     background: var(--white);
     border: 1px solid rgba(21, 24, 44, 0.20);
+    width: fit-content;
+    transition: background-color 0.125s linear, border-color 0.125s linear;
   }
 
   .button-tab svg {
@@ -418,7 +439,6 @@ footer {
 
   .button-tab.isActive {
     color: var(--white);
-    border: 0;
   }
 
   .button-tab.isActive svg {
@@ -427,26 +447,32 @@ footer {
 
   .button-tab[data-button-tab="agreements"].isActive {
     background: var(--slate);
+    border-color: var(--slate);
   }
 
   .button-tab[data-button-tab="billing"].isActive {
     background: var(--pink);
+    border-color: var(--pink);
   }
 
   .button-tab[data-button-tab="payments"].isActive {
     background: var(--green);
+    border-color: var(--green);
   }
 
   .button-tab[data-button-tab="collections"].isActive {
     background: var(--orange);
+    border-color: var(--orange);
   }
 
   .button-tab[data-button-tab="reporting"].isActive {
     background: var(--yellow);
+    border-color: var(--yellow);
   }
 
   .button-tab[data-button-tab="connectors"].isActive {
     background: var(--ink);
+    border-color: var(--ink);
   }
 
   .pill {
@@ -487,5 +513,38 @@ footer {
     to {
       transform: translateX(var(--loop-distance));
     }
+  }
+
+  .journey-visuals--agreement {
+    position: relative;
+    font-family: "Times New Roman";
+    display: flex;
+    width: 24rem;
+    height: 30.9375rem;
+    padding: 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+    border-radius: 0.125rem;
+    background: linear-gradient(180deg, rgba(138, 143, 214, 0.00) 0%, rgba(138, 143, 214, 0.20) 100%), #FFF;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.50) inset, 0 0 64px 0 rgba(21, 24, 44, 0.16);
+  }
+
+  .journey-visuals--agreement h1 {
+    text-align: center;
+    width: 100%;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 110%;
+    margin: 0 0 .5rem 0;
+  }
+
+  .journey-visuals--agreement p {
+    font-size: 0.5625rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 110%;
+    margin: 0;
   }
 }

@@ -12,7 +12,8 @@ let programmaticScrollTarget = null;
 // Phase class configuration for journey sections
 const JOURNEY_PHASE_1_PERCENTAGE = 37; // Scroll percentage to add phase-1 class
 const JOURNEY_PHASE_2_PERCENTAGE = 43; // Scroll percentage to add phase-2 class
-const JOURNEY_PHASE_3_PERCENTAGE = 49; // Scroll percentage to add phase-3 class (when section is 100% scrolled in)
+const JOURNEY_PHASE_3_PERCENTAGE = 48; // Scroll percentage to add phase-3 class (when section is 100% scrolled in)
+const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58; // Scroll percentage to start exit animation for journey visuals
 
 function updateScroll() {
   const display = document.querySelector('[data-parallax-system="display"]');
@@ -444,12 +445,40 @@ function updateScroll() {
     // Start from below the parent section (use section height as offset)
     const initialTranslateY = sectionHeight * 0.5; // Start 50% of section height below
     
+    // For agreements section, also check scroll percentage for exit animation
+    const isAgreements = visualJourneyId === 'agreements';
+    let agreementsScrollPercentage = 0;
+    
+    if (isAgreements) {
+      // Calculate scroll percentage for agreements section (same as in journeySections loop)
+      if (sectionRect.bottom < 0) {
+        agreementsScrollPercentage = 100;
+      } else if (sectionRect.top > viewportHeight) {
+        agreementsScrollPercentage = 0;
+      } else {
+        const scrollRange = viewportHeight + sectionHeight;
+        const scrolledAmount = viewportHeight - sectionRect.top;
+        agreementsScrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / scrollRange) * 100));
+      }
+    }
+    
     // Animate from bottom (translateY from initialTranslateY to 0), opacity (0 to 1), and scale (0.25 to 1)
     // Animation happens in first 50% of scroll progress
     const animationProgress = Math.min(1, scrollProgress / 0.5);
-    const translateY = initialTranslateY * (1 - animationProgress); // From outside bounds to 0px
-    const opacity = animationProgress; // 0 to 1
-    const scale = 0.25 + (animationProgress * 0.75); // 0.25 to 1.0
+    let translateY = initialTranslateY * (1 - animationProgress); // From outside bounds to 0px
+    let opacity = animationProgress; // 0 to 1
+    let scale = 0.25 + (animationProgress * 0.75); // 0.25 to 1.0
+    
+    // For agreements section, add exit animation when scrolling out
+    if (isAgreements && agreementsScrollPercentage > JOURNEY_VISUAL_EXIT_START_PERCENTAGE) {
+      const exitRange = 100 - JOURNEY_VISUAL_EXIT_START_PERCENTAGE;
+      const exitProgress = (agreementsScrollPercentage - JOURNEY_VISUAL_EXIT_START_PERCENTAGE) / exitRange; // 0 to 1 as section exits
+      const exitTranslateY = exitProgress * viewportHeight * 4; // Translate down at 4x scroll rate
+      translateY += exitTranslateY;
+      opacity = Math.max(0, opacity - (exitProgress * opacity)); // Fade out
+      // Scale down more on exit (from current scale to 0.5)
+      scale = scale * (1 - exitProgress * 0.5); // Scale down to 50% of current scale
+    }
     
     visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
     visual.style.opacity = opacity;

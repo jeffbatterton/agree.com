@@ -588,14 +588,18 @@ if (!canvas) {
   const START_TWIST_END = 0.1;
   const START_TWIST_POWER = 2.0;
   const START_TWIST_TOTAL = Math.PI;
-  const EXIT_TWIST_START = 0.84;
+  const EXIT_TWIST_START = 0.86; // Start twist when loop begins
   const EXIT_TWIST_END = 0.985;
   const EXIT_TWIST_POWER = 1.9;
   const EXIT_TWIST_TOTAL = Math.PI;
-  const EXIT_LEFT_START = 0.84;
-  const EXIT_LEFT_END = 0.998;
-  const EXIT_LEFT_POWER = 1.7;
-  const EXIT_LEFT_PX = 520;
+  const EXIT_RIGHT_START = 0.82; // Start earlier for smoother transition
+  const EXIT_RIGHT_END = 0.998;
+  const EXIT_RIGHT_POWER = 1.0; // Use smoothstep without power modification for gentle curve
+  const EXIT_RIGHT_PX = 700; // Total rightward movement
+  const EXIT_LOOP_START = 0.86;
+  const EXIT_LOOP_END = 0.97;
+  const EXIT_LOOP_AMPLITUDE = 180; // Increased for more pronounced loop
+  const EXIT_LOOP_VERTICAL = 100; // Vertical component for 3D loop
   const PERSPECTIVE = 760;
   const Z_Y_TILT = 0.05;
   const GRADIENT_A = { r: 244, g: 51,  b: 171, a: .25 };
@@ -763,12 +767,38 @@ if (!canvas) {
           const startF = fadeOut01(u, START_TWIST_START, START_TWIST_END, START_TWIST_POWER);
           const exitF  = ramp01(u, EXIT_TWIST_START, EXIT_TWIST_END, EXIT_TWIST_POWER);
           const theta = thetaField + sign * startF * START_TWIST_TOTAL + sign * exitF * EXIT_TWIST_TOTAL;
-          const exitLeftF = ramp01(u, EXIT_LEFT_START, EXIT_LEFT_END, EXIT_LEFT_POWER);
-          const exitLeft = -EXIT_LEFT_PX * exitLeftF;
-          const xObj = (x0 + exitLeft) + (s0 * Math.cos(theta));
+          // Smooth rightward curve starting earlier for gentle transition
+          const exitRightF = ramp01(u, EXIT_RIGHT_START, EXIT_RIGHT_END, EXIT_RIGHT_POWER);
+          let exitRight = EXIT_RIGHT_PX * exitRightF;
+          let loopYOffset = 0;
+          
+          // Create smooth 3D loop pattern: move right, loop up and back, then continue right
+          if (u >= EXIT_LOOP_START && u <= EXIT_LOOP_END) {
+            const rawProgress = clamp01((u - EXIT_LOOP_START) / (EXIT_LOOP_END - EXIT_LOOP_START));
+            // Use smoothstep for smooth easing throughout
+            const easedProgress = smoothstep(rawProgress);
+            // Create envelope that smoothly fades in and out at boundaries
+            const envelope = smoothstep(rawProgress) * smoothstep(1 - rawProgress);
+            // Use cosine for smooth loop curve: 1 -> 0 -> -1 -> 0 -> 1
+            // This creates a smooth arc pattern
+            const loopPhase = easedProgress * Math.PI * 2;
+            const loopCurve = Math.cos(loopPhase);
+            // Transform to create loop: (1 - cos) gives 0 -> 1 -> 2 -> 1 -> 0
+            // Scale and apply envelope for smooth transitions
+            const loopShape = (1 - loopCurve) * 0.5 * envelope;
+            // Apply loop offset - pulls left during loop, creating the loop-back
+            const loopOffset = loopShape * EXIT_LOOP_AMPLITUDE;
+            exitRight -= loopOffset;
+            // Add vertical component to create 3D loop effect
+            // Use sine to create vertical arc: 0 -> 1 -> 0 (peaks in middle of loop)
+            const loopVerticalCurve = Math.sin(easedProgress * Math.PI);
+            loopYOffset = loopVerticalCurve * EXIT_LOOP_VERTICAL * envelope;
+          }
+          
+          const xObj = (x0 + exitRight) + (s0 * Math.cos(theta));
           const zObj = (s0 * Math.sin(theta));
           const x = projectX(xObj, x0, zObj);
-          const y2 = y + zObj * Z_Y_TILT;
+          const y2 = y + zObj * Z_Y_TILT - loopYOffset; // Subtract to create upward loop
 
           if (j === 0) ctx.moveTo(x, y2);
           else ctx.lineTo(x, y2);

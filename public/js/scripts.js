@@ -592,7 +592,7 @@ if (!canvas) {
   const EXIT_TWIST_END = 0.985;
   const EXIT_TWIST_POWER = 1.9;
   const EXIT_TWIST_TOTAL = Math.PI;
-  const EXIT_RIGHT_START = 0.82; // Start earlier for smoother transition
+  const EXIT_RIGHT_START = 0.85; // Start later to push ribbon down further before turning right
   const EXIT_RIGHT_END = 0.998;
   const EXIT_RIGHT_POWER = 1.0; // Use smoothstep without power modification for gentle curve
   const EXIT_RIGHT_PX = 700; // Total rightward movement

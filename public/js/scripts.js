@@ -11,6 +11,7 @@ const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;
 // Journey section animation configuration
 const JOURNEY_ANIMATION_ENTRY_END = 25;
 const JOURNEY_ANIMATION_EXIT_START = 50;
+const JOURNEY_ANIMATION_EXIT_OPACITY_START = 75; // Scroll percentage at which opacity starts animating down during exit
 const JOURNEY_EXIT_TRANSLATE_Y = 400;
 
 // Display card animation configuration
@@ -95,10 +96,20 @@ function handleJourneySectionAnimation(section, scrollPercentage, isConnectors) 
       paddingBottom = 32;
     }
   } else if (scrollPercentage >= JOURNEY_ANIMATION_EXIT_START && !isConnectors) {
-    const progress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_START) / (100 - JOURNEY_ANIMATION_EXIT_START);
-    opacity = 1.0 - (progress * 1.0);
-    scale = 1.0 - (progress * 0.3);
-    translateY = progress * JOURNEY_EXIT_TRANSLATE_Y * 2;
+    const exitProgress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_START) / (100 - JOURNEY_ANIMATION_EXIT_START);
+    scale = 1.0 - (exitProgress * 0.3);
+    translateY = exitProgress * JOURNEY_EXIT_TRANSLATE_Y * 2;
+    
+    // Opacity animation: only starts when scrollPercentage reaches opacity start threshold
+    if (scrollPercentage < JOURNEY_ANIMATION_EXIT_OPACITY_START) {
+      opacity = 1.0; // Keep at full opacity before opacity animation starts
+    } else {
+      // Animate opacity from 1.0 to 0.0 between opacity start and 100%
+      const opacityRange = 100 - JOURNEY_ANIMATION_EXIT_OPACITY_START;
+      const opacityProgress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_OPACITY_START) / opacityRange;
+      opacity = 1.0 - opacityProgress;
+    }
+    
     // Keep padding at full during exit for non-agreements sections
     if (!isAgreements) {
       paddingTop = 104;

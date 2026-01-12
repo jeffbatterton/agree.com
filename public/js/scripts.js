@@ -20,13 +20,13 @@ const DISPLAY_CARD_SCALE_THRESHOLD = 50; // Scroll percentage where scale reache
 const DISPLAY_CARD_START_SCALE = 0.9; // Starting scale value
 
 // Display phase configuration
-const DISPLAY_PHASE_1_OPEN = 45; // Scroll percentage where phase-1 starts
+const DISPLAY_PHASE_1_OPEN = 25; // Scroll percentage where phase-1 starts
 const DISPLAY_PHASE_1_CLOSE = 100; // Scroll percentage where phase-1 ends
-const DISPLAY_PHASE_2_OPEN = 47; // Scroll percentage where phase-2 starts
+const DISPLAY_PHASE_2_OPEN = 35; // Scroll percentage where phase-2 starts
 const DISPLAY_PHASE_2_CLOSE = 100; // Scroll percentage where phase-2 ends
 const DISPLAY_PHASE_3_OPEN = 48; // Scroll percentage where phase-3 starts
 const DISPLAY_PHASE_3_CLOSE = 100; // Scroll percentage where phase-3 ends
-const DISPLAY_PHASE_4_OPEN = 53; // Scroll percentage where phase-4 starts
+const DISPLAY_PHASE_4_OPEN = 55; // Scroll percentage where phase-4 starts
 const DISPLAY_PHASE_4_CLOSE = 100; // Scroll percentage where phase-4 ends
 
 // Track when exit phase starts for card animation

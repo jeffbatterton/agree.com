@@ -35,64 +35,9 @@
   --text-overline-text-transform: uppercase;
 }
 
-.contract-to-cash-ribbon--canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  top: -10px;
-}
-.contract-to-cash-ribbon--canvas.isFixed {
-  position: fixed;
-  height: auto;
-}
-
-.contract-to-cash-ribbon--main {
-  background-color: #fff;
-  position: relative;
-  overflow: hidden;
-}
-
-.contract-to-cash-ribbon--content {
-  position: relative;
+.notification {
   z-index: 1;
-}
-
-.parallax-system--display--card {
-  position: fixed;
-  left: 50%;
-  width: 1120px;
-  height: 730px;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 1px 0 0 #FFF inset, 0 0 64px 0 rgba(21, 24, 44, 0.16);
-  backdrop-filter: blur(8px);
-  --card-top: 87vh;
-  --card-translate-y: 0px;
-  --card-scale: 0.9;
-  top: var(--card-top);
-  transform: translateX(-50%) translateY(var(--card-translate-y)) scale(var(--card-scale));
-  transform-origin: top center;
-  padding: 16px;
-  border-radius: 28px;
-}
-.parallax-system--display--card.isCentered {
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-.parallax-system--display--card.isScrollingIn {
-  --card-top: 87vh;
-}
-.parallax-system--display--card.isScrollingOut {
-  transform: translateX(-50%);
-}
-
-.parallax-system--display--notification {
-  z-index: 1;
-  grid-column-gap: 12px;
-  grid-row-gap: 12px;
+  gap: 12px;
   box-shadow: 0 16px 72px 0 #271e8033, inset 0 1px 0 0 var(--white), 0 0 1px 0 #0000001a;
   opacity: 0;
   backdrop-filter: blur(4px);
@@ -109,53 +54,12 @@
   height: 80px;
 }
 
-.parallax-system--display--phase1 [data-parallax-system--display--notification="1"],
-.parallax-system--display--phase2 [data-parallax-system--display--notification="1"],
-.parallax-system--display--phase2 [data-parallax-system--display--notification="2"],
-.parallax-system--display--phase3 [data-parallax-system--display--notification="1"],
-.parallax-system--display--phase3 [data-parallax-system--display--notification="2"],
-.parallax-system--display--phase3 [data-parallax-system--display--notification="3"],
-.parallax-system--display--phase4 [data-parallax-system--display--notification="1"],
-.parallax-system--display--phase4 [data-parallax-system--display--notification="2"],
-.parallax-system--display--phase4 [data-parallax-system--display--notification="3"],
-.parallax-system--display--phase4 [data-parallax-system--display--notification="4"] {
+.notification-1 .notification-1,
+.notification-2 .notification-2,
+.notification-3 .notification-3,
+.notification-4 .notification-4 {
   transform: scale(1);
   opacity: 1;
-}
-
-.parallax-system--journey--0.isLoaded {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: none !important;
-}
-.parallax-system--journey--0.isVisible {
-  display: flex !important;
-}
-.parallax-system--journey--0.isRelative {
-  position: relative;
-}
-
-.parallax-system--journey--spacer {
-  height: 100vh;
-  display: block;
-}
-.parallax-system--journey--spacer.isHidden {
-  display: none;
-}
-
-.parallax-system--qualities {
-  position: relative;
-}
-
-.parallax-system--qualities--spacer {
-  height: 100vh;
-  display: none;
-}
-
-.parallax-system--qualities--spacer.isVisible {
-  display: block;
 }
 
 @layer components {

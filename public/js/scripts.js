@@ -2,8 +2,6 @@
 // CONFIGURATION CONSTANTS
 // ============================================
 
-// Canvas configuration
-const CANVAS_ISFIXED_THRESHOLD = 25;
 
 // Journey section phase configuration
 const JOURNEY_PHASE_1_PERCENTAGE = 37;
@@ -11,24 +9,30 @@ const JOURNEY_PHASE_2_PERCENTAGE = 43;
 const JOURNEY_PHASE_3_PERCENTAGE = 48;
 const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;
 
-// Display scroll phase configuration
-const DISPLAY_SCROLL_PHASE_1_START = 2;
-const DISPLAY_SCROLL_PHASE_2_START = 8;
-const DISPLAY_SCROLL_PHASE_3_START = 14;
-const DISPLAY_SCROLL_PHASE_4_START = 20;
-const DISPLAY_SCROLL_PHASE_END = 62;
-
-// Card scroll configuration
-const CARD_SCROLL_IN_RATE = 0.75;
-const CARD_SCROLL_OUT_RATE = 0.9;
-const CARD_SCROLL_OUT_TRIGGER = 50;
-const CARD_HEIGHT = 730;
-const CARD_START_TOP_VH = 87;
 
 // Journey section animation configuration
 const JOURNEY_ANIMATION_ENTRY_END = 25;
 const JOURNEY_ANIMATION_EXIT_START = 50;
 const JOURNEY_EXIT_TRANSLATE_Y = 400;
+
+// Display card animation configuration
+const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where translateY reaches 0
+const DISPLAY_CARD_EXIT_TRANSLATE_Y = 18; // Final translateY in exit phase (vh) - for fine-tuning
+const DISPLAY_CARD_SCALE_THRESHOLD = 50; // Scroll percentage where scale reaches 1
+const DISPLAY_CARD_START_SCALE = 0.9; // Starting scale value
+
+// Display phase configuration
+const DISPLAY_PHASE_1_OPEN = 45; // Scroll percentage where phase-1 starts
+const DISPLAY_PHASE_1_CLOSE = 100; // Scroll percentage where phase-1 ends
+const DISPLAY_PHASE_2_OPEN = 47; // Scroll percentage where phase-2 starts
+const DISPLAY_PHASE_2_CLOSE = 100; // Scroll percentage where phase-2 ends
+const DISPLAY_PHASE_3_OPEN = 48; // Scroll percentage where phase-3 starts
+const DISPLAY_PHASE_3_CLOSE = 100; // Scroll percentage where phase-3 ends
+const DISPLAY_PHASE_4_OPEN = 53; // Scroll percentage where phase-4 starts
+const DISPLAY_PHASE_4_CLOSE = 100; // Scroll percentage where phase-4 ends
+
+// Track when exit phase starts for card animation
+let displayCardExitStartPercentage = null;
 
 // ============================================
 // STATE VARIABLES
@@ -43,17 +47,6 @@ let isAdjustingScroll = false;
 // HELPER FUNCTIONS
 // ============================================
 
-function calculateDisplayProgress(displayRect) {
-  const displayHeight = displayRect.height;
-  const displayTop = displayRect.top;
-  
-  if (displayTop > 0) {
-    return -(displayTop / displayHeight) * 100;
-  } else {
-    const progress = (-displayTop / displayHeight) * 100;
-    return Math.max(0, Math.min(110, progress));
-  }
-}
 
 
 function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
@@ -72,107 +65,6 @@ function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
   }
 }
 
-// ============================================
-// DISPLAY SECTION HANDLERS
-// ============================================
-
-function handleDisplayPhases(progress, card) {
-  if (!card) return;
-  
-  let currentPhase = 0;
-  if (progress >= DISPLAY_SCROLL_PHASE_4_START) {
-    currentPhase = 4;
-  } else if (progress >= DISPLAY_SCROLL_PHASE_3_START) {
-    currentPhase = 3;
-  } else if (progress >= DISPLAY_SCROLL_PHASE_2_START) {
-    currentPhase = 2;
-  } else if (progress >= DISPLAY_SCROLL_PHASE_1_START) {
-    currentPhase = 1;
-  }
-  
-  const phaseClasses = ['parallax-system--display--phase1', 'parallax-system--display--phase2', 
-                        'parallax-system--display--phase3', 'parallax-system--display--phase4'];
-  
-  if (progress >= DISPLAY_SCROLL_PHASE_END) {
-    card.classList.remove(...phaseClasses);
-  } else {
-    card.classList.remove(...phaseClasses);
-    if (currentPhase > 0) {
-      card.classList.add(`parallax-system--display--phase${currentPhase}`);
-    }
-  }
-}
-
-function handleCardAnimation(progress, card) {
-  if (!card) return;
-  
-  card.classList.remove('isScrollingOut', 'isCentered', 'isScrollingIn');
-  
-  if (progress >= CARD_SCROLL_OUT_TRIGGER) {
-    handleCardScrollOut(progress, card);
-  } else {
-    handleCardScrollIn(card);
-  }
-}
-
-function handleCardScrollOut(progress, card) {
-  const scrollOutProgress = (progress - CARD_SCROLL_OUT_TRIGGER) / (100 - CARD_SCROLL_OUT_TRIGGER);
-  const viewportHeight = window.innerHeight;
-  const centerTop = (viewportHeight / 2) - (CARD_HEIGHT / 2);
-  const scrollOutDistance = centerTop + CARD_HEIGHT;
-  const cardTranslateY = -scrollOutDistance * scrollOutProgress * CARD_SCROLL_OUT_RATE;
-  
-  card.classList.add('isScrollingOut');
-  card.style.setProperty('--card-top', `${centerTop + cardTranslateY}px`);
-  card.style.removeProperty('--card-translate-y');
-  card.style.setProperty('--card-scale', '1');
-}
-
-function handleCardScrollIn(card) {
-  if (typeof window.cardInitialScrollY === 'undefined') {
-    window.cardInitialScrollY = 0;
-  }
-  
-  const currentScrollY = window.scrollY || window.pageYOffset;
-  const scrollDelta = currentScrollY - window.cardInitialScrollY;
-  const viewportHeight = window.innerHeight;
-  
-  const cardStartTop = CARD_START_TOP_VH * viewportHeight / 100;
-  const cardStartCenter = cardStartTop + (CARD_HEIGHT / 2);
-  const targetCenter = viewportHeight / 2;
-  const centerDistance = cardStartCenter - targetCenter;
-  const scrollToReachCenter = centerDistance / CARD_SCROLL_IN_RATE;
-  
-  if (scrollDelta >= scrollToReachCenter && !card.dataset.scrolledPastCenter) {
-    card.dataset.scrollYAtCenter = currentScrollY.toString();
-    card.dataset.scrolledPastCenter = 'true';
-  }
-  
-  if (card.dataset.scrollYAtCenter) {
-    const scrollYAtCenter = parseFloat(card.dataset.scrollYAtCenter);
-    if (currentScrollY < scrollYAtCenter) {
-      delete card.dataset.scrolledPastCenter;
-      delete card.dataset.scrollYAtCenter;
-    }
-  }
-  
-  if (card.dataset.scrolledPastCenter) {
-    card.classList.add('isCentered');
-    card.style.removeProperty('--card-top');
-    card.style.removeProperty('--card-translate-y');
-    card.style.setProperty('--card-scale', '1');
-  } else {
-    const cardTranslateY = -scrollDelta * CARD_SCROLL_IN_RATE;
-    card.classList.add('isScrollingIn');
-    card.style.setProperty('--card-top', '87vh');
-    card.style.setProperty('--card-translate-y', `${cardTranslateY}px`);
-    
-    const maxScrollForScale = scrollToReachCenter;
-    const scaleProgress = Math.min(1, Math.max(0, scrollDelta / maxScrollForScale));
-    const cardScale = 0.9 + (scaleProgress * 0.1);
-    card.style.setProperty('--card-scale', cardScale.toString());
-  }
-}
 
 // ============================================
 // JOURNEY SECTIONS HANDLERS
@@ -273,59 +165,268 @@ function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight)
 // ============================================
 
 function updateScroll() {
-  const display = document.querySelector('[data-parallax-system="display"]');
-  if (!display) return;
+  // Calculate and log display section scroll percentage
+  const display = document.querySelector('[data-display]');
+  let scrollPercentage = 0;
+  let shouldBeFixed = true; // Default to fixed for ribbon canvas
   
-  const displayRect = display.getBoundingClientRect();
-  const progress = calculateDisplayProgress(displayRect);
+  if (display) {
+    const displayRect = display.getBoundingClientRect();
+    const displayHeight = displayRect.height;
+    const displayTop = displayRect.top;
+    const viewportHeight = window.innerHeight;
+    
+    if (displayTop > viewportHeight) {
+      // Section hasn't entered viewport yet
+      scrollPercentage = 0;
+    } else if (displayTop + displayHeight < 0) {
+      // Section has completely scrolled past
+      scrollPercentage = 100;
+    } else {
+      // Section is in viewport - calculate scroll percentage
+      // Percentage based on how much of the section has entered the viewport
+      const scrolledAmount = viewportHeight - displayTop;
+      const totalScrollableDistance = viewportHeight + displayHeight;
+      scrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / totalScrollableDistance) * 100));
+    }
+    
+    console.log('Display section scroll percentage:', scrollPercentage.toFixed(2) + '%');
+    
+    // Determine if ribbon canvas should be fixed based on scroll percentage
+    if (scrollPercentage >= 50) {
+      shouldBeFixed = false;
+    } else {
+      shouldBeFixed = true;
+    }
+      
+    // Handle scroll phases
+    display.classList.remove('scroll-entry', 'scroll-intermediate', 'scroll-exit');
+    
+    // Check if bottom of container has entered bottom of viewport
+    const displayBottom = displayRect.bottom;
+    const hasExited = displayBottom <= viewportHeight;
+    const isCompletelyPast = displayTop + displayHeight < 0; // Display section has completely scrolled past viewport
+    
+    // Handle hero, journey-0, and journey-spacer based on exit state and scroll percentage
+    const hero = document.querySelector('[data-hero]');
+    const journey0 = document.querySelector('[data-journey-0]');
+    const journeySpacer = document.querySelector('[data-journey--spacer]');
+    
+    // Check journey-0's own position to determine if it should be relative
+    let journey0ShouldBeRelative = false;
+    if (journey0) {
+      const journey0Rect = journey0.getBoundingClientRect();
+      // Journey-0 should be relative only if it has completely scrolled past the viewport
+      // This prevents jumping when refreshing while journey-0 is still in view
+      journey0ShouldBeRelative = journey0Rect.bottom < 0;
+    }
+    
+    // Priority 1: If journey-0 has completely scrolled past, make it relative
+    if (journey0ShouldBeRelative) {
+      if (hero) {
+        hero.classList.add('opacity-0');
+      }
+      if (journey0) {
+        journey0.classList.remove('fixed');
+        journey0.classList.add('relative', 'block');
+      }
+      if (journeySpacer) {
+        journeySpacer.classList.remove('block');
+        journeySpacer.classList.add('hidden');
+      }
+    }
+    // Priority 2: If display section has completely scrolled past, journey0 should be relative
+    else if (isCompletelyPast) {
+      if (hero) {
+        hero.classList.add('opacity-0');
+      }
+      if (journey0) {
+        journey0.classList.remove('fixed');
+        journey0.classList.add('relative', 'block');
+      }
+      if (journeySpacer) {
+        journeySpacer.classList.remove('block');
+        journeySpacer.classList.add('hidden');
+      }
+    }
+    // Priority 3: If in exit phase but not completely past, keep journey0 fixed to prevent jumping
+    else if (hasExited) {
+      if (hero) {
+        hero.classList.add('opacity-0');
+      }
+      if (journey0) {
+        journey0.classList.remove('relative', 'block');
+        journey0.classList.add('fixed');
+      }
+      if (journeySpacer) {
+        journeySpacer.classList.remove('hidden');
+        journeySpacer.classList.add('block');
+      }
+    }
+    // Priority 4: Use scroll percentage for normal scroll behavior
+    else if (scrollPercentage >= 50) {
+      // When scroll percentage reaches 50% or above (but not in exit phase)
+      if (hero) {
+        hero.classList.add('opacity-0');
+      }
+      if (journey0) {
+        journey0.classList.remove('relative', 'block');
+        journey0.classList.add('fixed');
+      }
+      if (journeySpacer) {
+        journeySpacer.classList.remove('hidden');
+        journeySpacer.classList.add('block');
+      }
+    } else {
+      // Revert when scroll percentage is below 50%
+      if (hero) {
+        hero.classList.remove('opacity-0');
+      }
+      if (journey0) {
+        journey0.classList.remove('fixed', 'block');
+        journey0.classList.add('relative');
+      }
+      if (journeySpacer) {
+        journeySpacer.classList.remove('block');
+        journeySpacer.classList.add('hidden');
+      }
+    }
+    
+    if (hasExited) {
+      display.classList.add('scroll-exit');
+      // Calculate exit start percentage: exit starts when displayBottom === viewportHeight
+      // Only set if null (on page load/refresh), preserve during scroll
+      if (displayCardExitStartPercentage === null) {
+        // When refreshing mid-exit, we need to calculate when exit started based on current position
+        // Exit starts when the bottom of the container reaches the bottom of the viewport
+        // At that point: displayTop = viewportHeight - displayHeight
+        // We calculate this using the scroll percentage formula to find when exit started
+        
+        // Calculate exit start based on geometry: exit starts when displayBottom === viewportHeight
+        // At that point: displayTop = viewportHeight - displayHeight
+        const exitStartTop = viewportHeight - displayHeight;
+        
+        // Calculate scroll percentage when exit started using same formula as scrollPercentage
+        if (exitStartTop > viewportHeight) {
+          // Section hasn't entered yet (edge case)
+          displayCardExitStartPercentage = 0;
+        } else if (exitStartTop + displayHeight < 0) {
+          // Section has completely scrolled past (edge case)
+          displayCardExitStartPercentage = 100;
+        } else {
+          // Normal case: calculate exit start scroll percentage
+          const exitStartScrolledAmount = viewportHeight - exitStartTop;
+          const exitStartTotalDistance = viewportHeight + displayHeight;
+          displayCardExitStartPercentage = Math.min(100, Math.max(0, (exitStartScrolledAmount / exitStartTotalDistance) * 100));
+        }
+        
+        // Ensure exit start is reasonable: must be >= 50% (after entry completes)
+        if (displayCardExitStartPercentage < 50) {
+          displayCardExitStartPercentage = 50;
+        }
+        
+        // When refreshing mid-exit, ensure exit start is before current scroll position
+        // This is critical: if exit start >= current scroll, the exit progress calculation breaks
+        if (displayCardExitStartPercentage >= scrollPercentage) {
+          // Use a value safely before current scroll (at least 0.5% gap to avoid division issues)
+          // But ensure it's still >= 50%
+          displayCardExitStartPercentage = Math.max(50, scrollPercentage - 0.5);
+        }
+      }
+    } else {
+      display.classList.remove('scroll-exit');
+      // Reset exit start percentage when not in exit phase
+      if (scrollPercentage <= 50) {
+        display.classList.add('scroll-entry');
+        displayCardExitStartPercentage = null;
+      } else {
+        display.classList.add('scroll-intermediate');
+        displayCardExitStartPercentage = null;
+      }
+    }
   
-  // Handle display phases and card animation
-  const card = document.querySelector('[data-parallax-system="display--card"]');
-  handleDisplayPhases(progress, card);
-  handleCardAnimation(progress, card);
+    // Handle display notification classes (can all coexist)
+    if (scrollPercentage >= DISPLAY_PHASE_1_OPEN && scrollPercentage < DISPLAY_PHASE_1_CLOSE) {
+      display.classList.add('notification-1');
+    } else {
+      display.classList.remove('notification-1');
+    }
+    
+    if (scrollPercentage >= DISPLAY_PHASE_2_OPEN && scrollPercentage < DISPLAY_PHASE_2_CLOSE) {
+      display.classList.add('notification-2');
+    } else {
+      display.classList.remove('notification-2');
+    }
+    
+    if (scrollPercentage >= DISPLAY_PHASE_3_OPEN && scrollPercentage < DISPLAY_PHASE_3_CLOSE) {
+      display.classList.add('notification-3');
+    } else {
+      display.classList.remove('notification-3');
+    }
+    
+    if (scrollPercentage >= DISPLAY_PHASE_4_OPEN && scrollPercentage <= DISPLAY_PHASE_4_CLOSE) {
+      display.classList.add('notification-4');
+    } else {
+      display.classList.remove('notification-4');
+    }
+  
+    // Animate display card translateY and scale as container scrolls in and out
+    const displayCard = document.querySelector('[data-display--card]');
+    if (displayCard) {
+      const cardStartTranslateY = -23; // Starting translateY in vh
+      
+      let cardTranslateY = cardStartTranslateY; // Default to start position
+      let cardScale = DISPLAY_CARD_START_SCALE; // Default to start scale
+      
+      if (hasExited && displayCardExitStartPercentage !== null) {
+        // Exit phase: animate from 0 to exit translateY as scroll goes from exit start to 100%
+        const exitStart = displayCardExitStartPercentage;
+        const exitRange = 100 - exitStart;
+        // Handle edge case: if exitRange is 0 or negative, or scrollPercentage is less than exitStart
+        if (exitRange > 0 && scrollPercentage >= exitStart) {
+          const exitProgress = Math.min(1, Math.max(0, (scrollPercentage - exitStart) / exitRange));
+          cardTranslateY = 0 + (exitProgress * DISPLAY_CARD_EXIT_TRANSLATE_Y); // Interpolate from 0 to exit translateY
+        } else if (scrollPercentage < exitStart) {
+          // Edge case: scrollPercentage is less than exit start (shouldn't happen, but handle it)
+          // Stay at intermediate phase position (translateY = 0)
+          cardTranslateY = 0;
+        } else {
+          // Edge case: exitRange is 0 or negative, or we're at/ past 100%
+          cardTranslateY = DISPLAY_CARD_EXIT_TRANSLATE_Y; // Fully exited
+        }
+        cardScale = 1.0; // Keep at full scale during exit
+      } else if (scrollPercentage <= DISPLAY_CARD_SCALE_THRESHOLD) {
+        // Entry phase: animate from -23vh to 0 and scale from 0.9 to 1 as scroll goes from 0% to threshold%
+        const progress = Math.min(1, Math.max(0, scrollPercentage / DISPLAY_CARD_SCALE_THRESHOLD));
+        cardTranslateY = cardStartTranslateY + (progress * -cardStartTranslateY); // Interpolate from -23 to 0
+        cardScale = DISPLAY_CARD_START_SCALE + (progress * (1.0 - DISPLAY_CARD_START_SCALE)); // Interpolate from 0.9 to 1
+      } else {
+        // Intermediate phase: keep translateY at 0 and scale at 1
+        cardTranslateY = 0;
+        cardScale = 1.0;
+      }
+      
+      // Apply both translateY and scale using vh units (flexbox handles horizontal centering)
+      displayCard.style.transform = `translateY(${cardTranslateY}vh) scale(${cardScale})`;
+    }
+  }
+  
+  // Handle ribbon canvas - apply/remove fixed class based on display scroll percentage
+  const ribbonCanvas = document.querySelector("[data-ribbon--canvas]");
+  if (ribbonCanvas && window.ribbonInitialized) {
+    if (shouldBeFixed) {
+      ribbonCanvas.classList.add('fixed');
+      ribbonCanvas.style.height = 'auto';
+    } else {
+      ribbonCanvas.classList.remove('fixed');
+      ribbonCanvas.style.height = '';
+    }
+  }
   
   // Handle qualities spacer
   const qualitiesSpacer = document.querySelector('[data-parallax-system="qualities--spacer"]');
   // Note: Qualities spacer visibility logic removed - was previously controlled by CTA scroll
   
-  // Handle journey--0 visibility
-  const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
-  const hero = document.querySelector('[data-parallax-system="hero"]');
-  if (journey0) {
-    if (progress >= 50) {
-      journey0.classList.add('isVisible');
-      hero?.classList.add('opacity-0');
-    } else {
-      journey0.classList.remove('isVisible');
-      hero?.classList.remove('opacity-0');
-    }
-    
-    if (progress >= 100) {
-      journey0.classList.add('isRelative');
-    } else {
-      journey0.classList.remove('isRelative');
-    }
-  }
-  
-  // Handle journey spacer
-  const journeySpacer = document.querySelector('[data-parallax-system="journey--spacer"]');
-  if (journeySpacer) {
-    if (progress >= 100) {
-      journeySpacer.classList.add('isHidden');
-    } else {
-      journeySpacer.classList.remove('isHidden');
-    }
-  }
-  
-  // Handle ribbon canvas
-  const ribbonCanvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
-  if (ribbonCanvas && window.ribbonInitialized) {
-    if (progress < CANVAS_ISFIXED_THRESHOLD) {
-      ribbonCanvas.classList.add('isFixed');
-    } else {
-      ribbonCanvas.classList.remove('isFixed');
-    }
-  }
   
   // Handle button tabs
   const buttonTabs = document.querySelector('[data-button-tabs]');
@@ -463,36 +564,7 @@ function handleTabClick(e) {
 }
 
 function handleWheel(event) {
-  const display = document.querySelector('[data-parallax-system="display"]');
-  if (!display) {
-    updateScroll();
-    return;
-  }
-  
-  const displayRect = display.getBoundingClientRect();
-  const progress = calculateDisplayProgress(displayRect);
-  
-  if (progress < 100 && !isAdjustingScroll) {
-    event.preventDefault();
-    isAdjustingScroll = true;
-    
-    const scrollAmount = event.deltaY * 2;
-    const currentScrollY = window.scrollY || window.pageYOffset;
-    const newScrollY = Math.max(0, currentScrollY + scrollAmount);
-    
-    window.scrollTo({
-      top: newScrollY,
-      behavior: 'auto'
-    });
-    
-    setTimeout(() => {
-      isAdjustingScroll = false;
-      lastScrollY = window.scrollY || window.pageYOffset;
-      updateScroll();
-    }, 10);
-  } else {
-    updateScroll();
-  }
+  updateScroll();
 }
 
 // ============================================
@@ -514,14 +586,7 @@ function initializeButtonTabsSpacer() {
 }
 
 function initialize() {
-  window.cardInitialScrollY = 0;
-  
-  const card = document.querySelector('[data-parallax-system="display--card"]');
-  if (card) {
-    card.style.setProperty('--card-scale', '0.9');
-  }
-  
-  const journey0 = document.querySelector('[data-parallax-system="journey--0"]');
+  const journey0 = document.querySelector('[data-journey-0]');
   if (journey0) {
     journey0.classList.add('isLoaded');
   }
@@ -549,8 +614,24 @@ function initialize() {
     }
   });
   
-  // Initial scroll update
-  updateScroll();
+  // Ensure updateScroll runs after DOM is ready and layout is calculated
+  function runInitialScrollUpdate() {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        updateScroll();
+      });
+    });
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runInitialScrollUpdate);
+  } else {
+    // DOM already loaded, call after next frame
+    runInitialScrollUpdate();
+  }
+  
+  // Also ensure it runs on full page load (after images, etc.)
+  window.addEventListener('load', runInitialScrollUpdate);
 }
 
 // Initialize on load
@@ -560,7 +641,7 @@ initialize();
 // CONTRACT TO CASH RIBBON
 // ============================================
 
-const canvas = document.querySelector("[data-contract-to-cash-ribbon='canvas']");
+const canvas = document.querySelector("[data-ribbon--canvas]");
 if (!canvas) {
   console.warn("Canvas element not found for contract-to-cash-ribbon");
 } else {
@@ -830,6 +911,11 @@ if (!canvas) {
       if (width > 0 && height > 0) {
         startAnimation();
         window.ribbonInitialized = true;
+        // Apply fixed class and height: auto as soon as ribbon is drawn
+        if (canvas) {
+          canvas.classList.add('fixed');
+          canvas.style.height = 'auto';
+        }
         updateScroll();
       }
     });

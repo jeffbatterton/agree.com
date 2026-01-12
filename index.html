@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="./dist/tailwind.css">
 </head>
 <body class="antialiased h-full m-0 p-0">
-  <div class="contract-to-cash-ribbon--main" data-contract-to-cash-ribbon="main">
-    <div class="contract-to-cash-ribbon--content" data-contract-to-cash-ribbon="content">
-      <section class="fixed top-0 left-0 w-full h-[98vh] flex flex-col justify-start items-center z-0 pb-[13vh]" data-parallax-system="hero">
+  <div class="relative overflow-hidden" data-ribbon--main>
+    <div class="relative z-1" data-ribbon--content>
+      <section class="fixed top-0 left-0 w-full h-[98vh] flex flex-col justify-start items-center z-0 pb-[13vh]" data-hero>
         <p class="text-body text-body-small w-full flex items-center justify-center py-2 bg-(--black) text-(--white) text-center">
           <a href="#" class="no-underline">Agree raises $11M to Launch AI Agents that Run Your Revenue Stack</a>
         </p>
@@ -80,10 +80,10 @@
         </div>
       </section>
       <div class="h-[98vh]"></div>
-      <section class="parallax-system--display relative bg-linear-to-b from-(--purple) to-(--purple-dark) h-[200vh] w-full z-2" data-parallax-system="display">
-        <div class="parallax-system--display--card" data-parallax-system="display--card">
+      <section class="relative bg-linear-to-b from-(--purple) to-(--purple-dark) w-full z-2 flex justify-center py-[10vh]" data-display>
+        <div class="w-fit h-fit bg-white/80 shadow-[0_1px_0_0_#FFF_inset,0_0_64px_0_rgba(21,24,44,0.16)] backdrop-blur-sm origin-top p-4 rounded-[28px]" data-display--card>
           <img src="public/img/screenshot.png" loading="lazy" alt="" class="rounded-[12px]" />
-          <div data-parallax-system--display--notification="1" class="parallax-system--display--notification top-8 -left-16">
+          <div class="notification notification-1 top-8 -left-16">
             <img src="public/img/avatars/Beehiiv.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
               <div class="text-body opacity-50">
@@ -95,7 +95,7 @@
               yesterday
             </div>
           </div>
-          <div data-parallax-system--display--notification="2" class="parallax-system--display--notification top-[260px] -right-8">
+          <div class="notification notification-2 top-[260px] -right-8">
             <img src="public/img/avatars/Deel.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
               <div class="text-body opacity-50">
@@ -107,7 +107,7 @@
               1hr ago
             </div>
           </div>
-          <div data-parallax-system--display--notification="3" class="parallax-system--display--notification top-[530px] right-[112px]">
+          <div class="notification notification-3 top-[530px] right-[112px]">
             <div class="h-12">
               <img src="public/img/avatars/Agree Agent.svg" loading="lazy" alt="" class="image" />
             </div>
@@ -121,7 +121,7 @@
               5m ago
             </div>
           </div>
-          <div data-parallax-system--display--notification="4" class="parallax-system--display--notification top-[360px] -left-8">
+          <div class="notification notification-4 top-[360px] -left-8">
             <img src="public/img/avatars/Anthropic.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
               <div class="text-body opacity-50">
@@ -135,7 +135,7 @@
           </div>
         </div>
       </section>
-      <section class="flex flex-col justify-center min-h-screen relative parallax-system--journey--0" data-parallax-system="journey--0">
+      <section class="flex flex-col justify-center min-h-screen relative parallax-system--journey--0 top-0 left-0 right-0" data-journey-0>
         <h1 class="text-heading-one text-center" data-button-tabs-opener>The fastest path from<br>signature to revenue.</h1>
         <div data-button-tabs-spacer class="hidden"></div>
         <div class="flex gap-8 justify-center py-8 z-2 top-0 left-0 right-0" data-button-tabs>
@@ -177,7 +177,7 @@
           </a>
         </div>
       </section>
-      <div class="parallax-system--journey--spacer" data-parallax-system="journey--spacer"></div>
+      <div class="h-screen hidden" data-journey--spacer></div>
       <section class="min-h-screen relative flex pt-[104px] px-16 pb-16 flex-col" data-parallax-system="journey--1" data-journey="agreements">
         <div class="bg-linear-to-bl from-(--slate-dark) to-(--slate) rounded-[28px] w-full h-full grow flex items-center justify-center overflow-hidden">
           <div class="container-width flex gap-8 m-6 w-full">
@@ -565,7 +565,7 @@
       <div class="parallax-system--qualities--spacer hidden" data-parallax-system="qualities--spacer"></div>
     </div>
 
-    <canvas class="contract-to-cash-ribbon--canvas" data-contract-to-cash-ribbon="canvas" data-contract-to-cash-ribbon--height="11"></canvas>
+    <canvas class="w-full h-full block absolute inset-0 z-0 pointer-events-none -top-[10px] contract-to-cash-ribbon--canvas" data-ribbon--canvas></canvas>
   </div>
 
   <section class="min-h-screen relative bg-(--purple)" data-parallax-system="cta">

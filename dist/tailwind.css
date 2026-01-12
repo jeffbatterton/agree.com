@@ -284,6 +284,9 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
   .inline-flex {
     display: inline-flex;
   }
@@ -730,6 +733,9 @@
   }
   .text-body-large {
     font-size: 1.5rem;
+  }
+  .text-body-bullets {
+    font-size: 1.2rem;
   }
   .text-label {
     font-size: var(--text-label-font-size);

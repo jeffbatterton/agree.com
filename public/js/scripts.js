@@ -2,13 +2,11 @@
 // CONFIGURATION CONSTANTS
 // ============================================
 
-
 // Journey section phase configuration
 const JOURNEY_PHASE_1_PERCENTAGE = 37;
 const JOURNEY_PHASE_2_PERCENTAGE = 43;
 const JOURNEY_PHASE_3_PERCENTAGE = 48;
 const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;
-
 
 // Journey section animation configuration
 const JOURNEY_ANIMATION_ENTRY_END = 25;
@@ -74,26 +72,62 @@ function handleJourneySectionAnimation(section, scrollPercentage, isConnectors) 
   const childDiv = section.querySelector(':scope > div');
   if (!childDiv) return;
   
-  let opacity = 0.8;
-  let scale = 0.8;
+  const journeyId = section.getAttribute('data-journey');
+  const isAgreements = journeyId === 'agreements';
+  
+  // For agreements section, start at full opacity and scale (no fade-in animation)
+  let opacity = isAgreements ? 1.0 : 0.8;
+  let scale = isAgreements ? 1.0 : 0.8;
   let translateY = 0;
+  
+  // Padding animation for non-agreements journey sections
+  let paddingTop = null;
+  let paddingBottom = null;
   
   if (scrollPercentage <= JOURNEY_ANIMATION_ENTRY_END) {
     const progress = scrollPercentage / JOURNEY_ANIMATION_ENTRY_END;
-    opacity = 0.8 + (progress * 0.2);
-    scale = 0.8 + (progress * 0.2);
+    // Only animate opacity and scale for non-agreements sections
+    if (!isAgreements) {
+      opacity = 0.8 + (progress * 0.2);
+      scale = 0.8 + (progress * 0.2);
+      // Animate top padding from 32px to 104px, keep bottom at 32px
+      paddingTop = 32 + (progress * (104 - 32));
+      paddingBottom = 32;
+    }
   } else if (scrollPercentage >= JOURNEY_ANIMATION_EXIT_START && !isConnectors) {
     const progress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_START) / (100 - JOURNEY_ANIMATION_EXIT_START);
     opacity = 1.0 - (progress * 1.0);
-    scale = 1.0 - (progress * 0.6);
-    translateY = -progress * JOURNEY_EXIT_TRANSLATE_Y;
+    scale = 1.0 - (progress * 0.3);
+    translateY = progress * JOURNEY_EXIT_TRANSLATE_Y * 2;
+    // Keep padding at full during exit for non-agreements sections
+    if (!isAgreements) {
+      paddingTop = 104;
+      paddingBottom = 32;
+    }
   } else {
     opacity = 1.0;
     scale = 1.0;
+    // Keep padding at full when fully scrolled in for non-agreements sections
+    if (!isAgreements) {
+      paddingTop = 104;
+      paddingBottom = 32;
+    }
   }
   
   childDiv.style.opacity = opacity;
   childDiv.style.transform = `translateY(${translateY}px) scale(${scale})`;
+  
+  // Apply padding animation to section element for non-agreements sections
+  if (!isAgreements) {
+    if (paddingTop !== null && paddingBottom !== null) {
+      section.style.paddingTop = `${paddingTop}px`;
+      section.style.paddingBottom = `${paddingBottom}px`;
+    }
+  } else {
+    // Clear inline padding styles for agreements section so CSS classes take precedence
+    section.style.paddingTop = '';
+    section.style.paddingBottom = '';
+  }
 }
 
 function handleJourneyPhaseClasses(section, scrollPercentage, isInViewport) {

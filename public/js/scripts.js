@@ -16,7 +16,8 @@ const JOURNEY_EXIT_TRANSLATE_Y = 400;
 
 // Journey-0 content animation configuration
 const JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH = 60; // Initial translateY in vh (positive = down)
-const JOURNEY_0_HEIGHT_THRESHOLD_PX = 300; // Height threshold in px for journey-0 as it scrolls out
+const JOURNEY_0_HEIGHT_THRESHOLD_PX = 350; // Height threshold in px for journey-0 as it scrolls out
+const JOURNEY_0_HEIGHT_REVERSE_START_PERCENTAGE = 50; // Display section scroll percentage at which height animation reverses (scrolls back up)
 
 // Display section animation configuration
 const DISPLAY_SECTION_MAX_TRANSLATE_Y_VH = 40; // Maximum translateY in vh (negative = up) for display section
@@ -50,6 +51,7 @@ let lastScrollY = window.scrollY || window.pageYOffset;
 let isAdjustingScroll = false;
 let journey0HeightAnimationStartScrollY = null; // Store scroll position when height animation starts
 let journey0InitialHeight = null; // Store journey-0's initial height when animation starts
+let journey0FrozenHeight = null; // Store the height when journey-0 scrolls off the page
 
 // ============================================
 // HELPER FUNCTIONS
@@ -375,13 +377,37 @@ function updateScroll() {
     
     // Animate journey-0 height based on scroll amount after display section fully scrolls out
     if (journey0 && journey0InitialHeight !== null && journey0HeightAnimationStartScrollY !== null) {
-      const currentScrollY = window.scrollY || window.pageYOffset;
-      const scrollAmount = Math.max(0, currentScrollY - journey0HeightAnimationStartScrollY);
+      // Check if journey-0 has scrolled entirely off the page
+      const journey0Rect = journey0.getBoundingClientRect();
+      const journey0IsOffPage = journey0Rect.bottom < 0;
       
-      // Subtract scroll amount from initial height (1:1 ratio)
-      const newHeight = Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, journey0InitialHeight - scrollAmount);
-      
-      journey0.style.height = `${newHeight}px`;
+      if (journey0IsOffPage) {
+        // Freeze the height at its current state when journey-0 scrolls off the page
+        if (journey0FrozenHeight === null) {
+          journey0FrozenHeight = parseFloat(journey0.style.height) || journey0InitialHeight;
+        }
+        journey0.style.height = `${Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, journey0FrozenHeight)}px`;
+      } else {
+        // Reset frozen height when journey-0 comes back into view
+        journey0FrozenHeight = null;
+        
+        const currentScrollY = window.scrollY || window.pageYOffset;
+        const scrollAmount = currentScrollY - journey0HeightAnimationStartScrollY;
+        
+        // Check if we should reverse the animation (scroll back up)
+        // Only reverse if display section has scrolled back in by the threshold percentage
+        if (scrollAmount < 0 && display && scrollPercentage > JOURNEY_0_HEIGHT_REVERSE_START_PERCENTAGE) {
+          // Scroll is going back up, but display section hasn't scrolled back in enough yet
+          // Hold the height at its current state (don't animate back up yet)
+          // Get the current height from the element or use the last calculated height
+          const currentHeight = parseFloat(journey0.style.height) || journey0InitialHeight;
+          journey0.style.height = `${Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, currentHeight)}px`;
+        } else {
+          // Normal animation: subtract scroll amount from initial height (1:1 ratio)
+          const newHeight = Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, journey0InitialHeight - Math.max(0, scrollAmount));
+          journey0.style.height = `${newHeight}px`;
+        }
+      }
     }
     
     // Animate journey-0 content wrapper translateY based on display section scroll out
@@ -670,12 +696,34 @@ function handleTabClick(e) {
   const section = document.querySelector(`[data-journey="${tabId}"]`);
   if (!section) return;
   
-  const sectionRect = section.getBoundingClientRect();
-  const sectionTop = sectionRect.top + window.scrollY;
-  
+  // Stop any ongoing scroll animations to prevent spillover
   window.scrollTo({
-    top: sectionTop,
-    behavior: 'smooth'
+    top: window.scrollY,
+    behavior: 'auto'
+  });
+  
+  // Force layout recalculation and wait for layout changes to settle
+  // This accounts for button tabs becoming fixed and journey 0 transitioning from fixed to relative
+  requestAnimationFrame(() => {
+    // Update scroll to apply layout changes (button tabs fixed, journey 0 relative, etc.)
+    updateScroll();
+    
+    // Force a layout recalculation by reading layout properties
+    void section.offsetHeight;
+    
+    // Wait another frame to ensure all layout changes have fully settled
+    requestAnimationFrame(() => {
+      // Calculate target scroll position: section's top should be at viewport top (0)
+      const sectionRect = section.getBoundingClientRect();
+      const currentScrollY = window.scrollY;
+      // sectionRect.top is relative to viewport, so we scroll by that amount
+      const targetScrollY = currentScrollY + sectionRect.top;
+      
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: 'smooth'
+      });
+    });
   });
   
   setTimeout(() => {

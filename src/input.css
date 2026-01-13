@@ -36,6 +36,11 @@
 }
 
 .notification {
+  --tx: 6px; 
+  --ty: 10px;    
+  --rot: 0.3deg; 
+  --dur: 7s;    
+
   z-index: 1;
   gap: 12px;
   box-shadow: 0 16px 72px 0 #271e8033, inset 0 1px 0 0 var(--white), 0 0 1px 0 #0000001a;
@@ -52,6 +57,8 @@
   position: absolute;
   transform: scale(0);
   height: 80px;
+  will-change: transform;
+  animation: notification var(--dur) ease-in-out infinite;
 }
 
 .notification-1 .notification-1,
@@ -60,6 +67,30 @@
 .notification-4 .notification-4 {
   transform: scale(1);
   opacity: 1;
+}
+
+@keyframes notification {
+  0% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform:
+      translate(calc(var(--tx) * 0.6), calc(var(--ty) * -0.6))
+      rotate(var(--rot));
+  }
+  50% {
+    transform:
+      translate(0, calc(var(--ty) * -1))
+      rotate(calc(var(--rot) * -1));
+  }
+  75% {
+    transform:
+      translate(calc(var(--tx) * -0.6), calc(var(--ty) * -0.6))
+      rotate(var(--rot));
+  }
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
 }
 
 @layer components {
@@ -553,4 +584,81 @@
       transform: scale(1);
     }
   }
+
+  .icon-dot-agreements {
+    --dot: var(--slate);
+  }
+
+  .icon-dot-billing {
+    --dot: var(--pink);
+  }
+
+  .icon-dot-payments {
+    --dot: var(--green);
+  }
+
+  .icon-dot-collections {
+    --dot: var(--orange);
+  }
+
+  .icon-dot-reporting {
+    --dot: var(--yellow);
+  }
+
+  .icon-dot-integrations {
+    --dot: var(--ink);
+  }
+
+  .icon-dot {
+    display: flex;
+    padding: 0.5rem;
+    align-items: center;
+    position: absolute;
+    border-radius: 6.25rem;
+    box-shadow: 0 16px 72px 0 rgba(39, 30, 128, 0.20);
+    background: var(--dot);
+    isolation: isolate; 
+  }
+
+  .icon-dot::after {
+    content: "";
+    background: transparent;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--dot);
+    animation: icon-dot--after 2s infinite;
+    position: absolute;
+    background-color: var(--dot);
+    inset: -8px;
+    border-radius: 100%;
+  }
+
+  .icon-dot svg {
+    position: relative;
+    z-index: 1;
+  }
+  
+  @keyframes icon-dot--after {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 70%, transparent);
+    }
+
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--dot) 0%, transparent);
+    }
+
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 0%, transparent);
+    }
+  }
 }
+
+
+
+
+
+
+
+

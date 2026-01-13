@@ -9,8 +9,6 @@
       "Courier New", monospace;
     --color-white: #fff;
     --spacing: 0.25rem;
-    --text-sm: 0.875rem;
-    --text-sm--line-height: calc(1.25 / 0.875);
     --font-weight-normal: 400;
     --radius-xl: 0.75rem;
     --blur-sm: 8px;
@@ -184,20 +182,41 @@
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
+  .-top-16 {
+    top: calc(var(--spacing) * -16);
+  }
   .-top-\[10px\] {
     top: calc(10px * -1);
   }
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
-  .top-1\/2 {
-    top: calc(1/2 * 100%);
-  }
   .top-4 {
     top: calc(var(--spacing) * 4);
   }
   .top-8 {
     top: calc(var(--spacing) * 8);
+  }
+  .top-16 {
+    top: calc(var(--spacing) * 16);
+  }
+  .top-44 {
+    top: calc(var(--spacing) * 44);
+  }
+  .top-80 {
+    top: calc(var(--spacing) * 80);
+  }
+  .top-120 {
+    top: calc(var(--spacing) * 120);
+  }
+  .top-160 {
+    top: calc(var(--spacing) * 160);
+  }
+  .top-200 {
+    top: calc(var(--spacing) * 200);
+  }
+  .top-240 {
+    top: calc(var(--spacing) * 240);
   }
   .top-\[260px\] {
     top: 260px;
@@ -217,8 +236,26 @@
   .right-4 {
     right: calc(var(--spacing) * 4);
   }
-  .right-\[100px\] {
-    right: 100px;
+  .right-32 {
+    right: calc(var(--spacing) * 32);
+  }
+  .right-40 {
+    right: calc(var(--spacing) * 40);
+  }
+  .right-48 {
+    right: calc(var(--spacing) * 48);
+  }
+  .right-64 {
+    right: calc(var(--spacing) * 64);
+  }
+  .right-72 {
+    right: calc(var(--spacing) * 72);
+  }
+  .right-100 {
+    right: calc(var(--spacing) * 100);
+  }
+  .right-120 {
+    right: calc(var(--spacing) * 120);
   }
   .right-\[112px\] {
     right: 112px;
@@ -252,9 +289,6 @@
   }
   .z-2 {
     z-index: 2;
-  }
-  .z-50 {
-    z-index: 50;
   }
   .container {
     width: 100%;
@@ -372,10 +406,6 @@
   }
   .origin-top {
     transform-origin: top;
-  }
-  .-translate-y-1\/2 {
-    --tw-translate-y: calc(calc(1/2 * 100%) * -1);
-    translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .rotate-45 {
     rotate: 45deg;
@@ -629,15 +659,8 @@
   .text-center {
     text-align: center;
   }
-  .font-mono {
-    font-family: var(--font-mono);
-  }
   .font-sans {
     font-family: var(--font-sans);
-  }
-  .text-sm {
-    font-size: var(--text-sm);
-    line-height: var(--tw-leading, var(--text-sm--line-height));
   }
   .font-normal {
     --tw-font-weight: var(--font-weight-normal);
@@ -751,6 +774,10 @@
   --text-overline-text-transform: uppercase;
 }
 .notification {
+  --tx: 6px;
+  --ty: 10px;
+  --rot: 0.3deg;
+  --dur: 7s;
   z-index: 1;
   gap: 12px;
   box-shadow: 0 16px 72px 0 #271e8033, inset 0 1px 0 0 var(--white), 0 0 1px 0 #0000001a;
@@ -767,10 +794,29 @@
   position: absolute;
   transform: scale(0);
   height: 80px;
+  will-change: transform;
+  animation: notification var(--dur) ease-in-out infinite;
 }
 .notification-1 .notification-1, .notification-2 .notification-2, .notification-3 .notification-3, .notification-4 .notification-4 {
   transform: scale(1);
   opacity: 1;
+}
+@keyframes notification {
+  0% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform: translate(calc(var(--tx) * 0.6), calc(var(--ty) * -0.6)) rotate(var(--rot));
+  }
+  50% {
+    transform: translate(0, calc(var(--ty) * -1)) rotate(calc(var(--rot) * -1));
+  }
+  75% {
+    transform: translate(calc(var(--tx) * -0.6), calc(var(--ty) * -0.6)) rotate(var(--rot));
+  }
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
 }
 @layer components {
   .text-body {
@@ -1176,21 +1222,63 @@
       transform: scale(1);
     }
   }
-}
-@property --tw-translate-x {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
-}
-@property --tw-translate-y {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
-}
-@property --tw-translate-z {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
+  .icon-dot-agreements {
+    --dot: var(--slate);
+  }
+  .icon-dot-billing {
+    --dot: var(--pink);
+  }
+  .icon-dot-payments {
+    --dot: var(--green);
+  }
+  .icon-dot-collections {
+    --dot: var(--orange);
+  }
+  .icon-dot-reporting {
+    --dot: var(--yellow);
+  }
+  .icon-dot-integrations {
+    --dot: var(--ink);
+  }
+  .icon-dot {
+    display: flex;
+    padding: 0.5rem;
+    align-items: center;
+    position: absolute;
+    border-radius: 6.25rem;
+    box-shadow: 0 16px 72px 0 rgba(39, 30, 128, 0.20);
+    background: var(--dot);
+    isolation: isolate;
+  }
+  .icon-dot::after {
+    content: "";
+    background: transparent;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--dot);
+    animation: icon-dot--after 2s infinite;
+    position: absolute;
+    background-color: var(--dot);
+    inset: -8px;
+    border-radius: 100%;
+  }
+  .icon-dot svg {
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes icon-dot--after {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 70%, transparent);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--dot) 0%, transparent);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 0%, transparent);
+    }
+  }
 }
 @property --tw-rotate-x {
   syntax: "*";
@@ -1373,12 +1461,24 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
-      --tw-translate-x: 0;
-      --tw-translate-y: 0;
-      --tw-translate-z: 0;
       --tw-rotate-x: initial;
       --tw-rotate-y: initial;
       --tw-rotate-z: initial;
@@ -1420,6 +1520,9 @@
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
       --tw-duration: initial;
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
     }
   }
 }

@@ -241,8 +241,6 @@ function updateScroll() {
       scrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / totalScrollableDistance) * 100));
     }
     
-    console.log('Display section scroll percentage:', scrollPercentage.toFixed(2) + '%');
-    
     // Animate hero section translateY as display section scrolls in (push up)
     const heroElement = document.querySelector('[data-hero]');
     if (heroElement) {
@@ -739,7 +737,6 @@ initialize();
 
 const canvas = document.querySelector("[data-ribbon--canvas]");
 if (!canvas) {
-  console.warn("Canvas element not found for contract-to-cash-ribbon");
 } else {
   const ctx = canvas.getContext("2d");
 
@@ -857,7 +854,6 @@ if (!canvas) {
     height = canvas.offsetHeight;
 
     if (width <= 0 || height <= 0) {
-      console.warn("Canvas dimensions are invalid:", width, height);
       return;
     }
     
@@ -866,7 +862,6 @@ if (!canvas) {
 
     const maxHeight = 5000;
     if (height > maxHeight) {
-      console.warn(`Canvas height (${height}px) exceeds maximum (${maxHeight}px). Limiting for performance.`);
       height = maxHeight;
     }
 

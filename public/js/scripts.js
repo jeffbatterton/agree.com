@@ -17,6 +17,9 @@ const JOURNEY_EXIT_TRANSLATE_Y = 400;
 // Journey-0 content animation configuration
 const JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH = 60; // Initial translateY in vh (positive = down)
 
+// Display section animation configuration
+const DISPLAY_SECTION_MAX_TRANSLATE_Y_VH = 40; // Maximum translateY in vh (negative = up) for display section
+
 // Display card animation configuration
 const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where translateY reaches 0
 const DISPLAY_CARD_EXIT_TRANSLATE_Y = 18; // Final translateY in exit phase (vh) - for fine-tuning
@@ -239,6 +242,22 @@ function updateScroll() {
     }
     
     console.log('Display section scroll percentage:', scrollPercentage.toFixed(2) + '%');
+    
+    // Animate hero section translateY as display section scrolls in (push up)
+    const heroElement = document.querySelector('[data-hero]');
+    if (heroElement) {
+      const maxTranslateY = DISPLAY_SECTION_MAX_TRANSLATE_Y_VH * viewportHeight / 100; // Convert vh to px
+      // Animate from 0 to maxTranslateY (negative, pushing up) as scroll percentage goes from 0 to 100%
+      const progress = Math.min(1, Math.max(0, scrollPercentage / 100));
+      const translateY = -maxTranslateY * progress; // Negative value = up
+      
+      // Apply transform: set to none when translateY is 0, otherwise apply the transform
+      if (translateY === 0) {
+        heroElement.style.transform = 'none';
+      } else {
+        heroElement.style.transform = `translateY(${translateY}px)`;
+      }
+    }
     
     // Determine if ribbon canvas should be fixed based on scroll percentage
     if (scrollPercentage >= 50) {

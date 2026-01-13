@@ -781,7 +781,7 @@ function initialize() {
       card.style.setProperty('--tx', `${rand(4, 10).toFixed(1)}px`);
       card.style.setProperty('--ty', `${rand(6, 14).toFixed(1)}px`);
       card.style.setProperty('--rot', `${rand(0.15, 0.4).toFixed(2)}deg`);
-      card.style.setProperty('--dur', `${rand(5.5, 9).toFixed(1)}s`);
+      card.style.setProperty('--dur', `${rand(12, 15).toFixed(1)}s`);
       card.style.animationDelay = `${rand(-5, 0).toFixed(1)}s`;
     });
   });

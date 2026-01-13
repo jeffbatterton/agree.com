@@ -69,7 +69,7 @@ function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
 // JOURNEY SECTIONS HANDLERS
 // ============================================
 
-function handleJourneySectionAnimation(section, scrollPercentage, isConnectors) {
+function handleJourneySectionAnimation(section, scrollPercentage, isIntegrations) {
   const childDiv = section.querySelector(':scope > div');
   if (!childDiv) return;
   
@@ -95,7 +95,7 @@ function handleJourneySectionAnimation(section, scrollPercentage, isConnectors) 
       paddingTop = 32 + (progress * (104 - 32));
       paddingBottom = 32;
     }
-  } else if (scrollPercentage >= JOURNEY_ANIMATION_EXIT_START && !isConnectors) {
+  } else if (scrollPercentage >= JOURNEY_ANIMATION_EXIT_START && !isIntegrations) {
     const exitProgress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_START) / (100 - JOURNEY_ANIMATION_EXIT_START);
     scale = 1.0 - (exitProgress * 0.3);
     translateY = exitProgress * JOURNEY_EXIT_TRANSLATE_Y * 2;
@@ -497,7 +497,7 @@ function updateScroll() {
   let activeJourney = null;
   let closestSection = null;
   let closestDistance = Infinity;
-  let connectorsScrollPercentage = 0;
+  let integrationsScrollPercentage = 0;
   
   journeySections.forEach(section => {
     const journeyId = section.getAttribute('data-journey');
@@ -506,13 +506,13 @@ function updateScroll() {
     const rect = section.getBoundingClientRect();
     const sectionHeight = rect.height;
     const scrollPercentage = calculateJourneyScrollPercentage(rect, sectionHeight);
-    const isConnectors = journeyId === 'connectors';
+    const isIntegrations = journeyId === 'integrations';
     
-    if (isConnectors) {
-      connectorsScrollPercentage = scrollPercentage;
+    if (isIntegrations) {
+      integrationsScrollPercentage = scrollPercentage;
     }
     
-    handleJourneySectionAnimation(section, scrollPercentage, isConnectors);
+    handleJourneySectionAnimation(section, scrollPercentage, isIntegrations);
     
     if (rect.top <= activationThreshold && rect.bottom > activationThreshold) {
       const distance = Math.abs(rect.top - activationThreshold);
@@ -541,12 +541,12 @@ function updateScroll() {
   });
   
   // Handle tabs animation
-  if (connectorsScrollPercentage >= 50 && buttonTabs) {
-    const connectorsSection = document.querySelector('[data-journey="connectors"]');
-    if (connectorsSection) {
-      const connectorsRect = connectorsSection.getBoundingClientRect();
-      const connectorsTop = connectorsRect.top;
-      const scrollAmount = connectorsTop < 0 ? Math.abs(connectorsTop) : 0;
+  if (integrationsScrollPercentage >= 50 && buttonTabs) {
+    const integrationsSection = document.querySelector('[data-journey="integrations"]');
+    if (integrationsSection) {
+      const integrationsRect = integrationsSection.getBoundingClientRect();
+      const integrationsTop = integrationsRect.top;
+      const scrollAmount = integrationsTop < 0 ? Math.abs(integrationsTop) : 0;
       buttonTabs.style.top = `${-scrollAmount}px`;
     }
   } else if (buttonTabs) {

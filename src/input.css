@@ -301,7 +301,7 @@
     border-color: var(--yellow);
   }
 
-  .button-tab[data-button-tab="connectors"].isActive {
+  .button-tab[data-button-tab="integrations"].isActive {
     background: var(--ink);
     border-color: var(--ink);
   }

@@ -14,6 +14,9 @@ const JOURNEY_ANIMATION_EXIT_START = 50;
 const JOURNEY_ANIMATION_EXIT_OPACITY_START = 75; // Scroll percentage at which opacity starts animating down during exit
 const JOURNEY_EXIT_TRANSLATE_Y = 400;
 
+// Journey-0 content animation configuration
+const JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH = 60; // Initial translateY in vh (positive = down)
+
 // Display card animation configuration
 const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where translateY reaches 0
 const DISPLAY_CARD_EXIT_TRANSLATE_Y = 18; // Final translateY in exit phase (vh) - for fine-tuning
@@ -337,6 +340,29 @@ function updateScroll() {
       }
     }
     
+    // Animate journey-0 content wrapper translateY based on display section scroll out
+    const journey0Content = document.querySelector('[data-journey-0-content]');
+    if (journey0Content && display) {
+      const viewportHeight = window.innerHeight;
+      const initialTranslateY = JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH * viewportHeight / 100; // Convert vh to px
+      
+      // Animate from initialTranslateY (down) to 0 as display section scrolls out (scrollPercentage goes from 0 to 100%)
+      // When display scrollPercentage is 0, translateY = initialTranslateY (40vh down)
+      // When display scrollPercentage is 100%, translateY = 0
+      const progress = Math.min(1, Math.max(0, scrollPercentage / 100));
+      const translateY = initialTranslateY * (1 - progress); // Interpolate from initialTranslateY to 0
+      
+      // Cap translateY at 0 to prevent it from going negative (translating up)
+      const clampedTranslateY = Math.max(0, translateY);
+      
+      // Set transform to none when translateY reaches 0, otherwise apply the transform
+      if (clampedTranslateY === 0) {
+        journey0Content.style.transform = 'none';
+      } else {
+        journey0Content.style.transform = `translateY(${clampedTranslateY}px)`;
+      }
+    }
+    
     if (hasExited) {
       display.classList.add('scroll-exit');
       // Calculate exit start percentage: exit starts when displayBottom === viewportHeight
@@ -498,6 +524,7 @@ function updateScroll() {
   let closestSection = null;
   let closestDistance = Infinity;
   let integrationsScrollPercentage = 0;
+  let agreementsScrollPercentage = 0;
   
   journeySections.forEach(section => {
     const journeyId = section.getAttribute('data-journey');
@@ -507,9 +534,14 @@ function updateScroll() {
     const sectionHeight = rect.height;
     const scrollPercentage = calculateJourneyScrollPercentage(rect, sectionHeight);
     const isIntegrations = journeyId === 'integrations';
+    const isAgreements = journeyId === 'agreements';
     
     if (isIntegrations) {
       integrationsScrollPercentage = scrollPercentage;
+    }
+    
+    if (isAgreements) {
+      agreementsScrollPercentage = scrollPercentage;
     }
     
     handleJourneySectionAnimation(section, scrollPercentage, isIntegrations);

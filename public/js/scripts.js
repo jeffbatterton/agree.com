@@ -16,6 +16,7 @@ const JOURNEY_EXIT_TRANSLATE_Y = 400;
 
 // Journey-0 content animation configuration
 const JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH = 60; // Initial translateY in vh (positive = down)
+const JOURNEY_0_HEIGHT_THRESHOLD_PX = 300; // Height threshold in px for journey-0 as it scrolls out
 
 // Display section animation configuration
 const DISPLAY_SECTION_MAX_TRANSLATE_Y_VH = 40; // Maximum translateY in vh (negative = up) for display section
@@ -47,6 +48,8 @@ let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
 let lastScrollY = window.scrollY || window.pageYOffset;
 let isAdjustingScroll = false;
+let journey0HeightAnimationStartScrollY = null; // Store scroll position when height animation starts
+let journey0InitialHeight = null; // Store journey-0's initial height when animation starts
 
 // ============================================
 // HELPER FUNCTIONS
@@ -308,6 +311,13 @@ function updateScroll() {
       if (journey0) {
         journey0.classList.remove('fixed');
         journey0.classList.add('relative', 'block');
+        
+        // Store journey-0's initial height (80vh) when display section fully scrolls out
+        if (journey0InitialHeight === null) {
+          const viewportHeight = window.innerHeight;
+          journey0InitialHeight = 80 * viewportHeight / 100; // 80vh in px
+          journey0HeightAnimationStartScrollY = window.scrollY || window.pageYOffset;
+        }
       }
       if (journeySpacer) {
         journeySpacer.classList.remove('block');
@@ -327,6 +337,9 @@ function updateScroll() {
         journeySpacer.classList.remove('hidden');
         journeySpacer.classList.add('block');
       }
+      // Reset height animation state when not completely past
+      journey0InitialHeight = null;
+      journey0HeightAnimationStartScrollY = null;
     }
     // Priority 4: Use scroll percentage for normal scroll behavior
     else if (scrollPercentage >= 50) {
@@ -355,6 +368,20 @@ function updateScroll() {
         journeySpacer.classList.remove('block');
         journeySpacer.classList.add('hidden');
       }
+      // Reset height animation state when scroll percentage is below 50%
+      journey0InitialHeight = null;
+      journey0HeightAnimationStartScrollY = null;
+    }
+    
+    // Animate journey-0 height based on scroll amount after display section fully scrolls out
+    if (journey0 && journey0InitialHeight !== null && journey0HeightAnimationStartScrollY !== null) {
+      const currentScrollY = window.scrollY || window.pageYOffset;
+      const scrollAmount = Math.max(0, currentScrollY - journey0HeightAnimationStartScrollY);
+      
+      // Subtract scroll amount from initial height (1:1 ratio)
+      const newHeight = Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, journey0InitialHeight - scrollAmount);
+      
+      journey0.style.height = `${newHeight}px`;
     }
     
     // Animate journey-0 content wrapper translateY based on display section scroll out

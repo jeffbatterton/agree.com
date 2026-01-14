@@ -277,7 +277,6 @@ function updateScroll() {
   const journeySections = document.querySelectorAll('[data-journey]');
   const tabs = document.querySelectorAll('[data-button-tab]');
   const viewportHeight = window.innerHeight;
-  const activationThreshold = viewportHeight * 0.5;
   let activeJourney = null;
   let closestSection = null;
   let closestDistance = Infinity;
@@ -290,8 +289,11 @@ function updateScroll() {
     const sectionHeight = rect.height;
     const scrollPercentage = calculateJourneyScrollPercentage(rect, sectionHeight);
     
-    if (rect.top <= activationThreshold && rect.bottom > activationThreshold) {
-      const distance = Math.abs(rect.top - activationThreshold);
+    // Check if section's top is at or above the top of the viewport
+    // Find the section whose top is closest to 0 (top of viewport) without going too far past
+    if (rect.top <= 0 && rect.bottom > 0) {
+      // Section's top is at or above viewport top, and section is still visible
+      const distance = Math.abs(rect.top);
       if (distance < closestDistance) {
         closestDistance = distance;
         closestSection = journeyId;
@@ -317,10 +319,26 @@ function updateScroll() {
   });
   
   // Update active tab
-  if (!isProgrammaticScroll) {
-    activeJourney = closestSection;
-  } else {
+  if (isProgrammaticScroll && programmaticScrollTarget) {
+    // During programmatic scroll, keep the target tab active
     activeJourney = programmaticScrollTarget;
+    
+    // Check if target section has reached the top of viewport, then reset programmatic scroll flag
+    const targetSection = document.querySelector(`[data-journey="${programmaticScrollTarget}"]`);
+    if (targetSection) {
+      const targetRect = targetSection.getBoundingClientRect();
+      // If target section's top is at or very close to viewport top, we've reached the destination
+      if (targetRect.top <= 0 && targetRect.top >= -10) {
+        // Reset after a small delay to ensure smooth transition
+        setTimeout(() => {
+          isProgrammaticScroll = false;
+          programmaticScrollTarget = null;
+        }, 100);
+      }
+    }
+  } else {
+    // Activate tab when its section's top reaches the top of the viewport
+    activeJourney = closestSection;
   }
   
   tabs.forEach(tab => {
@@ -384,11 +402,6 @@ function handleTabClick(e) {
       });
     });
   });
-  
-  setTimeout(() => {
-    isProgrammaticScroll = false;
-    programmaticScrollTarget = null;
-  }, 1000);
 }
 
 function handleWheel(event) {

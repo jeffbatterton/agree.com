@@ -216,6 +216,15 @@
   .top-\[560px\] {
     top: 560px;
   }
+  .top-\[600px\] {
+    top: 600px;
+  }
+  .top-\[624px\] {
+    top: 624px;
+  }
+  .top-\[640px\] {
+    top: 640px;
+  }
   .top-\[750px\] {
     top: 750px;
   }
@@ -227,6 +236,9 @@
   }
   .right-4 {
     right: calc(var(--spacing) * 4);
+  }
+  .right-\[-64px\] {
+    right: -64px;
   }
   .right-\[20px\] {
     right: 20px;
@@ -240,14 +252,41 @@
   .right-\[100px\] {
     right: 100px;
   }
+  .right-\[110px\] {
+    right: 110px;
+  }
   .right-\[112px\] {
     right: 112px;
+  }
+  .right-\[120px\] {
+    right: 120px;
+  }
+  .right-\[140px\] {
+    right: 140px;
+  }
+  .right-\[150px\] {
+    right: 150px;
+  }
+  .right-\[170px\] {
+    right: 170px;
   }
   .right-\[180px\] {
     right: 180px;
   }
+  .right-\[190px\] {
+    right: 190px;
+  }
+  .right-\[220px\] {
+    right: 220px;
+  }
   .right-\[230px\] {
     right: 230px;
+  }
+  .right-\[270px\] {
+    right: 270px;
+  }
+  .right-\[320px\] {
+    right: 320px;
   }
   .bottom-8 {
     bottom: calc(var(--spacing) * 8);
@@ -327,9 +366,6 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
-  .h-6 {
-    height: calc(var(--spacing) * 6);
-  }
   .h-8 {
     height: calc(var(--spacing) * 8);
   }
@@ -366,9 +402,6 @@
   .w-2\/3 {
     width: calc(2/3 * 100%);
   }
-  .w-6 {
-    width: calc(var(--spacing) * 6);
-  }
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
@@ -404,6 +437,10 @@
   }
   .-translate-x-\[640px\] {
     --tw-translate-x: calc(640px * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .-translate-x-\[730px\] {
+    --tw-translate-x: calc(730px * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .rotate-45 {
@@ -444,6 +481,9 @@
   }
   .justify-start {
     justify-content: flex-start;
+  }
+  .gap-1 {
+    gap: calc(var(--spacing) * 1);
   }
   .gap-2 {
     gap: calc(var(--spacing) * 2);
@@ -637,8 +677,8 @@
   .px-16 {
     padding-inline: calc(var(--spacing) * 16);
   }
-  .py-2 {
-    padding-block: calc(var(--spacing) * 2);
+  .py-3 {
+    padding-block: calc(var(--spacing) * 3);
   }
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
@@ -776,13 +816,13 @@
   --yellow: #F2A900FF;
   --yellow-dark: #C88A00FF;
   --yellow-faint: #FFF8E6FF;
-  --text-label-font-size: 0.875rem;
+  --text-label-font-size: 0.9375rem;
   --text-label-font-style: normal;
   --text-label-font-weight: 500;
   --text-label-line-height: 1;
-  --text-overline-font-size: 0.625rem;
+  --text-overline-font-size: 0.75rem;
   --text-overline-font-style: normal;
-  --text-overline-font-weight: 500;
+  --text-overline-font-weight: 600;
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
 }
@@ -1040,7 +1080,7 @@
   }
   .button-shiny-tertiary {
     color: var(--black);
-    background: var(--white);
+    background: var(--black-faint);
     box-shadow: none;
   }
   .button-shiny-tertiary::before, .button-shiny-tertiary::after {
@@ -1109,7 +1149,7 @@
   }
   .customer-logos-track {
     --loop-distance: 0;
-    animation: customer-logos-scroll 20s linear infinite;
+    animation: customer-logos-scroll 30s linear infinite;
     will-change: transform;
   }
   .customer-logos-track:hover {

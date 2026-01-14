@@ -23,14 +23,14 @@
   --yellow-dark: #C88A00FF;
   --yellow-faint: #FFF8E6FF;
 
-  --text-label-font-size: 0.875rem;
+  --text-label-font-size: 0.9375rem;
   --text-label-font-style: normal;
   --text-label-font-weight: 500;
   --text-label-line-height: 1;
 
-  --text-overline-font-size: 0.625rem;
+  --text-overline-font-size: 0.75rem;
   --text-overline-font-style: normal;
-  --text-overline-font-weight: 500;
+  --text-overline-font-weight: 600;
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
 }
@@ -353,7 +353,7 @@
 
   .button-shiny-tertiary {
     color: var(--black);
-    background: var(--white);
+    background: var(--black-faint);
     box-shadow: none;
   }
 
@@ -437,7 +437,7 @@
 
   .customer-logos-track {
     --loop-distance: 0;
-    animation: customer-logos-scroll 20s linear infinite;
+    animation: customer-logos-scroll 30s linear infinite;
     will-change: transform;
   }
 

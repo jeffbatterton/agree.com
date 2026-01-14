@@ -25,13 +25,17 @@ const DISPLAY_PHASE_4_OPEN = 55; // Scroll percentage where phase-4 starts
 const DISPLAY_PHASE_4_CLOSE = 100; // Scroll percentage where phase-4 ends
 
 // Qualities section configuration
-const QUALITIES_NOTIFICATION_1_PERCENTAGE = 20; // Scroll percentage where notification-1 class is added
-const QUALITIES_NOTIFICATION_2_PERCENTAGE = 42; // Scroll percentage where notification-2 class is added
-const QUALITIES_NOTIFICATION_3_PERCENTAGE = 60; // Scroll percentage where notification-3 class is added
-const QUALITIES_ICON_DOT_1_PERCENTAGE = 10; // Scroll percentage where icon-dot-1 class is added
-const QUALITIES_ICON_DOT_2_PERCENTAGE = 25; // Scroll percentage where icon-dot-2 class is added
-const QUALITIES_ICON_DOT_3_PERCENTAGE = 33; // Scroll percentage where icon-dot-3 class is added
-const QUALITIES_ICON_DOT_4_PERCENTAGE = 50; // Scroll percentage where icon-dot-4 class is added
+const QUALITIES_BASE_PERCENTAGE = 10; // Scroll percentage where the stagger sequence begins
+const QUALITIES_NOTIFICATION_1_DELAY_MS = 100; // Delay after base threshold (ms)
+const QUALITIES_NOTIFICATION_2_DELAY_MS = 320; // Delay after base threshold (ms)
+const QUALITIES_NOTIFICATION_3_DELAY_MS = 500; // Delay after base threshold (ms)
+const QUALITIES_ICON_DOT_1_DELAY_MS = 0; // Delay after base threshold (ms)
+const QUALITIES_ICON_DOT_2_DELAY_MS = 150; // Delay after base threshold (ms)
+const QUALITIES_ICON_DOT_3_DELAY_MS = 230; // Delay after base threshold (ms)
+const QUALITIES_ICON_DOT_4_DELAY_MS = 400; // Delay after base threshold (ms)
+
+// Button tabs activation configuration
+const TAB_ACTIVATION_SCROLL_IN_PERCENTAGE = 51; // Percentage of the section's "scroll-in" needed to activate its tab
 
 // Track when exit phase starts for card animation
 let displayCardExitStartPercentage = null;
@@ -43,6 +47,8 @@ let displayCardExitStartPercentage = null;
 let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
 const qualitiesNumbersAnimated = new Set(); // Track which number elements have been animated
+let qualitiesStaggerStarted = false;
+const qualitiesClassTimeouts = new Map();
 
 // ============================================
 // HELPER FUNCTIONS
@@ -64,6 +70,15 @@ function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
     const scrolledAmount = viewportHeight - sectionTop;
     return Math.min(100, Math.max(0, (scrolledAmount / scrollRange) * 100));
   }
+}
+
+function calculateSectionScrollInPercentage(sectionRect) {
+  const viewportHeight = window.innerHeight;
+  const sectionTop = sectionRect.top;
+
+  // 0% when section top is at the bottom of the viewport, 100% when section top reaches the top of the viewport.
+  const progress = (viewportHeight - sectionTop) / viewportHeight;
+  return Math.min(100, Math.max(0, progress * 100));
 }
 
 
@@ -127,51 +142,30 @@ function handleQualitiesSection(section, scrollPercentage, isInViewport) {
   if (!isInViewport) {
     // Remove all classes when section is out of viewport
     section.classList.remove('notification-1', 'notification-2', 'notification-3', 'icon-dot-1', 'icon-dot-2', 'icon-dot-3', 'icon-dot-4');
+    qualitiesStaggerStarted = false;
+    qualitiesClassTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    qualitiesClassTimeouts.clear();
     return;
   }
-  
-  // Handle notification classes - independent, remain until scroll back below threshold
-  if (scrollPercentage >= QUALITIES_NOTIFICATION_1_PERCENTAGE) {
-    section.classList.add('notification-1');
-  } else {
-    section.classList.remove('notification-1');
-  }
-  
-  if (scrollPercentage >= QUALITIES_NOTIFICATION_2_PERCENTAGE) {
-    section.classList.add('notification-2');
-  } else {
-    section.classList.remove('notification-2');
-  }
-  
-  if (scrollPercentage >= QUALITIES_NOTIFICATION_3_PERCENTAGE) {
-    section.classList.add('notification-3');
-  } else {
-    section.classList.remove('notification-3');
-  }
-  
-  // Handle icon-dot classes - independent, remain until scroll back below threshold
-  if (scrollPercentage >= QUALITIES_ICON_DOT_1_PERCENTAGE) {
-    section.classList.add('icon-dot-1');
-  } else {
-    section.classList.remove('icon-dot-1');
-  }
-  
-  if (scrollPercentage >= QUALITIES_ICON_DOT_2_PERCENTAGE) {
-    section.classList.add('icon-dot-2');
-  } else {
-    section.classList.remove('icon-dot-2');
-  }
-  
-  if (scrollPercentage >= QUALITIES_ICON_DOT_3_PERCENTAGE) {
-    section.classList.add('icon-dot-3');
-  } else {
-    section.classList.remove('icon-dot-3');
-  }
-  
-  if (scrollPercentage >= QUALITIES_ICON_DOT_4_PERCENTAGE) {
-    section.classList.add('icon-dot-4');
-  } else {
-    section.classList.remove('icon-dot-4');
+
+  if (scrollPercentage >= QUALITIES_BASE_PERCENTAGE && !qualitiesStaggerStarted) {
+    qualitiesStaggerStarted = true;
+    qualitiesClassTimeouts.clear();
+
+    const scheduleClass = (className, delayMs) => {
+      const timeoutId = setTimeout(() => {
+        section.classList.add(className);
+      }, delayMs);
+      qualitiesClassTimeouts.set(className, timeoutId);
+    };
+
+    scheduleClass('notification-1', QUALITIES_NOTIFICATION_1_DELAY_MS);
+    scheduleClass('notification-2', QUALITIES_NOTIFICATION_2_DELAY_MS);
+    scheduleClass('notification-3', QUALITIES_NOTIFICATION_3_DELAY_MS);
+    scheduleClass('icon-dot-1', QUALITIES_ICON_DOT_1_DELAY_MS);
+    scheduleClass('icon-dot-2', QUALITIES_ICON_DOT_2_DELAY_MS);
+    scheduleClass('icon-dot-3', QUALITIES_ICON_DOT_3_DELAY_MS);
+    scheduleClass('icon-dot-4', QUALITIES_ICON_DOT_4_DELAY_MS);
   }
   
   // Handle number animation - animate each number individually when it scrolls into view
@@ -420,11 +414,12 @@ function updateScroll() {
     const rect = section.getBoundingClientRect();
     const sectionHeight = rect.height;
     const scrollPercentage = calculateJourneyScrollPercentage(rect, sectionHeight);
+    const scrollInPercentage = calculateSectionScrollInPercentage(rect);
     
-    // Check if section's top is at or above the top of the viewport
-    // Find the section whose top is closest to 0 (top of viewport) without going too far past
-    if (rect.top <= 0 && rect.bottom > 0) {
-      // Section's top is at or above viewport top, and section is still visible
+    // Activate tab when its section is at least N% scrolled in.
+    // We select the section whose top is closest to the top of the viewport among eligible sections.
+    const isEligibleForTabActivation = scrollInPercentage >= TAB_ACTIVATION_SCROLL_IN_PERCENTAGE && rect.bottom > 0;
+    if (isEligibleForTabActivation) {
       const distance = Math.abs(rect.top);
       if (distance < closestDistance) {
         closestDistance = distance;
@@ -469,7 +464,7 @@ function updateScroll() {
       }
     }
   } else {
-    // Activate tab when its section's top reaches the top of the viewport
+    // Activate tab when its section is at least N% scrolled in
     activeJourney = closestSection;
   }
   
@@ -558,7 +553,7 @@ function initialize() {
     });
     
     // Randomize notification card animation variables
-    document.querySelectorAll('.notification').forEach(card => {
+    document.querySelectorAll('.notification-wrapper').forEach(card => {
       const rand = (min, max) => Math.random() * (max - min) + min;
 
       card.style.setProperty('--tx', `${rand(4, 10).toFixed(1)}px`);

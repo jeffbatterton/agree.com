@@ -387,6 +387,9 @@
   .m-6 {
     margin: calc(var(--spacing) * 6);
   }
+  .-mt-\[10px\] {
+    margin-top: calc(10px * -1);
+  }
   .-mb-32 {
     margin-bottom: calc(var(--spacing) * -32);
   }
@@ -420,8 +423,14 @@
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
+  .h-\[25vh\] {
+    height: 25vh;
+  }
   .h-\[32px\] {
     height: 32px;
+  }
+  .h-\[50vh\] {
+    height: 50vh;
   }
   .h-\[98vh\] {
     height: 98vh;

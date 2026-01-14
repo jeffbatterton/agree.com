@@ -42,6 +42,7 @@ let displayCardExitStartPercentage = null;
 
 let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
+const qualitiesNumbersAnimated = new Set(); // Track which number elements have been animated
 
 // ============================================
 // HELPER FUNCTIONS
@@ -94,6 +95,34 @@ function handleJourneyPhaseClasses(section, scrollPercentage, isInViewport) {
   }
 }
 
+function animateNumber(element, startValue, endValue, suffix) {
+  const duration = 1000; // Animation duration in milliseconds
+  const steps = 60; // Number of animation steps
+  const stepDuration = duration / steps;
+  const valueDifference = endValue - startValue;
+  let currentStep = 0;
+  
+  const animate = () => {
+    if (currentStep >= steps) {
+      // Animation complete - set final value
+      element.textContent = Math.round(endValue) + suffix;
+      return;
+    }
+    
+    // Calculate current value for this step
+    const progress = currentStep / steps;
+    const currentValue = startValue + (valueDifference * progress);
+    
+    // Show whole number during animation (no decimal)
+    element.textContent = Math.round(currentValue) + suffix;
+    
+    currentStep++;
+    setTimeout(animate, stepDuration);
+  };
+  
+  animate();
+}
+
 function handleQualitiesSection(section, scrollPercentage, isInViewport) {
   if (!isInViewport) {
     // Remove all classes when section is out of viewport
@@ -144,6 +173,40 @@ function handleQualitiesSection(section, scrollPercentage, isInViewport) {
   } else {
     section.classList.remove('icon-dot-4');
   }
+  
+  // Handle number animation - animate each number individually when it scrolls into view
+  const numberElements = section.querySelectorAll('[data-number]');
+  const viewportHeight = window.innerHeight;
+  
+  numberElements.forEach(element => {
+    // Skip if already animated
+    if (qualitiesNumbersAnimated.has(element)) {
+      return;
+    }
+    
+    // Check if element is in viewport
+    const elementRect = element.getBoundingClientRect();
+    const isInViewport = elementRect.top < viewportHeight && elementRect.bottom > 0;
+    
+    if (isInViewport) {
+      // Get target value from data-number attribute
+      const endValue = parseFloat(element.getAttribute('data-number'));
+      if (!isNaN(endValue)) {
+        // Get current displayed value
+        const currentText = element.textContent.trim();
+        const numericMatch = currentText.match(/[\d.]+/);
+        if (numericMatch) {
+          const startValue = parseFloat(numericMatch[0]);
+          // Preserve suffix (like "+" in "90%+")
+          const suffix = currentText.replace(/[\d.]+/, '');
+          
+          // Mark as animated and start animation
+          qualitiesNumbersAnimated.add(element);
+          animateNumber(element, startValue, endValue, suffix);
+        }
+      }
+    }
+  });
 }
 
 function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight) {

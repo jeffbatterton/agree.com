@@ -8,20 +8,6 @@ const JOURNEY_PHASE_2_PERCENTAGE = 43;
 const JOURNEY_PHASE_3_PERCENTAGE = 48;
 const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;
 
-// Journey section animation configuration
-const JOURNEY_ANIMATION_ENTRY_END = 25;
-const JOURNEY_ANIMATION_EXIT_START = 50;
-const JOURNEY_ANIMATION_EXIT_OPACITY_START = 75; // Scroll percentage at which opacity starts animating down during exit
-const JOURNEY_EXIT_TRANSLATE_Y = 400;
-
-// Journey-0 content animation configuration
-const JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH = 60; // Initial translateY in vh (positive = down)
-const JOURNEY_0_HEIGHT_THRESHOLD_PX = 350; // Height threshold in px for journey-0 as it scrolls out
-const JOURNEY_0_HEIGHT_REVERSE_START_PERCENTAGE = 50; // Display section scroll percentage at which height animation reverses (scrolls back up)
-
-// Display section animation configuration
-const DISPLAY_SECTION_MAX_TRANSLATE_Y_VH = 40; // Maximum translateY in vh (negative = up) for display section
-
 // Display card animation configuration
 const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where translateY reaches 0
 const DISPLAY_CARD_EXIT_TRANSLATE_Y = 18; // Final translateY in exit phase (vh) - for fine-tuning
@@ -47,11 +33,6 @@ let displayCardExitStartPercentage = null;
 
 let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
-let lastScrollY = window.scrollY || window.pageYOffset;
-let isAdjustingScroll = false;
-let journey0HeightAnimationStartScrollY = null; // Store scroll position when height animation starts
-let journey0InitialHeight = null; // Store journey-0's initial height when animation starts
-let journey0FrozenHeight = null; // Store the height when journey-0 scrolls off the page
 
 // ============================================
 // HELPER FUNCTIONS
@@ -79,78 +60,6 @@ function calculateJourneyScrollPercentage(sectionRect, sectionHeight) {
 // ============================================
 // JOURNEY SECTIONS HANDLERS
 // ============================================
-
-function handleJourneySectionAnimation(section, scrollPercentage, isIntegrations) {
-  const childDiv = section.querySelector(':scope > div');
-  if (!childDiv) return;
-  
-  const journeyId = section.getAttribute('data-journey');
-  const isAgreements = journeyId === 'agreements';
-  
-  // For agreements section, start at full opacity and scale (no fade-in animation)
-  let opacity = isAgreements ? 1.0 : 0.8;
-  let scale = isAgreements ? 1.0 : 0.8;
-  let translateY = 0;
-  
-  // Padding animation for non-agreements journey sections
-  let paddingTop = null;
-  let paddingBottom = null;
-  
-  if (scrollPercentage <= JOURNEY_ANIMATION_ENTRY_END) {
-    const progress = scrollPercentage / JOURNEY_ANIMATION_ENTRY_END;
-    // Only animate opacity and scale for non-agreements sections
-    if (!isAgreements) {
-      opacity = 0.8 + (progress * 0.2);
-      scale = 0.8 + (progress * 0.2);
-      // Animate top padding from 32px to 104px, keep bottom at 32px
-      paddingTop = 32 + (progress * (104 - 32));
-      paddingBottom = 32;
-    }
-  } else if (scrollPercentage >= JOURNEY_ANIMATION_EXIT_START && !isIntegrations) {
-    const exitProgress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_START) / (100 - JOURNEY_ANIMATION_EXIT_START);
-    scale = 1.0 - (exitProgress * 0.3);
-    translateY = exitProgress * JOURNEY_EXIT_TRANSLATE_Y * 2;
-    
-    // Opacity animation: only starts when scrollPercentage reaches opacity start threshold
-    if (scrollPercentage < JOURNEY_ANIMATION_EXIT_OPACITY_START) {
-      opacity = 1.0; // Keep at full opacity before opacity animation starts
-    } else {
-      // Animate opacity from 1.0 to 0.0 between opacity start and 100%
-      const opacityRange = 100 - JOURNEY_ANIMATION_EXIT_OPACITY_START;
-      const opacityProgress = (scrollPercentage - JOURNEY_ANIMATION_EXIT_OPACITY_START) / opacityRange;
-      opacity = 1.0 - opacityProgress;
-    }
-    
-    // Keep padding at full during exit for non-agreements sections
-    if (!isAgreements) {
-      paddingTop = 104;
-      paddingBottom = 32;
-    }
-  } else {
-    opacity = 1.0;
-    scale = 1.0;
-    // Keep padding at full when fully scrolled in for non-agreements sections
-    if (!isAgreements) {
-      paddingTop = 104;
-      paddingBottom = 32;
-    }
-  }
-  
-  childDiv.style.opacity = opacity;
-  childDiv.style.transform = `translateY(${translateY}px) scale(${scale})`;
-  
-  // Apply padding animation to section element for non-agreements sections
-  if (!isAgreements) {
-    if (paddingTop !== null && paddingBottom !== null) {
-      section.style.paddingTop = `${paddingTop}px`;
-      section.style.paddingBottom = `${paddingBottom}px`;
-    }
-  } else {
-    // Clear inline padding styles for agreements section so CSS classes take precedence
-    section.style.paddingTop = '';
-    section.style.paddingBottom = '';
-  }
-}
 
 function handleJourneyPhaseClasses(section, scrollPercentage, isInViewport) {
   if (isInViewport) {
@@ -191,26 +100,11 @@ function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight)
   }
   
   const initialTranslateY = sectionHeight * 0.5;
-  const isAgreements = visualJourneyId === 'agreements';
-  let agreementsScrollPercentage = 0;
-  
-  if (isAgreements) {
-    agreementsScrollPercentage = calculateJourneyScrollPercentage(sectionRect, sectionHeight);
-  }
   
   const animationProgress = Math.min(1, scrollProgress / 0.5);
   let translateY = initialTranslateY * (1 - animationProgress);
   let opacity = animationProgress;
   let scale = 0.25 + (animationProgress * 0.75);
-  
-  if (isAgreements && agreementsScrollPercentage > JOURNEY_VISUAL_EXIT_START_PERCENTAGE) {
-    const exitRange = 100 - JOURNEY_VISUAL_EXIT_START_PERCENTAGE;
-    const exitProgress = (agreementsScrollPercentage - JOURNEY_VISUAL_EXIT_START_PERCENTAGE) / exitRange;
-    const exitTranslateY = exitProgress * viewportHeight * 4;
-    translateY += exitTranslateY;
-    opacity = Math.max(0, opacity - (exitProgress * opacity));
-    scale = scale * (1 - exitProgress * 0.5);
-  }
   
   visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
   visual.style.opacity = opacity;
@@ -224,7 +118,6 @@ function updateScroll() {
   // Calculate and log display section scroll percentage
   const display = document.querySelector('[data-display]');
   let scrollPercentage = 0;
-  let shouldBeFixed = true; // Default to fixed for ribbon canvas
   
   if (display) {
     const displayRect = display.getBoundingClientRect();
@@ -246,29 +139,6 @@ function updateScroll() {
       scrollPercentage = Math.min(100, Math.max(0, (scrolledAmount / totalScrollableDistance) * 100));
     }
     
-    // Animate hero section translateY as display section scrolls in (push up)
-    const heroElement = document.querySelector('[data-hero]');
-    if (heroElement) {
-      const maxTranslateY = DISPLAY_SECTION_MAX_TRANSLATE_Y_VH * viewportHeight / 100; // Convert vh to px
-      // Animate from 0 to maxTranslateY (negative, pushing up) as scroll percentage goes from 0 to 100%
-      const progress = Math.min(1, Math.max(0, scrollPercentage / 100));
-      const translateY = -maxTranslateY * progress; // Negative value = up
-      
-      // Apply transform: set to none when translateY is 0, otherwise apply the transform
-      if (translateY === 0) {
-        heroElement.style.transform = 'none';
-      } else {
-        heroElement.style.transform = `translateY(${translateY}px)`;
-      }
-    }
-    
-    // Determine if ribbon canvas should be fixed based on scroll percentage
-    if (scrollPercentage >= 50) {
-      shouldBeFixed = false;
-    } else {
-      shouldBeFixed = true;
-    }
-      
     // Handle scroll phases
     display.classList.remove('scroll-entry', 'scroll-intermediate', 'scroll-exit');
     
@@ -277,161 +147,6 @@ function updateScroll() {
     const hasExited = displayBottom <= viewportHeight;
     const isCompletelyPast = displayTop + displayHeight < 0; // Display section has completely scrolled past viewport
     
-    // Handle hero, journey-0, and journey-spacer based on exit state and scroll percentage
-    const hero = document.querySelector('[data-hero]');
-    const journey0 = document.querySelector('[data-journey-0]');
-    const journeySpacer = document.querySelector('[data-journey--spacer]');
-    
-    // Check journey-0's own position to determine if it should be relative
-    let journey0ShouldBeRelative = false;
-    if (journey0) {
-      const journey0Rect = journey0.getBoundingClientRect();
-      // Journey-0 should be relative only if it has completely scrolled past the viewport
-      // This prevents jumping when refreshing while journey-0 is still in view
-      journey0ShouldBeRelative = journey0Rect.bottom < 0;
-    }
-    
-    // Priority 1: If journey-0 has completely scrolled past, make it relative
-    if (journey0ShouldBeRelative) {
-      if (hero) {
-        hero.classList.add('opacity-0');
-      }
-      if (journey0) {
-        journey0.classList.remove('fixed');
-        journey0.classList.add('relative', 'block');
-      }
-      if (journeySpacer) {
-        journeySpacer.classList.remove('block');
-        journeySpacer.classList.add('hidden');
-      }
-    }
-    // Priority 2: If display section has completely scrolled past, journey0 should be relative
-    else if (isCompletelyPast) {
-      if (hero) {
-        hero.classList.add('opacity-0');
-      }
-      if (journey0) {
-        journey0.classList.remove('fixed');
-        journey0.classList.add('relative', 'block');
-        
-        // Store journey-0's initial height (80vh) when display section fully scrolls out
-        if (journey0InitialHeight === null) {
-          const viewportHeight = window.innerHeight;
-          journey0InitialHeight = 80 * viewportHeight / 100; // 80vh in px
-          journey0HeightAnimationStartScrollY = window.scrollY || window.pageYOffset;
-        }
-      }
-      if (journeySpacer) {
-        journeySpacer.classList.remove('block');
-        journeySpacer.classList.add('hidden');
-      }
-    }
-    // Priority 3: If in exit phase but not completely past, keep journey0 fixed to prevent jumping
-    else if (hasExited) {
-      if (hero) {
-        hero.classList.add('opacity-0');
-      }
-      if (journey0) {
-        journey0.classList.remove('relative', 'block');
-        journey0.classList.add('fixed');
-      }
-      if (journeySpacer) {
-        journeySpacer.classList.remove('hidden');
-        journeySpacer.classList.add('block');
-      }
-      // Reset height animation state when not completely past
-      journey0InitialHeight = null;
-      journey0HeightAnimationStartScrollY = null;
-    }
-    // Priority 4: Use scroll percentage for normal scroll behavior
-    else if (scrollPercentage >= 50) {
-      // When scroll percentage reaches 50% or above (but not in exit phase)
-      if (hero) {
-        hero.classList.add('opacity-0');
-      }
-      if (journey0) {
-        journey0.classList.remove('relative', 'block');
-        journey0.classList.add('fixed');
-      }
-      if (journeySpacer) {
-        journeySpacer.classList.remove('hidden');
-        journeySpacer.classList.add('block');
-      }
-    } else {
-      // Revert when scroll percentage is below 50%
-      if (hero) {
-        hero.classList.remove('opacity-0');
-      }
-      if (journey0) {
-        journey0.classList.remove('fixed', 'block');
-        journey0.classList.add('relative');
-      }
-      if (journeySpacer) {
-        journeySpacer.classList.remove('block');
-        journeySpacer.classList.add('hidden');
-      }
-      // Reset height animation state when scroll percentage is below 50%
-      journey0InitialHeight = null;
-      journey0HeightAnimationStartScrollY = null;
-    }
-    
-    // Animate journey-0 height based on scroll amount after display section fully scrolls out
-    if (journey0 && journey0InitialHeight !== null && journey0HeightAnimationStartScrollY !== null) {
-      // Check if journey-0 has scrolled entirely off the page
-      const journey0Rect = journey0.getBoundingClientRect();
-      const journey0IsOffPage = journey0Rect.bottom < 0;
-      
-      if (journey0IsOffPage) {
-        // Freeze the height at its current state when journey-0 scrolls off the page
-        if (journey0FrozenHeight === null) {
-          journey0FrozenHeight = parseFloat(journey0.style.height) || journey0InitialHeight;
-        }
-        journey0.style.height = `${Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, journey0FrozenHeight)}px`;
-      } else {
-        // Reset frozen height when journey-0 comes back into view
-        journey0FrozenHeight = null;
-        
-        const currentScrollY = window.scrollY || window.pageYOffset;
-        const scrollAmount = currentScrollY - journey0HeightAnimationStartScrollY;
-        
-        // Check if we should reverse the animation (scroll back up)
-        // Only reverse if display section has scrolled back in by the threshold percentage
-        if (scrollAmount < 0 && display && scrollPercentage > JOURNEY_0_HEIGHT_REVERSE_START_PERCENTAGE) {
-          // Scroll is going back up, but display section hasn't scrolled back in enough yet
-          // Hold the height at its current state (don't animate back up yet)
-          // Get the current height from the element or use the last calculated height
-          const currentHeight = parseFloat(journey0.style.height) || journey0InitialHeight;
-          journey0.style.height = `${Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, currentHeight)}px`;
-        } else {
-          // Normal animation: subtract scroll amount from initial height (1:1 ratio)
-          const newHeight = Math.max(JOURNEY_0_HEIGHT_THRESHOLD_PX, journey0InitialHeight - Math.max(0, scrollAmount));
-          journey0.style.height = `${newHeight}px`;
-        }
-      }
-    }
-    
-    // Animate journey-0 content wrapper translateY based on display section scroll out
-    const journey0Content = document.querySelector('[data-journey-0-content]');
-    if (journey0Content && display) {
-      const viewportHeight = window.innerHeight;
-      const initialTranslateY = JOURNEY_0_CONTENT_INITIAL_TRANSLATE_Y_VH * viewportHeight / 100; // Convert vh to px
-      
-      // Animate from initialTranslateY (down) to 0 as display section scrolls out (scrollPercentage goes from 0 to 100%)
-      // When display scrollPercentage is 0, translateY = initialTranslateY (40vh down)
-      // When display scrollPercentage is 100%, translateY = 0
-      const progress = Math.min(1, Math.max(0, scrollPercentage / 100));
-      const translateY = initialTranslateY * (1 - progress); // Interpolate from initialTranslateY to 0
-      
-      // Cap translateY at 0 to prevent it from going negative (translating up)
-      const clampedTranslateY = Math.max(0, translateY);
-      
-      // Set transform to none when translateY reaches 0, otherwise apply the transform
-      if (clampedTranslateY === 0) {
-        journey0Content.style.transform = 'none';
-      } else {
-        journey0Content.style.transform = `translateY(${clampedTranslateY}px)`;
-      }
-    }
     
     if (hasExited) {
       display.classList.add('scroll-exit');
@@ -552,38 +267,11 @@ function updateScroll() {
     }
   }
   
-  // Handle ribbon canvas - apply/remove fixed class based on display scroll percentage
-  const ribbonCanvas = document.querySelector("[data-ribbon--canvas]");
-  if (ribbonCanvas && window.ribbonInitialized) {
-    if (shouldBeFixed) {
-      ribbonCanvas.classList.add('fixed');
-      ribbonCanvas.style.height = 'auto';
-    } else {
-      ribbonCanvas.classList.remove('fixed');
-      ribbonCanvas.style.height = '';
-    }
-  }
-  
   // Handle qualities spacer
   const qualitiesSpacer = document.querySelector('[data-parallax-system="qualities--spacer"]');
   // Note: Qualities spacer visibility logic removed - was previously controlled by CTA scroll
   
   
-  // Handle button tabs
-  const buttonTabs = document.querySelector('[data-button-tabs]');
-  const buttonTabsOpener = document.querySelector('[data-button-tabs-opener]');
-  const buttonTabsSpacer = document.querySelector('[data-button-tabs-spacer]');
-  
-  if (buttonTabs && buttonTabsOpener) {
-    const openerRect = buttonTabsOpener.getBoundingClientRect();
-    if (openerRect.bottom < 0) {
-      buttonTabs.classList.add('fixed');
-      buttonTabsSpacer?.classList.remove('hidden');
-    } else {
-      buttonTabs.classList.remove('fixed');
-      buttonTabsSpacer?.classList.add('hidden');
-    }
-  }
   
   // Handle journey sections
   const journeySections = document.querySelectorAll('[data-journey]');
@@ -593,8 +281,6 @@ function updateScroll() {
   let activeJourney = null;
   let closestSection = null;
   let closestDistance = Infinity;
-  let integrationsScrollPercentage = 0;
-  let agreementsScrollPercentage = 0;
   
   journeySections.forEach(section => {
     const journeyId = section.getAttribute('data-journey');
@@ -603,18 +289,6 @@ function updateScroll() {
     const rect = section.getBoundingClientRect();
     const sectionHeight = rect.height;
     const scrollPercentage = calculateJourneyScrollPercentage(rect, sectionHeight);
-    const isIntegrations = journeyId === 'integrations';
-    const isAgreements = journeyId === 'agreements';
-    
-    if (isIntegrations) {
-      integrationsScrollPercentage = scrollPercentage;
-    }
-    
-    if (isAgreements) {
-      agreementsScrollPercentage = scrollPercentage;
-    }
-    
-    handleJourneySectionAnimation(section, scrollPercentage, isIntegrations);
     
     if (rect.top <= activationThreshold && rect.bottom > activationThreshold) {
       const distance = Math.abs(rect.top - activationThreshold);
@@ -641,19 +315,6 @@ function updateScroll() {
     const sectionHeight = sectionRect.height;
     handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight);
   });
-  
-  // Handle tabs animation
-  if (integrationsScrollPercentage >= 50 && buttonTabs) {
-    const integrationsSection = document.querySelector('[data-journey="integrations"]');
-    if (integrationsSection) {
-      const integrationsRect = integrationsSection.getBoundingClientRect();
-      const integrationsTop = integrationsRect.top;
-      const scrollAmount = integrationsTop < 0 ? Math.abs(integrationsTop) : 0;
-      buttonTabs.style.top = `${-scrollAmount}px`;
-    }
-  } else if (buttonTabs) {
-    buttonTabs.style.top = '';
-  }
   
   // Update active tab
   if (!isProgrammaticScroll) {
@@ -703,9 +364,7 @@ function handleTabClick(e) {
   });
   
   // Force layout recalculation and wait for layout changes to settle
-  // This accounts for button tabs becoming fixed and journey 0 transitioning from fixed to relative
   requestAnimationFrame(() => {
-    // Update scroll to apply layout changes (button tabs fixed, journey 0 relative, etc.)
     updateScroll();
     
     // Force a layout recalculation by reading layout properties
@@ -740,32 +399,11 @@ function handleWheel(event) {
 // INITIALIZATION
 // ============================================
 
-function initializeButtonTabsSpacer() {
-  const buttonTabs = document.querySelector('[data-button-tabs]');
-  const buttonTabsSpacer = document.querySelector('[data-button-tabs-spacer]');
-  if (buttonTabs && buttonTabsSpacer) {
-    const tabsRect = buttonTabs.getBoundingClientRect();
-    const tabsHeight = tabsRect.height;
-    if (tabsHeight > 0) {
-      buttonTabsSpacer.style.height = tabsHeight + 'px';
-    } else {
-      setTimeout(initializeButtonTabsSpacer, 100);
-    }
-  }
-}
-
 function initialize() {
   const journey0 = document.querySelector('[data-journey-0]');
   if (journey0) {
     journey0.classList.add('isLoaded');
   }
-  
-  // Initialize button tabs spacer
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      initializeButtonTabsSpacer();
-    });
-  });
   
   // Setup tab click handlers
   document.addEventListener('DOMContentLoaded', function() {
@@ -789,9 +427,7 @@ function initialize() {
   // Setup scroll and wheel handlers
   window.addEventListener('wheel', handleWheel, { passive: false });
   window.addEventListener('scroll', function() {
-    if (!isAdjustingScroll) {
-      updateScroll();
-    }
+    updateScroll();
   });
   
   // Ensure updateScroll runs after DOM is ready and layout is calculated
@@ -1088,11 +724,6 @@ if (!canvas) {
       if (width > 0 && height > 0) {
         startAnimation();
         window.ribbonInitialized = true;
-        // Apply fixed class and height: auto as soon as ribbon is drawn
-        if (canvas) {
-          canvas.classList.add('fixed');
-          canvas.style.height = 'auto';
-        }
         updateScroll();
       }
     });

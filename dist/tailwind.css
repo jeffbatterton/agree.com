@@ -552,13 +552,6 @@
       background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
     }
   }
-  .bg-linear-to-b {
-    --tw-gradient-position: to bottom;
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      --tw-gradient-position: to bottom in oklab;
-    }
-    background-image: linear-gradient(var(--tw-gradient-stops));
-  }
   .bg-linear-to-bl {
     --tw-gradient-position: to bottom left;
     @supports (background-image: linear-gradient(in lab, red, red)) {
@@ -580,10 +573,6 @@
   }
   .from-\(--pink-dark\) {
     --tw-gradient-from: var(--pink-dark);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .from-\(--purple\) {
-    --tw-gradient-from: var(--purple);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .from-\(--purple-dark\) {
@@ -612,10 +601,6 @@
   }
   .to-\(--purple\) {
     --tw-gradient-to: var(--purple);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .to-\(--purple-dark\) {
-    --tw-gradient-to: var(--purple-dark);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .to-\(--yellow\) {
@@ -1299,6 +1284,57 @@
     }
     to {
       transform: scale(1);
+    }
+  }
+  @property --display-gradient-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 178deg;
+  }
+  .display {
+    --display-gradient-angle: 178deg;
+    position: relative;
+    background: var(--purple);
+    background: conic-gradient(from var(--display-gradient-angle) at 50% 50%, rgba(244, 52, 172, 0.50) 0deg, rgba(77, 60, 255, 0.50) 180deg, rgba(77, 60, 255, 0.50) 230.19230604171753deg, rgba(65, 151, 243, 0.50) 287.30769395828247deg, rgba(67, 187, 93, 0.50) 323.6538362503052deg, rgba(244, 52, 172, 0.50) 360deg), var(--purple, #4D3CFF);
+    animation: display 60s linear infinite;
+  }
+  @keyframes display {
+    from {
+      --display-gradient-angle: 178deg;
+    }
+    to {
+      --display-gradient-angle: 538deg;
+    }
+  }
+  .display::before {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100vh;
+    inset: -10vh 0 0 50%;
+    transform: translateX(-680px);
+    background: radial-gradient(50% 50% at 50% 50%, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
+    mix-blend-mode: overlay;
+    animation: display-before 12s ease-in-out infinite;
+  }
+  @keyframes display-before {
+    0% {
+      transform: translateX(-680px) translate(0, 0);
+    }
+    20% {
+      transform: translateX(-680px) translate(48px, -32px);
+    }
+    40% {
+      transform: translateX(-680px) translate(-24px, 56px);
+    }
+    60% {
+      transform: translateX(-680px) translate(64px, 24px);
+    }
+    80% {
+      transform: translateX(-680px) translate(-56px, -48px);
+    }
+    100% {
+      transform: translateX(-680px) translate(0, 0);
     }
   }
 }

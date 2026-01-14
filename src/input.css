@@ -664,6 +664,62 @@
       transform: scale(1);
     }
   }
+
+  @property --display-gradient-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 178deg;
+  }
+
+  .display {
+    --display-gradient-angle: 178deg;
+    position: relative;
+    background: var(--purple);
+    background: conic-gradient(from var(--display-gradient-angle) at 50% 50%, rgba(244, 52, 172, 0.50) 0deg, rgba(77, 60, 255, 0.50) 180deg, rgba(77, 60, 255, 0.50) 230.19230604171753deg, rgba(65, 151, 243, 0.50) 287.30769395828247deg, rgba(67, 187, 93, 0.50) 323.6538362503052deg, rgba(244, 52, 172, 0.50) 360deg), var(--purple, #4D3CFF);
+    animation: display 60s linear infinite;
+  }
+
+  @keyframes display {
+    from {
+      --display-gradient-angle: 178deg;
+    }
+    to {
+      --display-gradient-angle: 538deg;
+    }
+  }
+
+  .display::before {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100vh;
+    inset: -10vh 0 0 50%;
+    transform: translateX(-680px);
+    background: radial-gradient(50% 50% at 50% 50%, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
+    mix-blend-mode: overlay;
+    animation: display-before 12s ease-in-out infinite;
+  }
+
+  @keyframes display-before {
+    0% {
+      transform: translateX(-680px) translate(0, 0);
+    }
+    20% {
+      transform: translateX(-680px) translate(48px, -32px);
+    }
+    40% {
+      transform: translateX(-680px) translate(-24px, 56px);
+    }
+    60% {
+      transform: translateX(-680px) translate(64px, 24px);
+    }
+    80% {
+      transform: translateX(-680px) translate(-56px, -48px);
+    }
+    100% {
+      transform: translateX(-680px) translate(0, 0);
+    }
+  }
 }
 
 

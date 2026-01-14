@@ -21,11 +21,11 @@ const DISPLAY_PHASE_2_OPEN = 35; // Scroll percentage where phase-2 starts
 const DISPLAY_PHASE_2_CLOSE = 100; // Scroll percentage where phase-2 ends
 const DISPLAY_PHASE_3_OPEN = 48; // Scroll percentage where phase-3 starts
 const DISPLAY_PHASE_3_CLOSE = 100; // Scroll percentage where phase-3 ends
-const DISPLAY_PHASE_4_OPEN = 55; // Scroll percentage where phase-4 starts
+const DISPLAY_PHASE_4_OPEN = 50; // Scroll percentage where phase-4 starts
 const DISPLAY_PHASE_4_CLOSE = 100; // Scroll percentage where phase-4 ends
 
 // Qualities section configuration
-const QUALITIES_BASE_PERCENTAGE = 10; // Scroll percentage where the stagger sequence begins
+const QUALITIES_BASE_PERCENTAGE = 20; // Scroll percentage where the stagger sequence begins
 const QUALITIES_NOTIFICATION_1_DELAY_MS = 100; // Delay after base threshold (ms)
 const QUALITIES_NOTIFICATION_2_DELAY_MS = 320; // Delay after base threshold (ms)
 const QUALITIES_NOTIFICATION_3_DELAY_MS = 500; // Delay after base threshold (ms)

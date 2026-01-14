@@ -24,6 +24,15 @@ const DISPLAY_PHASE_3_CLOSE = 100; // Scroll percentage where phase-3 ends
 const DISPLAY_PHASE_4_OPEN = 55; // Scroll percentage where phase-4 starts
 const DISPLAY_PHASE_4_CLOSE = 100; // Scroll percentage where phase-4 ends
 
+// Qualities section configuration
+const QUALITIES_NOTIFICATION_1_PERCENTAGE = 20; // Scroll percentage where notification-1 class is added
+const QUALITIES_NOTIFICATION_2_PERCENTAGE = 42; // Scroll percentage where notification-2 class is added
+const QUALITIES_NOTIFICATION_3_PERCENTAGE = 60; // Scroll percentage where notification-3 class is added
+const QUALITIES_ICON_DOT_1_PERCENTAGE = 10; // Scroll percentage where icon-dot-1 class is added
+const QUALITIES_ICON_DOT_2_PERCENTAGE = 25; // Scroll percentage where icon-dot-2 class is added
+const QUALITIES_ICON_DOT_3_PERCENTAGE = 33; // Scroll percentage where icon-dot-3 class is added
+const QUALITIES_ICON_DOT_4_PERCENTAGE = 50; // Scroll percentage where icon-dot-4 class is added
+
 // Track when exit phase starts for card animation
 let displayCardExitStartPercentage = null;
 
@@ -82,6 +91,58 @@ function handleJourneyPhaseClasses(section, scrollPercentage, isInViewport) {
     }
   } else {
     section.classList.remove('journey-visuals--phase-1', 'journey-visuals--phase-2', 'journey-visuals--phase-3');
+  }
+}
+
+function handleQualitiesSection(section, scrollPercentage, isInViewport) {
+  if (!isInViewport) {
+    // Remove all classes when section is out of viewport
+    section.classList.remove('notification-1', 'notification-2', 'notification-3', 'icon-dot-1', 'icon-dot-2', 'icon-dot-3', 'icon-dot-4');
+    return;
+  }
+  
+  // Handle notification classes - independent, remain until scroll back below threshold
+  if (scrollPercentage >= QUALITIES_NOTIFICATION_1_PERCENTAGE) {
+    section.classList.add('notification-1');
+  } else {
+    section.classList.remove('notification-1');
+  }
+  
+  if (scrollPercentage >= QUALITIES_NOTIFICATION_2_PERCENTAGE) {
+    section.classList.add('notification-2');
+  } else {
+    section.classList.remove('notification-2');
+  }
+  
+  if (scrollPercentage >= QUALITIES_NOTIFICATION_3_PERCENTAGE) {
+    section.classList.add('notification-3');
+  } else {
+    section.classList.remove('notification-3');
+  }
+  
+  // Handle icon-dot classes - independent, remain until scroll back below threshold
+  if (scrollPercentage >= QUALITIES_ICON_DOT_1_PERCENTAGE) {
+    section.classList.add('icon-dot-1');
+  } else {
+    section.classList.remove('icon-dot-1');
+  }
+  
+  if (scrollPercentage >= QUALITIES_ICON_DOT_2_PERCENTAGE) {
+    section.classList.add('icon-dot-2');
+  } else {
+    section.classList.remove('icon-dot-2');
+  }
+  
+  if (scrollPercentage >= QUALITIES_ICON_DOT_3_PERCENTAGE) {
+    section.classList.add('icon-dot-3');
+  } else {
+    section.classList.remove('icon-dot-3');
+  }
+  
+  if (scrollPercentage >= QUALITIES_ICON_DOT_4_PERCENTAGE) {
+    section.classList.add('icon-dot-4');
+  } else {
+    section.classList.remove('icon-dot-4');
   }
 }
 
@@ -271,12 +332,20 @@ function updateScroll() {
   const qualitiesSpacer = document.querySelector('[data-parallax-system="qualities--spacer"]');
   // Note: Qualities spacer visibility logic removed - was previously controlled by CTA scroll
   
-  
-  
   // Handle journey sections
   const journeySections = document.querySelectorAll('[data-journey]');
   const tabs = document.querySelectorAll('[data-button-tab]');
   const viewportHeight = window.innerHeight;
+  
+  // Handle qualities section
+  const qualitiesSection = document.querySelector('[data-qualities]');
+  if (qualitiesSection) {
+    const qualitiesRect = qualitiesSection.getBoundingClientRect();
+    const qualitiesHeight = qualitiesRect.height;
+    const qualitiesScrollPercentage = calculateJourneyScrollPercentage(qualitiesRect, qualitiesHeight);
+    const isQualitiesInViewport = qualitiesRect.top <= viewportHeight && qualitiesRect.bottom >= 0;
+    handleQualitiesSection(qualitiesSection, qualitiesScrollPercentage, isQualitiesInViewport);
+  }
   let activeJourney = null;
   let closestSection = null;
   let closestDistance = Infinity;

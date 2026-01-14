@@ -50,14 +50,16 @@
   border-radius: 12px;
   justify-content: flex-start;
   align-items: center;
-  width: 410px;
+  width: 300px;
   padding: 16px;
   transition: all .125s ease-in-out;
   display: flex;
-  position: absolute;
   transform: scale(0);
   height: 80px;
   will-change: transform;
+}
+
+.notification-wrapper {
   animation: notification var(--dur) ease-in-out infinite;
 }
 
@@ -71,25 +73,108 @@
 
 @keyframes notification {
   0% {
-    transform: translate(0, 0) rotate(0);
+    transform: translate(0, 0) rotate(0) scale(1);
   }
   25% {
     transform:
       translate(calc(var(--tx) * 0.6), calc(var(--ty) * -0.6))
-      rotate(var(--rot));
+      rotate(var(--rot))
+      scale(1);
   }
   50% {
     transform:
       translate(0, calc(var(--ty) * -1))
-      rotate(calc(var(--rot) * -1));
+      rotate(calc(var(--rot) * -1))
+      scale(1);
   }
   75% {
     transform:
       translate(calc(var(--tx) * -0.6), calc(var(--ty) * -0.6))
-      rotate(var(--rot));
+      rotate(var(--rot))
+      scale(1);
   }
   100% {
-    transform: translate(0, 0) rotate(0);
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+}
+
+.icon-dot-agreements {
+  --dot: var(--slate);
+}
+
+.icon-dot-billing {
+  --dot: var(--pink);
+}
+
+.icon-dot-payments {
+  --dot: var(--green);
+}
+
+.icon-dot-collections {
+  --dot: var(--orange);
+}
+
+.icon-dot-reporting {
+  --dot: var(--yellow);
+}
+
+.icon-dot-integrations {
+  --dot: var(--ink);
+}
+
+.icon-dot {
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  position: absolute;
+  border-radius: 6.25rem;
+  box-shadow: 0 16px 72px 0 rgba(39, 30, 128, 0.20);
+  background: var(--dot);
+  isolation: isolate; 
+  opacity: 0;
+  transition: all .125s ease-in-out;
+  transform: scale(0);
+}
+
+.icon-dot-1 .icon-dot-1,
+.icon-dot-2 .icon-dot-2,
+.icon-dot-3 .icon-dot-3,
+.icon-dot-4 .icon-dot-4 {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.icon-dot::after {
+  content: "";
+  background: transparent;
+  transform: scale(1);
+  box-shadow: 0 0 0 0 var(--dot);
+  animation: icon-dot--after 2s infinite;
+  position: absolute;
+  background-color: var(--dot);
+  inset: -8px;
+  border-radius: 100%;
+}
+
+.icon-dot svg {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes icon-dot--after {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 70%, transparent);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--dot) 0%, transparent);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 0%, transparent);
   }
 }
 
@@ -574,75 +659,6 @@
     }
     to {
       transform: scale(1);
-    }
-  }
-
-  .icon-dot-agreements {
-    --dot: var(--slate);
-  }
-
-  .icon-dot-billing {
-    --dot: var(--pink);
-  }
-
-  .icon-dot-payments {
-    --dot: var(--green);
-  }
-
-  .icon-dot-collections {
-    --dot: var(--orange);
-  }
-
-  .icon-dot-reporting {
-    --dot: var(--yellow);
-  }
-
-  .icon-dot-integrations {
-    --dot: var(--ink);
-  }
-
-  .icon-dot {
-    display: flex;
-    padding: 0.5rem;
-    align-items: center;
-    position: absolute;
-    border-radius: 6.25rem;
-    box-shadow: 0 16px 72px 0 rgba(39, 30, 128, 0.20);
-    background: var(--dot);
-    isolation: isolate; 
-  }
-
-  .icon-dot::after {
-    content: "";
-    background: transparent;
-    transform: scale(1);
-    box-shadow: 0 0 0 0 var(--dot);
-    animation: icon-dot--after 2s infinite;
-    position: absolute;
-    background-color: var(--dot);
-    inset: -8px;
-    border-radius: 100%;
-  }
-
-  .icon-dot svg {
-    position: relative;
-    z-index: 1;
-  }
-  
-  @keyframes icon-dot--after {
-    0% {
-      transform: scale(0.95);
-      box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 70%, transparent);
-    }
-
-    70% {
-      transform: scale(1);
-      box-shadow: 0 0 0 10px color-mix(in srgb, var(--dot) 0%, transparent);
-    }
-
-    100% {
-      transform: scale(0.95);
-      box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot) 0%, transparent);
     }
   }
 }

@@ -6,7 +6,17 @@
 const JOURNEY_PHASE_1_PERCENTAGE = 38;
 const JOURNEY_PHASE_2_PERCENTAGE = 43;
 const JOURNEY_PHASE_3_PERCENTAGE = 48;
-const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;
+const JOURNEY_EXIT_PERCENTAGE = 70;
+
+// Agreements-specific tuning
+const JOURNEY_VISUAL_AGREEMENTS_ENTRY_START_SCALE = 0.25; // Scale at the start of entry
+const JOURNEY_VISUAL_AGREEMENTS_ENTRY_INITIAL_TRANSLATE_Y_FACTOR = 0.5; // initial translateY = sectionHeight * factor
+const JOURNEY_VISUAL_AGREEMENTS_ENTRY_COMPLETE_AT_SCROLL_PROGRESS = 0.5; // entry completes when scrollProgress reaches this (0..1)
+const JOURNEY_VISUAL_AGREEMENTS_SCROLL_SECTION_HEIGHT_FACTOR = 0.5; // affects scrollProgress denominator: viewportHeight + sectionHeight * factor
+const JOURNEY_VISUAL_AGREEMENTS_EXIT_TRANSLATE_VIEWPORTS = 1.25; // How far down to translate on exit (multiples of viewport height)
+const JOURNEY_VISUAL_AGREEMENTS_EXIT_END_SCALE = 0.25; // Scale at the end of exit animation
+const JOURNEY_VISUAL_AGREEMENTS_EXIT_RATE = 3.5; // Exit easing strength (2 = faster at start, slower at end; does NOT change start/end scroll positions)
+const JOURNEY_VISUAL_AGREEMENTS_EXIT_END_OPACITY = .75; // Opacity at the end of exit animation
 
 // Display card animation configuration
 const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where translateY reaches 0
@@ -212,17 +222,49 @@ function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight)
   
   let scrollProgress = 0;
   if (sectionTop <= viewportHeight && sectionTop >= -sectionHeight) {
-    scrollProgress = Math.max(0, Math.min(1, (viewportHeight - sectionTop) / (viewportHeight + sectionHeight * 0.5)));
+    const denomFactor = visualJourneyId === 'agreements'
+      ? JOURNEY_VISUAL_AGREEMENTS_SCROLL_SECTION_HEIGHT_FACTOR
+      : 0.5;
+    scrollProgress = Math.max(
+      0,
+      Math.min(1, (viewportHeight - sectionTop) / (viewportHeight + sectionHeight * denomFactor))
+    );
   } else if (sectionTop < -sectionHeight) {
     scrollProgress = 1;
   }
   
-  const initialTranslateY = sectionHeight * 0.5;
+  const initialTranslateYFactor = visualJourneyId === 'agreements'
+    ? JOURNEY_VISUAL_AGREEMENTS_ENTRY_INITIAL_TRANSLATE_Y_FACTOR
+    : 0.5;
+  const initialTranslateY = sectionHeight * initialTranslateYFactor;
   
-  const animationProgress = Math.min(1, scrollProgress / 0.5);
+  const entryCompleteAt = visualJourneyId === 'agreements'
+    ? JOURNEY_VISUAL_AGREEMENTS_ENTRY_COMPLETE_AT_SCROLL_PROGRESS
+    : 0.5;
+  const animationProgress = Math.min(1, scrollProgress / entryCompleteAt);
   let translateY = initialTranslateY * (1 - animationProgress);
   let opacity = animationProgress;
-  let scale = 0.25 + (animationProgress * 0.75);
+  const entryStartScale = visualJourneyId === 'agreements'
+    ? JOURNEY_VISUAL_AGREEMENTS_ENTRY_START_SCALE
+    : 0.25;
+  let scale = entryStartScale + (animationProgress * (1 - entryStartScale));
+
+  // Agreements-only exit animation driven by scroll percentage
+  if (visualJourneyId === 'agreements') {
+    const scrollPercentage = calculateJourneyScrollPercentage(sectionRect, sectionHeight);
+    if (scrollPercentage >= JOURNEY_EXIT_PERCENTAGE) {
+      const exitRange = 100 - JOURNEY_EXIT_PERCENTAGE;
+      const baseExitProgress = exitRange > 0
+        ? Math.min(1, Math.max(0, (scrollPercentage - JOURNEY_EXIT_PERCENTAGE) / exitRange))
+        : 1;
+      // Ease-out curve controlled by rate (keeps start/end positions the same)
+      const exitProgress = 1 - Math.pow(1 - baseExitProgress, JOURNEY_VISUAL_AGREEMENTS_EXIT_RATE);
+
+      translateY = exitProgress * (viewportHeight * JOURNEY_VISUAL_AGREEMENTS_EXIT_TRANSLATE_VIEWPORTS);
+      scale = 1 - (exitProgress * (1 - JOURNEY_VISUAL_AGREEMENTS_EXIT_END_SCALE));
+      opacity = 1 - (exitProgress * (1 - JOURNEY_VISUAL_AGREEMENTS_EXIT_END_OPACITY));
+    }
+  }
   
   visual.style.transform = `translateY(${translateY}px) scale(${scale})`;
   visual.style.opacity = opacity;

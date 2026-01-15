@@ -3,7 +3,7 @@
 // ============================================
 
 // Journey section phase configuration
-const JOURNEY_PHASE_1_PERCENTAGE = 37;
+const JOURNEY_PHASE_1_PERCENTAGE = 38;
 const JOURNEY_PHASE_2_PERCENTAGE = 43;
 const JOURNEY_PHASE_3_PERCENTAGE = 48;
 const JOURNEY_VISUAL_EXIT_START_PERCENTAGE = 58;

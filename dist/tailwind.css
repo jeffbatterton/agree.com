@@ -225,9 +225,6 @@
   .-right-8 {
     right: calc(var(--spacing) * -8);
   }
-  .right-0 {
-    right: calc(var(--spacing) * 0);
-  }
   .right-4 {
     right: calc(var(--spacing) * 4);
   }
@@ -251,9 +248,6 @@
   }
   .right-\[295px\] {
     right: 295px;
-  }
-  .bottom-0 {
-    bottom: calc(var(--spacing) * 0);
   }
   .bottom-8 {
     bottom: calc(var(--spacing) * 8);
@@ -821,6 +815,7 @@
   gap: 12px;
   box-shadow: 0 16px 72px 0 #271e8033, inset 0 1px 0 0 var(--white), 0 0 1px 0 #0000001a;
   opacity: 0;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   background-color: #ffffffe6;
   border-radius: 12px;
@@ -1043,16 +1038,17 @@
     inset: -8px;
     border-radius: 18px;
     background: rgba(21, 24, 44, 0.10);
+    -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
   }
   .button-shiny::after {
     content: "";
     position: absolute;
-    inset: -1px;
+    inset: -2px;
     border-radius: 13px;
     pointer-events: none;
     border-radius: 0.8125rem;
-    background: conic-gradient( from var(--glow-angle) at 50% 50%, rgba(244, 52, 172, 1) 0deg, rgba(242, 169, 0, 1) 118.80000472068787deg, rgba(255, 255, 255, 1) 180deg, rgba(21, 19, 79, 1) 237.60000944137573deg, rgba(244, 52, 172, 1) 360deg );
+    background: conic-gradient(from var(--glow-angle) at 50% 50%, #43BB5E 0deg, #EDA922 51.92307651042938deg, #DF4EA4 103.84615302085876deg, #4D3CFF 169.61538791656494deg, #3C9AFF 228.46153020858765deg, #43BB5E 360deg), var(--purple, #4D3CFF);
     transition: background 80ms linear;
   }
   .button-shiny-secondary {
@@ -1090,29 +1086,34 @@
   .button-tab svg {
     opacity: .4;
   }
+  .button-tab[data-button-tab="agreements"].isActive {
+    --button-tab-color: var(--purple);
+  }
+  .button-tab[data-button-tab="billing"].isActive {
+    --button-tab-color: var(--pink);
+  }
+  .button-tab[data-button-tab="payments"].isActive {
+    --button-tab-color: var(--green);
+  }
+  .button-tab[data-button-tab="collections"].isActive {
+    --button-tab-color: var(--orange);
+  }
+  .button-tab[data-button-tab="reporting"].isActive {
+    --button-tab-color: var(--yellow);
+  }
+  .button-tab[data-button-tab="integrations"].isActive {
+    --button-tab-color: var(--charcoal);
+  }
   .button-tab.isActive {
     color: var(--white);
+    background: var(--button-tab-color);
+    box-shadow: 0 0 24px var(--button-tab-color);
+    @supports (color: color-mix(in lab, red, red)) {
+      box-shadow: 0 0 24px color-mix(in srgb, var(--button-tab-color) 35%, transparent);
+    }
   }
   .button-tab.isActive svg {
     opacity: 1;
-  }
-  .button-tab[data-button-tab="agreements"].isActive {
-    background: var(--purple);
-  }
-  .button-tab[data-button-tab="billing"].isActive {
-    background: var(--pink);
-  }
-  .button-tab[data-button-tab="payments"].isActive {
-    background: var(--green);
-  }
-  .button-tab[data-button-tab="collections"].isActive {
-    background: var(--orange);
-  }
-  .button-tab[data-button-tab="reporting"].isActive {
-    background: var(--yellow);
-  }
-  .button-tab[data-button-tab="integrations"].isActive {
-    background: var(--charcoal);
   }
   .pill {
     display: flex;
@@ -1151,7 +1152,7 @@
   }
   .journey-visuals--agreement {
     position: relative;
-    z-index: 0;
+    z-index: 1;
     isolation: isolate;
     font-family: "Times New Roman";
     display: flex;

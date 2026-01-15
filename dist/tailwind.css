@@ -710,17 +710,11 @@
   .opacity-10 {
     opacity: 10%;
   }
-  .opacity-25 {
-    opacity: 25%;
-  }
   .opacity-40 {
     opacity: 40%;
   }
   .opacity-50 {
     opacity: 50%;
-  }
-  .mix-blend-overlay {
-    mix-blend-mode: overlay;
   }
   .shadow-\[0_1px_0_0_\#FFF_inset\,0_0_64px_0_rgba\(21\,24\,44\,0\.16\)\] {
     --tw-shadow: 0 1px 0 0 var(--tw-shadow-color, #FFF) inset, 0 0 64px 0 var(--tw-shadow-color, rgba(21,24,44,0.16));
@@ -1342,35 +1336,37 @@
       --display-gradient-angle: 538deg;
     }
   }
+  @property --display-before-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 243deg;
+  }
+  @property --display-before-mid {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 50%;
+  }
   .display::before {
     content: "";
     position: absolute;
-    height: 100vh;
-    width: 100vh;
-    inset: -10vh 0 0 50%;
-    transform: translateX(-680px);
-    background: radial-gradient(50% 50% at 50% 50%, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
-    mix-blend-mode: overlay;
-    animation: display-before 12s ease-in-out infinite;
+    height: 100%;
+    width: 100%;
+    inset: 0;
+    background: linear-gradient( var(--display-before-angle), rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.08) var(--display-before-mid), rgba(255, 255, 255, 0.00) var(--display-before-mid), rgba(255, 255, 255, 0.00) 100% );
+    animation: display-before-mid 120s linear infinite;
   }
-  @keyframes display-before {
+  @keyframes display-before-mid {
     0% {
-      transform: translateX(-680px) translate(0, 0);
+      --display-before-mid: 50%;
+      --display-before-angle: 243deg;
     }
-    20% {
-      transform: translateX(-680px) translate(48px, -32px);
-    }
-    40% {
-      transform: translateX(-680px) translate(-24px, 56px);
-    }
-    60% {
-      transform: translateX(-680px) translate(64px, 24px);
-    }
-    80% {
-      transform: translateX(-680px) translate(-56px, -48px);
+    50% {
+      --display-before-mid: 70%;
+      --display-before-angle: 253deg;
     }
     100% {
-      transform: translateX(-680px) translate(0, 0);
+      --display-before-mid: 50%;
+      --display-before-angle: 243deg;
     }
   }
 }

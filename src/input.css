@@ -778,6 +778,28 @@
       --display-before-angle: 243deg;
     }
   }
+
+  .badge-container:hover .badge {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .badge-container .frame {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .badge-container:hover .frame {
+    transform: translate(-50%, -50%) scale(1.1) rotate(30deg);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .cta {
+    background: radial-gradient(50% 50% at 50% 100%, rgba(77, 60, 255, 0.30) 0%, rgba(77, 60, 255, 0.00) 100%), var(--ink, #1E2148);
+  }
 }
 
 

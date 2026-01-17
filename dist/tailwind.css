@@ -311,9 +311,6 @@
   .mx-auto {
     margin-inline: auto;
   }
-  .-mt-\[10px\] {
-    margin-top: calc(10px * -1);
-  }
   .-mt-\[20px\] {
     margin-top: calc(20px * -1);
   }
@@ -1100,13 +1097,6 @@
     content: "";
     position: absolute;
     z-index: -1;
-  }
-  .button-shiny::before {
-    inset: -8px;
-    border-radius: 18px;
-    background: rgba(21, 24, 44, 0.10);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
   }
   .button-shiny::after {
     content: "";

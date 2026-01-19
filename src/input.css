@@ -798,6 +798,10 @@
   .cta {
     background: radial-gradient(50% 50% at 50% 100%, rgba(77, 60, 255, 0.30) 0%, rgba(77, 60, 255, 0.00) 100%), var(--ink, #1E2148);
   }
+
+  .footer-closing .heart {
+    color: var(--red);
+  }
 }
 
 

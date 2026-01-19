@@ -7,7 +7,6 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
     --font-weight-normal: 400;
@@ -347,14 +346,8 @@
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
-  .h-\[25vh\] {
-    height: 25vh;
-  }
   .h-\[32px\] {
     height: 32px;
-  }
-  .h-\[50vh\] {
-    height: 50vh;
   }
   .h-\[98vh\] {
     height: 98vh;
@@ -467,6 +460,9 @@
   .items-center {
     align-items: center;
   }
+  .items-end {
+    align-items: flex-end;
+  }
   .items-start {
     align-items: flex-start;
   }
@@ -499,9 +495,6 @@
   }
   .gap-10 {
     gap: calc(var(--spacing) * 10);
-  }
-  .gap-12 {
-    gap: calc(var(--spacing) * 12);
   }
   .gap-14 {
     gap: calc(var(--spacing) * 14);
@@ -604,9 +597,6 @@
   }
   .bg-\[\#F36A21\] {
     background-color: #F36A21;
-  }
-  .bg-black {
-    background-color: var(--color-black);
   }
   .bg-white\/5 {
     background-color: color-mix(in srgb, #fff 5%, transparent);
@@ -717,6 +707,9 @@
   .py-\[10vh\] {
     padding-block: 10vh;
   }
+  .py-\[64px\] {
+    padding-block: 64px;
+  }
   .py-\[128px\] {
     padding-block: 128px;
   }
@@ -738,11 +731,17 @@
   .pb-\[13vh\] {
     padding-bottom: 13vh;
   }
+  .pb-\[128px\] {
+    padding-bottom: 128px;
+  }
   .pl-2 {
     padding-left: calc(var(--spacing) * 2);
   }
   .text-center {
     text-align: center;
+  }
+  .text-right {
+    text-align: right;
   }
   .font-sans {
     font-family: var(--font-sans);
@@ -750,6 +749,9 @@
   .font-normal {
     --tw-font-weight: var(--font-weight-normal);
     font-weight: var(--font-weight-normal);
+  }
+  .whitespace-nowrap {
+    white-space: nowrap;
   }
   .text-\(--black\) {
     color: var(--black);
@@ -778,6 +780,9 @@
   .no-underline {
     text-decoration-line: none;
   }
+  .underline {
+    text-decoration-line: underline;
+  }
   .antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -803,6 +808,13 @@
   }
   .shadow-\[0_4px_40px_rgba\(21\,24\,44\,0\.08\)\,0_-1px_0_\#fff\] {
     --tw-shadow: 0 4px 40px var(--tw-shadow-color, rgba(21,24,44,0.08)), 0 -1px 0 var(--tw-shadow-color, #fff);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[inset_0_1px_0_0_color-mix\(in_srgb\,var\(--purple\)_40\%\,transparent\)\] {
+    --tw-shadow: inset 0 1px 0 0 var(--tw-shadow-color, var(--purple));
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow: inset 0 1px 0 0 var(--tw-shadow-color, color-mix(in srgb,var(--purple) 40%,transparent));
+    }
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .backdrop-blur-sm {
@@ -1481,6 +1493,9 @@
   }
   .cta {
     background: radial-gradient(50% 50% at 50% 100%, rgba(77, 60, 255, 0.30) 0%, rgba(77, 60, 255, 0.00) 100%), var(--ink, #1E2148);
+  }
+  .footer-closing .heart {
+    color: var(--red);
   }
 }
 @property --tw-translate-x {

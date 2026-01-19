@@ -500,6 +500,9 @@
   .gap-10 {
     gap: calc(var(--spacing) * 10);
   }
+  .gap-12 {
+    gap: calc(var(--spacing) * 12);
+  }
   .gap-14 {
     gap: calc(var(--spacing) * 14);
   }
@@ -714,6 +717,9 @@
   .py-\[10vh\] {
     padding-block: 10vh;
   }
+  .py-\[128px\] {
+    padding-block: 128px;
+  }
   .py-\[200px\] {
     padding-block: 200px;
   }
@@ -748,6 +754,9 @@
   .text-\(--black\) {
     color: var(--black);
   }
+  .text-\(--blue\) {
+    color: var(--blue);
+  }
   .text-\(--purple\) {
     color: var(--purple);
   }
@@ -762,6 +771,9 @@
   }
   .text-white {
     color: var(--color-white);
+  }
+  .italic {
+    font-style: italic;
   }
   .no-underline {
     text-decoration-line: none;

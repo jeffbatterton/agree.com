@@ -817,6 +817,10 @@
     }
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
+  .blur {
+    --tw-blur: blur(8px);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
   .backdrop-blur-sm {
     --tw-backdrop-blur: blur(var(--blur-sm));
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
@@ -1497,6 +1501,58 @@
   .footer-closing .heart {
     color: var(--red);
   }
+  .footer-closing {
+    cursor: default;
+    padding: 20px;
+    margin-right: -20px;
+  }
+  .footer-location {
+    --loc-dur: 420ms;
+    display: inline-grid;
+    grid-area: 1 / 1;
+    overflow: hidden;
+    height: 1.2em;
+    line-height: 1.2;
+    vertical-align: baseline;
+  }
+  .footer-location .loc {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    will-change: transform, opacity;
+    transition: transform var(--loc-dur) cubic-bezier(0.2, 0.8, 0.2, 1), opacity var(--loc-dur) cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .footer-location .loc.current {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  .footer-location .loc.next {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  .footer-location.is-animating .loc.current {
+    transform: translateY(-100%);
+    opacity: 0.25;
+  }
+  .footer-location.is-animating .loc.next {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  .footer-location.is-snap .loc {
+    transition: none !important;
+  }
+  .footer-location.is-snap .loc.current {
+    transform: translateY(0%) !important;
+    opacity: 1 !important;
+  }
+  .footer-location.is-snap .loc.next {
+    transform: translateY(100%) !important;
+    opacity: 0 !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .footer-location .loc {
+      transition: none;
+    }
+  }
 }
 @property --tw-translate-x {
   syntax: "*";
@@ -1654,6 +1710,59 @@
   inherits: false;
   initial-value: 0 0 #0000;
 }
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-backdrop-blur {
   syntax: "*";
   inherits: false;
@@ -1727,6 +1836,19 @@
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
       --tw-backdrop-blur: initial;
       --tw-backdrop-brightness: initial;
       --tw-backdrop-contrast: initial;

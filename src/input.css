@@ -802,6 +802,71 @@
   .footer-closing .heart {
     color: var(--red);
   }
+
+  /* Footer closing: rotating locations */
+  .footer-closing {
+    cursor: default;
+    padding: 20px;
+    margin-right: -20px;
+  }
+
+  .footer-location {
+    --loc-dur: 420ms;
+    display: inline-grid;
+    grid-area: 1 / 1;
+    overflow: hidden;
+    height: 1.2em;
+    line-height: 1.2;
+    vertical-align: baseline;
+  }
+
+  .footer-location .loc {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    will-change: transform, opacity;
+    transition:
+      transform var(--loc-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity var(--loc-dur) cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .footer-location .loc.current {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+
+  .footer-location .loc.next {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  .footer-location.is-animating .loc.current {
+    transform: translateY(-100%);
+    opacity: 0.25;
+  }
+
+  .footer-location.is-animating .loc.next {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+
+  /* Prevent the "snap-back" flash after we promote next -> current */
+  .footer-location.is-snap .loc {
+    transition: none !important;
+  }
+  .footer-location.is-snap .loc.current {
+    transform: translateY(0%) !important;
+    opacity: 1 !important;
+  }
+  .footer-location.is-snap .loc.next {
+    transform: translateY(100%) !important;
+    opacity: 0 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-location .loc {
+      transition: none;
+    }
+  }
 }
 
 

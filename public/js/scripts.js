@@ -1016,3 +1016,120 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
 
   document.querySelectorAll(TRACK_SEL).forEach(setupTrack);
 })();
+
+// ============================================
+// FOOTER CLOSING (LOCATION ROTATOR)
+// ============================================
+
+(() => {
+  const closing = document.querySelector("[data-footer-closing]");
+  const locWrap = document.querySelector("[data-footer-location]");
+  if (!closing || !locWrap) return;
+
+  const currentEl = locWrap.querySelector(".loc.current");
+  const nextEl = locWrap.querySelector(".loc.next");
+  if (!currentEl || !nextEl) return;
+
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Start with these; add more later.
+  const locations = [
+    "Orem, UT",
+    "Miami, FL",
+    "Tempe, AZ",
+    "Prosper, TX",
+    "Honolulu, HI",
+    "Discovery, USA",
+    "San Francisco, CA"
+  ];
+
+  const initial = (currentEl.textContent || "").trim() || "New York City";
+  // Loop: NYC -> SF -> Prosper -> NYC -> ...
+  const loop = [initial, ...locations];
+  let idx = 1; // next item to show (current starts at `initial`)
+
+  // Keep in sync with CSS transition duration.
+  const DUR = 420;
+  const PAUSE = 900;
+
+  let intervalId = 0;
+  let commitT = 0;
+  let animating = false;
+
+  const clearTimers = () => {
+    if (intervalId) window.clearInterval(intervalId);
+    if (commitT) window.clearTimeout(commitT);
+    intervalId = 0;
+    commitT = 0;
+    animating = false;
+  };
+
+  const step = () => {
+    if (animating) return;
+
+    const text = loop[idx % loop.length];
+    idx = (idx + 1) % loop.length;
+
+    if (prefersReducedMotion) {
+      currentEl.textContent = text;
+      nextEl.textContent = "";
+      return;
+    }
+
+    animating = true;
+    nextEl.textContent = text;
+    // force reflow so the transition reliably triggers
+    void nextEl.offsetWidth;
+    locWrap.classList.add("is-animating");
+
+    commitT = window.setTimeout(() => {
+      currentEl.textContent = text;
+      // Snap to the resting state without animating back down (prevents flash).
+      locWrap.classList.add("is-snap");
+      // Ensure the "no transition" snap state is applied before we drop is-animating.
+      void locWrap.offsetWidth;
+      locWrap.classList.remove("is-animating");
+      nextEl.textContent = "";
+      animating = false;
+      commitT = 0;
+
+      // Keep is-snap for 2 frames to avoid any timing edge-cases.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          locWrap.classList.remove("is-snap");
+        });
+      });
+    }, DUR);
+  };
+
+  const start = () => {
+    if (intervalId) return;
+    // Start from the item after whatever is currently displayed.
+    const cur = (currentEl.textContent || "").trim();
+    const curIdx = loop.findIndex((x) => x === cur);
+    idx = curIdx >= 0 ? (curIdx + 1) % loop.length : 1;
+
+    step();
+    intervalId = window.setInterval(step, DUR + PAUSE);
+  };
+
+  const stop = () => {
+    clearTimers();
+    locWrap.classList.remove("is-snap");
+    locWrap.classList.remove("is-animating");
+    currentEl.textContent = initial;
+    nextEl.textContent = "";
+    idx = 1;
+  };
+
+  closing.addEventListener("mouseenter", start);
+  closing.addEventListener("mouseleave", stop);
+
+  // Optional: keyboard accessibility (tab focus)
+  if (!closing.hasAttribute("tabindex")) closing.setAttribute("tabindex", "0");
+  closing.addEventListener("focus", start);
+  closing.addEventListener("blur", stop);
+})();

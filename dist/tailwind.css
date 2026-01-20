@@ -749,6 +749,12 @@
   .px-16 {
     padding-inline: calc(var(--spacing) * 16);
   }
+  .px-\[64px\] {
+    padding-inline: 64px;
+  }
+  .px-\[80px\] {
+    padding-inline: 80px;
+  }
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
   }
@@ -778,6 +784,9 @@
   }
   .pt-\[20vh\] {
     padding-top: 20vh;
+  }
+  .pt-\[64px\] {
+    padding-top: 64px;
   }
   .pr-1 {
     padding-right: calc(var(--spacing) * 1);
@@ -819,9 +828,6 @@
   }
   .text-\(--black\) {
     color: var(--black);
-  }
-  .text-\(--blue\) {
-    color: var(--blue);
   }
   .text-\(--purple\) {
     color: var(--purple);

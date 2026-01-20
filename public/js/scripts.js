@@ -1190,11 +1190,24 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
   let latestY = lastY;
   let ticking = false;
   let hiddenPx = 0; // 0 = fully shown, headerHeight = fully hidden
+  let closeT = 0;
+
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
   const setRevealVar = (px) => {
     document.documentElement.style.setProperty("--header-reveal", `${px}px`);
+  };
+
+  const setClosingTransition = (enabled) => {
+    if (prefersReducedMotion) return;
+    header.style.transition = enabled
+      ? "transform 125ms ease-in-out, opacity 125ms ease-in-out"
+      : "none";
   };
 
   const applyScrub = () => {
@@ -1214,6 +1227,9 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
 
     if (!pastHeader) {
       header.classList.remove("is-floating");
+      if (closeT) window.clearTimeout(closeT);
+      closeT = 0;
+      header.style.transition = "";
       header.style.transform = "";
       header.style.opacity = "";
       header.style.pointerEvents = "";
@@ -1225,6 +1241,7 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     header.classList.add("is-floating");
     syncWrapHeight();
     hiddenPx = header.offsetHeight || 0; // start fully hidden when it becomes floating
+    setClosingTransition(false);
     lastY = window.scrollY || 0;
     latestY = lastY;
     applyScrub();
@@ -1248,10 +1265,24 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     const dy = latestY - lastY;
     lastY = latestY;
 
-    // Scroll-scrubbed reveal: scrolling down hides (increase hiddenPx),
-    // scrolling up reveals (decrease hiddenPx). No deadzone/threshold so
-    // trackpads feel perfectly smooth (including fractional pixels).
-    hiddenPx += dy;
+    // Scroll-up: scrubbed reveal tied to scroll movement.
+    // Scroll-down: flick closed immediately (not tied to scroll position).
+    const h = header.offsetHeight || 0;
+    if (dy > 0) {
+      setClosingTransition(true);
+      hiddenPx = h;
+      if (closeT) window.clearTimeout(closeT);
+      closeT = window.setTimeout(() => {
+        closeT = 0;
+        if (!pastHeader) return;
+        setClosingTransition(false);
+      }, 140);
+    } else {
+      if (closeT) window.clearTimeout(closeT);
+      closeT = 0;
+      setClosingTransition(false);
+      hiddenPx += dy; // dy is negative when scrolling up
+    }
     applyScrub();
   };
 

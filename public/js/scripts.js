@@ -56,6 +56,8 @@ let displayCardExitStartPercentage = null;
 
 let isProgrammaticScroll = false;
 let programmaticScrollTarget = null;
+let programmaticScrollTargetY = null;
+let programmaticScrollStartedAt = 0;
 const qualitiesNumbersAnimated = new Set(); // Track which number elements have been animated
 let qualitiesStaggerStarted = false;
 const qualitiesClassTimeouts = new Map();
@@ -509,18 +511,22 @@ function updateScroll() {
     // During programmatic scroll, keep the target tab active
     activeJourney = programmaticScrollTarget;
     
-    // Check if target section has reached the top of viewport, then reset programmatic scroll flag
-    const targetSection = document.querySelector(`[data-journey="${programmaticScrollTarget}"]`);
-    if (targetSection) {
-      const targetRect = targetSection.getBoundingClientRect();
-      // If target section's top is at or very close to viewport top, we've reached the destination
-      if (targetRect.top <= 0 && targetRect.top >= -10) {
-        // Reset after a small delay to ensure smooth transition
-        setTimeout(() => {
-          isProgrammaticScroll = false;
-          programmaticScrollTarget = null;
-        }, 100);
-      }
+    // Reset programmatic scroll once we reach the intended scrollY target.
+    // Using scrollY is more robust than checking a section's rect.top, because header/tabs offsets
+    // can prevent the section from ever landing at exactly 0px.
+    const now = Date.now();
+    const y = window.scrollY || 0;
+    const targetY = typeof programmaticScrollTargetY === "number" ? programmaticScrollTargetY : null;
+    const reachedTarget = targetY !== null && Math.abs(y - targetY) <= 2;
+    const safetyTimeout = programmaticScrollStartedAt && now - programmaticScrollStartedAt > 2000;
+
+    if (reachedTarget || safetyTimeout) {
+      setTimeout(() => {
+        isProgrammaticScroll = false;
+        programmaticScrollTarget = null;
+        programmaticScrollTargetY = null;
+        programmaticScrollStartedAt = 0;
+      }, 50);
     }
   } else {
     // Activate tab when its section is at least N% scrolled in
@@ -557,6 +563,8 @@ function handleTabClick(e) {
   
   isProgrammaticScroll = true;
   programmaticScrollTarget = tabId;
+  programmaticScrollTargetY = null;
+  programmaticScrollStartedAt = Date.now();
   
   const section = document.querySelector(`[data-journey="${tabId}"]`);
   if (!section) return;
@@ -581,6 +589,7 @@ function handleTabClick(e) {
       const currentScrollY = window.scrollY;
       // sectionRect.top is relative to viewport, so we scroll by that amount
       const targetScrollY = currentScrollY + sectionRect.top;
+      programmaticScrollTargetY = targetScrollY;
       
       window.scrollTo({
         top: targetScrollY,
@@ -591,6 +600,13 @@ function handleTabClick(e) {
 }
 
 function handleWheel(event) {
+  // If the user scrolls manually, immediately release the "locked" active tab.
+  if (isProgrammaticScroll) {
+    isProgrammaticScroll = false;
+    programmaticScrollTarget = null;
+    programmaticScrollTargetY = null;
+    programmaticScrollStartedAt = 0;
+  }
   updateScroll();
 }
 

@@ -1066,6 +1066,7 @@
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
   --header-reveal: 0px;
+  --ribbon-fade-start: 94%;
 }
 .site-header {
   will-change: transform, opacity;
@@ -1081,6 +1082,14 @@
 }
 [data-button-tabs] {
   top: var(--header-reveal) !important;
+}
+[data-ribbon--canvas] {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 var(--ribbon-fade-start), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 var(--ribbon-fade-start), transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 .display-card {
   --display-card-angle: 243deg;

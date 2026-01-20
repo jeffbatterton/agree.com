@@ -39,6 +39,9 @@
 
   /* Header reveal amount (in px). Set by JS. */
   --header-reveal: 0px;
+
+  /* Ribbon bottom fade: where the fade begins (0% = top, 100% = bottom). */
+  --ribbon-fade-start: 94%;
 }
 
 /* ============================================
@@ -63,6 +66,16 @@
 /* Keep the sticky button tabs tucked under the header when it reveals. */
 [data-button-tabs] {
   top: var(--header-reveal) !important;
+}
+
+/* Fade the bottom of the ribbon canvas into the page background. */
+[data-ribbon--canvas] {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 var(--ribbon-fade-start), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 var(--ribbon-fade-start), transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
 .display-card {

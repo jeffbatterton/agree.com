@@ -1040,6 +1040,7 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     "Orem, UT",
     "Miami, FL",
     "Tempe, AZ",
+    "London, UK",
     "Prosper, TX",
     "Honolulu, HI",
     "Discovery, USA",

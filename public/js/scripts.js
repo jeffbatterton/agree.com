@@ -393,6 +393,23 @@ function updateScroll() {
       
       let cardTranslateY = cardStartTranslateY; // Default to start position
       let cardScale = DISPLAY_CARD_START_SCALE; // Default to start scale
+
+      // Scroll-scrubbed gradient morph on the display card overlay.
+      // By the time we reach the exit phase start, the gradient has fully morphed.
+      const exitStartForGradient = displayHeight > 0
+        ? Math.max(50, (displayHeight / (viewportHeight + displayHeight)) * 100)
+        : 50;
+      const gradT = Math.min(1, Math.max(0, scrollPercentage / exitStartForGradient));
+
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const angle = lerp(243, 262, gradT);
+      const mid = lerp(62.28, 14.69, gradT);
+      const end = lerp(124.55, 29.38, gradT);
+      const glowBottom = lerp(0, 45, gradT);
+      displayCard.style.setProperty("--display-card-angle", `${angle}deg`);
+      displayCard.style.setProperty("--display-card-mid", `${mid}%`);
+      displayCard.style.setProperty("--display-card-end", `${end}%`);
+      displayCard.style.setProperty("--display-card-glow-bottom", `${glowBottom}%`);
       
       if (hasExited && displayCardExitStartPercentage !== null) {
         // Exit phase: animate from 0 to exit translateY as scroll goes from exit start to 100%

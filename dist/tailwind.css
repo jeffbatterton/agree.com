@@ -15,7 +15,6 @@
     --radius-2xl: 1rem;
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --blur-xs: 4px;
-    --blur-sm: 8px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -453,9 +452,6 @@
   .basis-0 {
     flex-basis: calc(var(--spacing) * 0);
   }
-  .origin-top {
-    transform-origin: top;
-  }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -676,12 +672,6 @@
       background-color: color-mix(in oklab, var(--color-white) 75%, transparent);
     }
   }
-  .bg-white\/80 {
-    background-color: color-mix(in srgb, #fff 80%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
-    }
-  }
   .bg-linear-to-bl {
     --tw-gradient-position: to bottom left;
     @supports (background-image: linear-gradient(in lab, red, red)) {
@@ -878,10 +868,6 @@
   .opacity-75 {
     opacity: 75%;
   }
-  .shadow-\[0_1px_0_0_\#FFF_inset\,0_0_64px_0_rgba\(21\,24\,44\,0\.16\)\] {
-    --tw-shadow: 0 1px 0 0 var(--tw-shadow-color, #FFF) inset, 0 0 64px 0 var(--tw-shadow-color, rgba(21,24,44,0.16));
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .shadow-\[0_4px_40px_rgba\(21\,24\,44\,0\.08\)\,0_-1px_0_\#fff\] {
     --tw-shadow: 0 4px 40px var(--tw-shadow-color, rgba(21,24,44,0.08)), 0 -1px 0 var(--tw-shadow-color, #fff);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -900,11 +886,6 @@
   .blur {
     --tw-blur: blur(8px);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-  }
-  .backdrop-blur-sm {
-    --tw-backdrop-blur: blur(var(--blur-sm));
-    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
   .backdrop-blur-xs {
     --tw-backdrop-blur: blur(var(--blur-xs));
@@ -1096,12 +1077,49 @@
 [data-button-tabs] {
   top: var(--header-reveal) !important;
 }
+.display-card {
+  --display-card-angle: 243deg;
+  --display-card-mid: 62.28%;
+  --display-card-end: 124.55%;
+  --display-card-glow-bottom: 0%;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 0 0 #fff inset, 0 -1px 0 rgba(255, 255, 255, 0.25) inset, 0 0 64px 0 rgba(21, 24, 44, 0.16);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transform-origin: top;
+  padding: 1rem;
+  border-radius: 28px;
+}
+.display-card::before {
+  z-index: 0;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  background: linear-gradient( var(--display-card-angle), rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.15) var(--display-card-mid), rgba(255, 255, 255, 0.00) var(--display-card-mid), rgba(255, 255, 255, 0.00) var(--display-card-end) );
+}
+.display-card::after {
+  content: "";
+  position: absolute;
+  width: 27.9375rem;
+  height: 700px;
+  width: 450px;
+  left: -200px;
+  bottom: var(--display-card-glow-bottom);
+  opacity: 0.6;
+  background: radial-gradient(50% 50% at 50% 50%, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
+}
+.display-card img {
+  position: relative;
+  border-radius: 12px;
+  z-index: 1;
+}
 .notification {
   --tx: 6px;
   --ty: 10px;
   --rot: 0.3deg;
   --dur: 7s;
-  z-index: 1;
   gap: 12px;
   box-shadow: 0 16px 72px 0 #271e8033, inset 0 1px 0 0 var(--white), 0 0 1px 0 #0000001a;
   opacity: 0;
@@ -1664,39 +1682,6 @@
     }
     to {
       --display-gradient-angle: 538deg;
-    }
-  }
-  @property --display-before-angle {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: 243deg;
-  }
-  @property --display-before-mid {
-    syntax: "<percentage>";
-    inherits: false;
-    initial-value: 50%;
-  }
-  .display::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    inset: 0;
-    background: linear-gradient( var(--display-before-angle), rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.08) var(--display-before-mid), rgba(255, 255, 255, 0.00) var(--display-before-mid), rgba(255, 255, 255, 0.00) 100% );
-    animation: display-before-mid 120s linear infinite;
-  }
-  @keyframes display-before-mid {
-    0% {
-      --display-before-mid: 50%;
-      --display-before-angle: 243deg;
-    }
-    50% {
-      --display-before-mid: 70%;
-      --display-before-angle: 253deg;
-    }
-    100% {
-      --display-before-mid: 50%;
-      --display-before-angle: 243deg;
     }
   }
   .badge-container:hover .badge {

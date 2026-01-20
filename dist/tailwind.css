@@ -7,7 +7,6 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
     --font-weight-normal: 400;
@@ -15,7 +14,6 @@
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --blur-xs: 4px;
     --blur-sm: 8px;
     --default-transition-duration: 150ms;
@@ -353,6 +351,9 @@
   .grid {
     display: grid;
   }
+  .hidden {
+    display: none;
+  }
   .inline-flex {
     display: inline-flex;
   }
@@ -361,9 +362,6 @@
   }
   .h-2 {
     height: calc(var(--spacing) * 2);
-  }
-  .h-10 {
-    height: calc(var(--spacing) * 10);
   }
   .h-12 {
     height: calc(var(--spacing) * 12);
@@ -376,9 +374,6 @@
   }
   .h-32 {
     height: calc(var(--spacing) * 32);
-  }
-  .h-\[32px\] {
-    height: 32px;
   }
   .h-\[98vh\] {
     height: 98vh;
@@ -413,20 +408,11 @@
   .w-2\/3 {
     width: calc(2/3 * 100%);
   }
-  .w-10 {
-    width: calc(var(--spacing) * 10);
-  }
-  .w-12 {
-    width: calc(var(--spacing) * 12);
-  }
   .w-14 {
     width: calc(var(--spacing) * 14);
   }
   .w-16 {
     width: calc(var(--spacing) * 16);
-  }
-  .w-\[112px\] {
-    width: 112px;
   }
   .w-\[320px\] {
     width: 320px;
@@ -451,6 +437,9 @@
   }
   .flex-1 {
     flex: 1;
+  }
+  .shrink {
+    flex-shrink: 1;
   }
   .shrink-0 {
     flex-shrink: 0;
@@ -932,18 +921,9 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
-  .transition-colors {
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
-    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-    transition-duration: var(--tw-duration, var(--default-transition-duration));
-  }
   .duration-125 {
     --tw-duration: 125ms;
     transition-duration: 125ms;
-  }
-  .duration-250 {
-    --tw-duration: 250ms;
-    transition-duration: 250ms;
   }
   .ease-out {
     --tw-ease: var(--ease-out);
@@ -1099,6 +1079,22 @@
   --text-overline-font-weight: 600;
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
+  --header-reveal: 0px;
+}
+.site-header {
+  will-change: transform, opacity;
+}
+.site-header.is-floating {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background-color: var(--white);
+  box-shadow: 0 12px 48px rgba(21, 24, 44, 0.12);
+}
+[data-button-tabs] {
+  top: var(--header-reveal) !important;
 }
 .notification {
   --tx: 6px;

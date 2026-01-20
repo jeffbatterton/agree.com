@@ -1134,3 +1134,128 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
   closing.addEventListener("focus", start);
   closing.addEventListener("blur", stop);
 })();
+
+// ============================================
+// HEADER REVEAL ON SCROLL UP
+// ============================================
+
+(() => {
+  const header = document.querySelector("[data-site-header]");
+  if (!header) return;
+
+  // Keep layout stable when the header becomes fixed.
+  // We wrap the header in a permanent spacer so there's no "0 -> height" jump
+  // that can trigger scroll anchoring.
+  const wrap = document.createElement("div");
+  wrap.style.position = "relative";
+  // The hero is a flex-col with `items-center`, so flex items will shrink unless
+  // we explicitly stretch to full width.
+  wrap.style.alignSelf = "stretch";
+  wrap.style.width = "100%";
+  header.before(wrap);
+  wrap.appendChild(header);
+  const syncWrapHeight = () => {
+    wrap.style.height = `${header.offsetHeight || 0}px`;
+  };
+  syncWrapHeight();
+
+  // Sentinel sits immediately after the header in the normal flow.
+  // When the sentinel has scrolled above the viewport, the header is out of view.
+  const sentinel = document.createElement("div");
+  sentinel.setAttribute("aria-hidden", "true");
+  sentinel.style.height = "1px";
+  sentinel.style.width = "1px";
+  sentinel.style.pointerEvents = "none";
+  wrap.after(sentinel);
+
+  let pastHeader = false;
+  let lastY = window.scrollY || 0;
+  let latestY = lastY;
+  let ticking = false;
+  let hiddenPx = 0; // 0 = fully shown, headerHeight = fully hidden
+
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+
+  const setRevealVar = (px) => {
+    document.documentElement.style.setProperty("--header-reveal", `${px}px`);
+  };
+
+  const applyScrub = () => {
+    const h = header.offsetHeight || 0;
+    if (!pastHeader || h <= 0) return;
+
+    hiddenPx = clamp(hiddenPx, 0, h);
+    setRevealVar(h - hiddenPx);
+    header.style.transform = `translate3d(0, ${-hiddenPx}px, 0)`;
+    header.style.opacity = String(1 - hiddenPx / h);
+    header.style.pointerEvents = hiddenPx >= h ? "none" : "auto";
+  };
+
+  const setPastHeader = (next) => {
+    if (pastHeader === next) return;
+    pastHeader = next;
+
+    if (!pastHeader) {
+      header.classList.remove("is-floating");
+      header.style.transform = "";
+      header.style.opacity = "";
+      header.style.pointerEvents = "";
+      setRevealVar(0);
+      syncWrapHeight();
+      return;
+    }
+
+    header.classList.add("is-floating");
+    syncWrapHeight();
+    hiddenPx = header.offsetHeight || 0; // start fully hidden when it becomes floating
+    lastY = window.scrollY || 0;
+    latestY = lastY;
+    applyScrub();
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0];
+      const nextPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      setPastHeader(nextPast);
+    },
+    { threshold: [0] }
+  );
+
+  observer.observe(sentinel);
+
+  const tick = () => {
+    ticking = false;
+    if (!pastHeader) return;
+
+    const dy = latestY - lastY;
+    lastY = latestY;
+
+    // Scroll-scrubbed reveal: scrolling down hides (increase hiddenPx),
+    // scrolling up reveals (decrease hiddenPx). No deadzone/threshold so
+    // trackpads feel perfectly smooth (including fractional pixels).
+    hiddenPx += dy;
+    applyScrub();
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      latestY = window.scrollY || 0;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(tick);
+    },
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (!pastHeader) return;
+      syncWrapHeight();
+      applyScrub();
+    },
+    { passive: true }
+  );
+})();

@@ -36,6 +36,33 @@
   --text-overline-font-weight: 600;
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
+
+  /* Header reveal amount (in px). Set by JS. */
+  --header-reveal: 0px;
+}
+
+/* ============================================
+   HEADER REVEAL (SCROLL UP)
+   ============================================ */
+
+.site-header {
+  will-change: transform, opacity;
+}
+
+.site-header.is-floating {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background-color: var(--white);
+  box-shadow: 0 12px 48px rgba(21, 24, 44, 0.12);
+  /* transform/opacity are scroll-scrubbed in JS (no transition animation) */
+}
+
+/* Keep the sticky button tabs tucked under the header when it reveals. */
+[data-button-tabs] {
+  top: var(--header-reveal) !important;
 }
 
 .notification {

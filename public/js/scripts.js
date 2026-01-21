@@ -1274,6 +1274,31 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
 
   observer.observe(sentinel);
 
+  // Track when the hero and display sections are fully out of view
+  const heroSection = document.querySelector("[data-hero]");
+  const displaySection = document.querySelector("[data-display]");
+  let heroOutOfView = !heroSection;
+  let displayOutOfView = !displaySection;
+
+  const createSectionObserver = (section, callback) => {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        // Section is out of view when not intersecting and its bottom is above viewport
+        callback(!entry.isIntersecting && entry.boundingClientRect.bottom < 0);
+      },
+      { threshold: [0] }
+    );
+    sectionObserver.observe(section);
+  };
+
+  if (heroSection) {
+    createSectionObserver(heroSection, (out) => { heroOutOfView = out; });
+  }
+  if (displaySection) {
+    createSectionObserver(displaySection, (out) => { displayOutOfView = out; });
+  }
+
   const tick = () => {
     ticking = false;
     if (!pastHeader) return;
@@ -1283,7 +1308,10 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
 
     // Scroll-up: scrubbed reveal tied to scroll movement.
     // Scroll-down: flick closed immediately (not tied to scroll position).
+    // Only reveal on scroll-up if both hero and display sections are fully out of view.
     const h = header.offsetHeight || 0;
+    const canReveal = heroOutOfView && displayOutOfView;
+
     if (dy > 0) {
       setClosingTransition(true);
       hiddenPx = h;
@@ -1293,7 +1321,8 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
         if (!pastHeader) return;
         setClosingTransition(false);
       }, 140);
-    } else {
+    } else if (canReveal) {
+      // Only reveal header on scroll-up when hero and display are fully scrolled out
       if (closeT) window.clearTimeout(closeT);
       closeT = 0;
       setClosingTransition(false);

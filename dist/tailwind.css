@@ -1247,10 +1247,10 @@
     font-size: 0.75rem;
   }
   .text-body-large {
-    font-size: 1.5rem;
+    font-size: clamp(1.125rem, 0.5vw + 0.9rem, 1.5rem);
   }
   .text-body-bullets {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 0.25vw + 0.9rem, 1.2rem);
   }
   .text-label {
     font-size: var(--text-label-font-size);
@@ -1260,43 +1260,43 @@
   }
   .text-big-numbers {
     font-family: "Letterboard Lite";
-    font-size: 6rem;
+    font-size: clamp(3rem, 4vw + 1rem, 6rem);
     font-style: normal;
     font-weight: 400;
     line-height: 1;
   }
   .text-hero {
-    font-size: 6.5rem;
+    font-size: clamp(2.5rem, 5vw + 1rem, 6.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 95%;
   }
   .text-heading-one {
-    font-size: 5.5rem;
+    font-size: clamp(2.25rem, 4.5vw + 0.75rem, 5.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1;
   }
   .text-heading-two {
-    font-size: 3.75rem;
+    font-size: clamp(1.75rem, 3vw + 0.5rem, 3.75rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1;
   }
   .text-heading-three {
-    font-size: 3.5rem;
+    font-size: clamp(1.5rem, 2.5vw + 0.5rem, 3.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 100%;
   }
   .text-heading-four {
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 1vw + 0.75rem, 2rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1.1;
   }
   .text-heading-five {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 0.5vw + 0.75rem, 1.25rem);
     font-style: normal;
     font-weight: 700;
     line-height: 1.25;

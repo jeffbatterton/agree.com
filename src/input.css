@@ -44,6 +44,16 @@
   --ribbon-fade-start: 96%;
 }
 
+/* Hide scrollbar for horizontal scroll on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
 /* ============================================
    HEADER REVEAL (SCROLL UP)
    ============================================ */
@@ -121,7 +131,6 @@
   .display-card {
     padding: 1rem;
     border-radius: 28px;
-    /* No transform rule here - let JavaScript control it */
   }
 }
 
@@ -333,7 +342,7 @@
 
   .text-body-large {
     /* 1.125rem (mobile) → 1.5rem (desktop) */
-    font-size: clamp(1.125rem, 0.5vw + 0.9rem, 1.5rem);
+    font-size: clamp(1rem, 0.5vw + 0.9rem, 1.5rem);
   }
 
   .text-body-bullets {
@@ -366,8 +375,8 @@
   }
 
   .text-heading-one {
-    /* 2.25rem (mobile) → 5.5rem (desktop) */
-    font-size: clamp(2.25rem, 4.5vw + 0.75rem, 5.5rem);
+    /* 2rem (mobile) → 5.5rem (desktop) */
+    font-size: clamp(2rem, 4.5vw + 0.75rem, 5.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1;
@@ -407,8 +416,8 @@
 
   .container-width {
     max-width: 1120px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 4vw;
+    padding-right: 4vw;
   }
 
   @media (min-width: 640px) {
@@ -472,7 +481,6 @@
     padding: 1rem 2rem;
     justify-content: center;
     align-items: center;
-    margin: 8px;
     gap: 0.5rem;
     border-radius: 12px;
     background: transparent;

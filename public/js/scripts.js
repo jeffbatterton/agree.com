@@ -699,6 +699,11 @@ if (!canvas) {
   const START_TWIST_END = 0.1;
   const START_TWIST_POWER = 2.0;
   const START_TWIST_TOTAL = Math.PI;
+  // Mid-ribbon ripple at qualities section
+  const MID_RIPPLE_CENTER = 0.62; // Where the ripple peaks (qualities section)
+  const MID_RIPPLE_WIDTH = 0.08; // How wide the ripple effect is
+  const MID_RIPPLE_TWIST = Math.PI * 0.75; // Extra twist amount
+  const MID_RIPPLE_WAVE = 40; // Horizontal wave amplitude
   const EXIT_TWIST_START = 0.86; // Start twist when loop begins
   const EXIT_TWIST_END = 0.985;
   const EXIT_TWIST_POWER = 1.9;
@@ -875,10 +880,17 @@ if (!canvas) {
           const thetaField = sign * (BASE_TWIST + TWIST_AMP * (a1 + H2_GAIN * a2 + H3_GAIN * a3));
           const startF = fadeOut01(u, START_TWIST_START, START_TWIST_END, START_TWIST_POWER);
           const exitF  = ramp01(u, EXIT_TWIST_START, EXIT_TWIST_END, EXIT_TWIST_POWER);
-          const theta = thetaField + sign * startF * START_TWIST_TOTAL + sign * exitF * EXIT_TWIST_TOTAL;
+          
+          // Mid-ribbon ripple at qualities section
+          const rippleDist = Math.abs(u - MID_RIPPLE_CENTER) / MID_RIPPLE_WIDTH;
+          const rippleEnvelope = rippleDist < 1 ? Math.pow(1 - rippleDist, 2) : 0; // Smooth falloff
+          const rippleTwist = rippleEnvelope * MID_RIPPLE_TWIST * Math.sin((u - MID_RIPPLE_CENTER) * 30);
+          const rippleWave = rippleEnvelope * MID_RIPPLE_WAVE * Math.sin((u - MID_RIPPLE_CENTER) * 25);
+          
+          const theta = thetaField + sign * startF * START_TWIST_TOTAL + sign * exitF * EXIT_TWIST_TOTAL + sign * rippleTwist;
           // Smooth rightward curve starting earlier for gentle transition
           const exitRightF = ramp01(u, EXIT_RIGHT_START, EXIT_RIGHT_END, EXIT_RIGHT_POWER);
-          let exitRight = EXIT_RIGHT_PX * exitRightF;
+          let exitRight = EXIT_RIGHT_PX * exitRightF + rippleWave;
           let loopYOffset = 0;
           
           // Create smooth 3D loop pattern: move right, loop up and back, then continue right

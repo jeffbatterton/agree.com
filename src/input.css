@@ -41,7 +41,7 @@
   --header-reveal: 0px;
 
   /* Ribbon bottom fade: where the fade begins (0% = top, 100% = bottom). */
-  --ribbon-fade-start: 94%;
+  --ribbon-fade-start: 96%;
 }
 
 /* ============================================

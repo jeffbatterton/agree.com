@@ -1063,7 +1063,7 @@
   --text-overline-line-height: 1;
   --text-overline-text-transform: uppercase;
   --header-reveal: 0px;
-  --ribbon-fade-start: 94%;
+  --ribbon-fade-start: 96%;
 }
 .site-header {
   will-change: transform, opacity;

@@ -109,14 +109,19 @@
   transform-origin: top;
   padding: 0.5rem;
   border-radius: 12px;
-  transform: none !important;
+}
+
+@media (max-width: 639px) {
+  .display-card {
+    transform: none !important;
+  }
 }
 
 @media (min-width: 640px) {
   .display-card {
     padding: 1rem;
     border-radius: 28px;
-    transform: unset;
+    /* No transform rule here - let JavaScript control it */
   }
 }
 

@@ -1368,3 +1368,66 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     { passive: true }
   );
 })();
+
+// ============================================
+// MOBILE MENU
+// ============================================
+(function() {
+  const menuToggle = document.querySelector('[data-mobile-menu-toggle]');
+  const menuClose = document.querySelector('[data-mobile-menu-close]');
+  const mobileMenu = document.querySelector('[data-mobile-menu]');
+  const menuIconOpen = document.querySelector('[data-menu-icon-open]');
+  const menuIconClose = document.querySelector('[data-menu-icon-close]');
+
+  if (!menuToggle || !mobileMenu) return;
+
+  function openMenu() {
+    mobileMenu.classList.remove('hidden');
+    mobileMenu.classList.add('flex');
+    menuToggle.setAttribute('aria-expanded', 'true');
+    if (menuIconOpen) menuIconOpen.classList.add('hidden');
+    if (menuIconClose) menuIconClose.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.classList.remove('flex');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    if (menuIconOpen) menuIconOpen.classList.remove('hidden');
+    if (menuIconClose) menuIconClose.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  menuToggle.addEventListener('click', function() {
+    const isOpen = mobileMenu.classList.contains('flex');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  if (menuClose) {
+    menuClose.addEventListener('click', closeMenu);
+  }
+
+  // Close menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('flex')) {
+      closeMenu();
+    }
+  });
+
+  // Close menu when clicking a nav link
+  mobileMenu.querySelectorAll('nav a').forEach(function(link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Close menu on resize to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 1024 && mobileMenu.classList.contains('flex')) {
+      closeMenu();
+    }
+  });
+})();

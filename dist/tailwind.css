@@ -402,9 +402,6 @@
   .w-1\/3 {
     width: calc(1/3 * 100%);
   }
-  .w-2 {
-    width: calc(var(--spacing) * 2);
-  }
   .w-2\/3 {
     width: calc(2/3 * 100%);
   }
@@ -625,9 +622,6 @@
   .bg-\(--green\) {
     background-color: var(--green);
   }
-  .bg-\(--ink\) {
-    background-color: var(--ink);
-  }
   .bg-\(--orange\) {
     background-color: var(--orange);
   }
@@ -749,9 +743,6 @@
   .px-16 {
     padding-inline: calc(var(--spacing) * 16);
   }
-  .px-\[64px\] {
-    padding-inline: 64px;
-  }
   .px-\[80px\] {
     padding-inline: 80px;
   }
@@ -859,9 +850,6 @@
   }
   .opacity-10 {
     opacity: 10%;
-  }
-  .opacity-20 {
-    opacity: 20%;
   }
   .opacity-40 {
     opacity: 40%;
@@ -1362,11 +1350,21 @@
     display: inline-flex;
     width: fit-content;
     padding: 1rem 2rem;
-    position: relative;
     justify-content: center;
     align-items: center;
     margin: 8px;
     gap: 0.5rem;
+    border-radius: 12px;
+    background: transparent;
+    transition: all .125s linear;
+    position: relative;
+    isolation: isolate;
+  }
+  .button-shiny::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     border-radius: 12px;
     background: linear-gradient(0deg, rgba(138, 126, 255, 0.00) 0%, rgba(138, 126, 255, 0.00) 50%, rgba(138, 126, 255, 0.03) 50%, rgba(138, 126, 255, 0.20) 100%), #15182C;
     box-shadow: 0 -8px 8px 0 rgba(60, 66, 253, 0.20) inset, 0 0 48px var(--purple);
@@ -1375,34 +1373,31 @@
     }
     transition: all .125s linear;
   }
-  .button-shiny:hover {
+  .button-shiny:hover::before {
     box-shadow: 0 -8px 24px 0 rgba(60, 66, 253, 0.5) inset, 0 0 48px var(--purple);
     @supports (color: color-mix(in lab, red, red)) {
       box-shadow: 0 -8px 24px 0 rgba(60, 66, 253, 0.5) inset, 0 0 48px color-mix(in srgb, var(--purple) 30%, transparent);
     }
   }
-  .button-shiny::before, .button-shiny::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-  }
   .button-shiny::after {
     content: "";
     position: absolute;
     inset: -2px;
-    border-radius: 13px;
-    pointer-events: none;
+    z-index: -2;
     border-radius: 0.8125rem;
+    pointer-events: none;
     background: conic-gradient(from var(--glow-angle) at 50% 50%, #43BB5E 0deg, #EDA922 51.92307651042938deg, #DF4EA4 103.84615302085876deg, #4D3CFF 169.61538791656494deg, #3C9AFF 228.46153020858765deg, #43BB5E 360deg), var(--purple, #4D3CFF);
     transition: all 80ms linear;
   }
   .button-shiny-secondary {
     color: var(--black);
+  }
+  .button-shiny-secondary::before {
     background: linear-gradient(0deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.80) 100%);
     background-color: rgba(255, 255, 255, 0.50);
     box-shadow: 0 1px 0 0 #FFF inset, 0 -8px 8px 0 rgba(255, 255, 255, 0.10) inset, 0 0 48px rgba(255,255,255, 0);
   }
-  .button-shiny-secondary:hover {
+  .button-shiny-secondary:hover::before {
     box-shadow: 0 1px 0 0 #FFF inset, 0 -8px 8px 0 rgba(255, 255, 255, 0.85) inset, 0 0 48px rgba(255,255,255, .25);
   }
   .button-shiny-secondary::after {
@@ -1410,18 +1405,23 @@
   }
   .button-shiny-tertiary {
     color: var(--black);
+  }
+  .button-shiny-tertiary::before {
     background: var(--black-faint);
     box-shadow: none;
   }
-  .button-shiny-tertiary:hover {
+  .button-shiny-tertiary:hover::before {
     background: var(--white);
     box-shadow: 0 -8px 24px 0 rgba(60, 66, 253, 0.05) inset, 0 0 48px var(--purple);
     @supports (color: color-mix(in lab, red, red)) {
       box-shadow: 0 -8px 24px 0 rgba(60, 66, 253, 0.05) inset, 0 0 48px color-mix(in srgb, var(--purple) 30%, transparent);
     }
   }
-  .button-shiny-tertiary::before, .button-shiny-tertiary::after {
+  .button-shiny-tertiary::after {
     opacity: 0;
+  }
+  .button-shiny-tertiary:hover::before {
+    opacity: 1;
   }
   .button-shiny-tertiary:hover::after {
     opacity: .5;

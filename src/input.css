@@ -326,8 +326,8 @@
   }
 
   .text-hero {
-    /* 2.5rem (mobile) → 6.5rem (desktop) */
-    font-size: clamp(2.5rem, 5vw + 1rem, 6.5rem);
+    /* 3rem (mobile) → 6.5rem (desktop) */
+    font-size: clamp(3rem, 5vw + 1rem, 6.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 95%;
@@ -375,6 +375,15 @@
 
   .container-width {
     max-width: 1120px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .container-width {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
   }
 
   .button-flat {
@@ -599,7 +608,13 @@
   .customer-logos {
     opacity: .8;
     padding: 32px 0;
-    mask-image: linear-gradient(to right, transparent 0%, black 30%, black calc(100% - 30%), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black calc(100% - 15%), transparent 100%);
+  }
+
+  @media (min-width: 640px) {
+    .customer-logos {
+      mask-image: linear-gradient(to right, transparent 0%, black 30%, black calc(100% - 30%), transparent 100%);
+    }
   }
 
   .customer-logos-track {

@@ -439,9 +439,6 @@
   .w-full {
     width: 100%;
   }
-  .max-w-\[1024px\] {
-    max-width: 1024px;
-  }
   .max-w-\[1280px\] {
     max-width: 1280px;
   }
@@ -477,6 +474,18 @@
   .-translate-y-2 {
     --tw-translate-y: calc(var(--spacing) * -2);
     translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .scale-70 {
+    --tw-scale-x: 70%;
+    --tw-scale-y: 70%;
+    --tw-scale-z: 70%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .scale-75 {
+    --tw-scale-x: 75%;
+    --tw-scale-y: 75%;
+    --tw-scale-z: 75%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
   }
   .rotate-45 {
     rotate: 45deg;
@@ -1077,6 +1086,34 @@
       display: flex;
     }
   }
+  .sm\:w-auto {
+    @media (width >= 40rem) {
+      width: auto;
+    }
+  }
+  .sm\:max-w-\[1024px\] {
+    @media (width >= 40rem) {
+      max-width: 1024px;
+    }
+  }
+  .sm\:scale-100 {
+    @media (width >= 40rem) {
+      --tw-scale-x: 100%;
+      --tw-scale-y: 100%;
+      --tw-scale-z: 100%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+  }
+  .sm\:flex-row {
+    @media (width >= 40rem) {
+      flex-direction: row;
+    }
+  }
+  .sm\:gap-16 {
+    @media (width >= 40rem) {
+      gap: calc(var(--spacing) * 16);
+    }
+  }
   .sm\:px-8 {
     @media (width >= 40rem) {
       padding-inline: calc(var(--spacing) * 8);
@@ -1350,7 +1387,7 @@
     line-height: 1;
   }
   .text-hero {
-    font-size: clamp(2.5rem, 5vw + 1rem, 6.5rem);
+    font-size: clamp(3rem, 5vw + 1rem, 6.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 95%;
@@ -1387,6 +1424,14 @@
   }
   .container-width {
     max-width: 1120px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  @media (min-width: 640px) {
+    .container-width {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
   }
   .button-flat {
     font-size: var(--text-label-font-size);
@@ -1581,7 +1626,12 @@
   .customer-logos {
     opacity: .8;
     padding: 32px 0;
-    mask-image: linear-gradient(to right, transparent 0%, black 30%, black calc(100% - 30%), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black calc(100% - 15%), transparent 100%);
+  }
+  @media (min-width: 640px) {
+    .customer-logos {
+      mask-image: linear-gradient(to right, transparent 0%, black 30%, black calc(100% - 30%), transparent 100%);
+    }
   }
   .customer-logos-track {
     --loop-distance: 0;
@@ -1894,6 +1944,21 @@
   inherits: false;
   initial-value: 0;
 }
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;
@@ -2138,6 +2203,9 @@
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
       --tw-rotate-x: initial;
       --tw-rotate-y: initial;
       --tw-rotate-z: initial;

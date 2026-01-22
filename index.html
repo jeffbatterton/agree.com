@@ -187,10 +187,10 @@
         </div>
       </div>
     </section>
-    <section class="display relative w-full z-2 flex justify-center py-[10vh]" data-display>
-      <div class="display-card w-fit h-fit relative z-1" data-display--card>
-        <img src="public/img/screenshot.png" loading="lazy" alt="" />
-        <div class="notification-wrapper absolute top-8 -left-16 z-2">
+    <section class="display relative w-full z-2 flex justify-center p-4 sm:py-[10vh] overflow-hidden sm:overflow-visible" data-display>
+      <div class="display-card w-fit h-fit relative z-1 bg-white/50 shadow-[0_1px_0_0_#fff_inset,0_-1px_0_rgba(255,255,255,0.25)_inset,0_0_64px_0_rgba(21,24,44,0.16)] backdrop-blur-sm origin-top p-2 sm:p-4 rounded-[12px] sm:rounded-[28px]" data-display--card>
+        <img src="public/img/screenshot.png" loading="lazy" alt="" class="relative z-1 rounded-[4px] sm:rounded-[12px]" />
+        <div class="notification-wrapper absolute top-8 -left-16 z-2 hidden sm:block">
           <div class="notification notification-1">
             <img src="public/img/avatars/Beehiiv.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
@@ -204,7 +204,7 @@
             </div>
           </div>
         </div>
-        <div class="notification-wrapper absolute top-[260px] -right-8 z-2">
+        <div class="notification-wrapper absolute top-[260px] -right-8 z-2 hidden sm:block">
           <div class="notification notification-2">
             <img src="public/img/avatars/Deel.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
@@ -218,7 +218,7 @@
             </div>
           </div>
         </div>
-        <div class="notification-wrapper absolute top-[360px] -left-8 z-2">
+        <div class="notification-wrapper absolute top-[360px] -left-8 z-2 hidden sm:block">
           <div class="notification notification-3">
             <img src="public/img/avatars/Anthropic.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
@@ -232,7 +232,7 @@
             </div>
           </div>
         </div>
-        <div class="notification-wrapper absolute top-[600px] right-[-64px] z-2">
+        <div class="notification-wrapper absolute top-[600px] right-[-64px] z-2 hidden sm:block">
           <div class="notification notification-4">
             <div class="h-12">
               <img src="public/img/avatars/Slack.svg" loading="lazy" alt="" class="image" />

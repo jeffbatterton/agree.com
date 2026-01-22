@@ -107,17 +107,8 @@
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   transform-origin: top;
-  padding: 0.5rem;
-  border-radius: 12px;
-  transform: none !important;
-}
-
-@media (min-width: 640px) {
-  .display-card {
-    padding: 1rem;
-    border-radius: 28px;
-    transform: unset;
-  }
+  padding: 1rem;
+  border-radius: 28px;
 }
 
 .display-card::before {
@@ -125,7 +116,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 12px;
+  border-radius: 28px;
   background: linear-gradient(
     var(--display-card-angle),
     rgba(255, 255, 255, 0.50) 0%,
@@ -133,12 +124,6 @@
     rgba(255, 255, 255, 0.00) var(--display-card-mid),
     rgba(255, 255, 255, 0.00) var(--display-card-end)
   );
-}
-
-@media (min-width: 640px) {
-  .display-card::before {
-    border-radius: 28px;
-  }
 }
 
 .display-card::after {
@@ -155,14 +140,8 @@
 
 .display-card img {
   position: relative;
-  border-radius: 4px;
+  border-radius: 12px;
   z-index: 1;
-}
-
-@media (min-width: 640px) {
-  .display-card img {
-    border-radius: 12px;
-  }
 }
 
 .notification {
@@ -177,7 +156,7 @@
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   background-color: #ffffffe6;
-  border-radius: 4px;
+  border-radius: 12px;
   justify-content: flex-start;
   align-items: center;
   width: 300px;
@@ -187,12 +166,6 @@
   transform: scale(0);
   height: 80px;
   will-change: transform;
-}
-
-@media (min-width: 640px) {
-  .notification {
-    border-radius: 12px;
-  }
 }
 
 .notification-wrapper {

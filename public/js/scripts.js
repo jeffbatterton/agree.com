@@ -394,67 +394,59 @@ function updateScroll() {
     // Animate display card translateY and scale as container scrolls in and out
     const displayCard = document.querySelector('[data-display--card]');
     if (displayCard) {
-      const isMobile = window.innerWidth < 640; // Skip animation on mobile
+      const cardStartTranslateY = -23; // Starting translateY in vh
       
-      if (isMobile) {
-        // On mobile, absolutely no transform animation - keep card static
-        displayCard.style.transform = 'none';
-        return; // Early return to skip all animation logic
-      } else {
-        const cardStartTranslateY = -23; // Starting translateY in vh
-        
-        let cardTranslateY = cardStartTranslateY; // Default to start position
-        let cardScale = DISPLAY_CARD_START_SCALE; // Default to start scale
+      let cardTranslateY = cardStartTranslateY; // Default to start position
+      let cardScale = DISPLAY_CARD_START_SCALE; // Default to start scale
 
-        // Scroll-scrubbed gradient morph on the display card overlay.
-        // By the time we reach the exit phase start, the gradient has fully morphed.
-        const exitStartForGradient = displayHeight > 0
-          ? Math.max(50, (displayHeight / (viewportHeight + displayHeight)) * 100)
-          : 50;
-        const gradT = Math.min(1, Math.max(0, scrollPercentage / exitStartForGradient));
+      // Scroll-scrubbed gradient morph on the display card overlay.
+      // By the time we reach the exit phase start, the gradient has fully morphed.
+      const exitStartForGradient = displayHeight > 0
+        ? Math.max(50, (displayHeight / (viewportHeight + displayHeight)) * 100)
+        : 50;
+      const gradT = Math.min(1, Math.max(0, scrollPercentage / exitStartForGradient));
 
-        const lerp = (a, b, t) => a + (b - a) * t;
-        const angle = lerp(243, 262, gradT);
-        const mid = lerp(62.28, 14.69, gradT);
-        const end = lerp(124.55, 29.38, gradT);
-        const glowT = Math.min(1, gradT * DISPLAY_CARD_GLOW_RATE); // Apply rate factor
-        const glowBottom = lerp(DISPLAY_CARD_GLOW_BOTTOM_START, DISPLAY_CARD_GLOW_BOTTOM_END, glowT);
-        displayCard.style.setProperty("--display-card-angle", `${angle}deg`);
-        displayCard.style.setProperty("--display-card-mid", `${mid}%`);
-        displayCard.style.setProperty("--display-card-end", `${end}%`);
-        displayCard.style.setProperty("--display-card-glow-bottom", `${glowBottom}%`);
-        
-        if (hasExited && displayCardExitStartPercentage !== null) {
-          // Exit phase: animate from 0 to exit translateY as scroll goes from exit start to 100%
-          const exitStart = displayCardExitStartPercentage;
-          const exitRange = 100 - exitStart;
-          // Handle edge case: if exitRange is 0 or negative, or scrollPercentage is less than exitStart
-          if (exitRange > 0 && scrollPercentage >= exitStart) {
-            const exitProgress = Math.min(1, Math.max(0, (scrollPercentage - exitStart) / exitRange));
-            cardTranslateY = 0 + (exitProgress * DISPLAY_CARD_EXIT_TRANSLATE_Y); // Interpolate from 0 to exit translateY
-          } else if (scrollPercentage < exitStart) {
-            // Edge case: scrollPercentage is less than exit start (shouldn't happen, but handle it)
-            // Stay at intermediate phase position (translateY = 0)
-            cardTranslateY = 0;
-          } else {
-            // Edge case: exitRange is 0 or negative, or we're at/ past 100%
-            cardTranslateY = DISPLAY_CARD_EXIT_TRANSLATE_Y; // Fully exited
-          }
-          cardScale = 1.0; // Keep at full scale during exit
-        } else if (scrollPercentage <= DISPLAY_CARD_SCALE_THRESHOLD) {
-          // Entry phase: animate from -23vh to 0 and scale from 0.9 to 1 as scroll goes from 0% to threshold%
-          const progress = Math.min(1, Math.max(0, scrollPercentage / DISPLAY_CARD_SCALE_THRESHOLD));
-          cardTranslateY = cardStartTranslateY + (progress * -cardStartTranslateY); // Interpolate from -23 to 0
-          cardScale = DISPLAY_CARD_START_SCALE + (progress * (1.0 - DISPLAY_CARD_START_SCALE)); // Interpolate from 0.9 to 1
-        } else {
-          // Intermediate phase: keep translateY at 0 and scale at 1
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const angle = lerp(243, 262, gradT);
+      const mid = lerp(62.28, 14.69, gradT);
+      const end = lerp(124.55, 29.38, gradT);
+      const glowT = Math.min(1, gradT * DISPLAY_CARD_GLOW_RATE); // Apply rate factor
+      const glowBottom = lerp(DISPLAY_CARD_GLOW_BOTTOM_START, DISPLAY_CARD_GLOW_BOTTOM_END, glowT);
+      displayCard.style.setProperty("--display-card-angle", `${angle}deg`);
+      displayCard.style.setProperty("--display-card-mid", `${mid}%`);
+      displayCard.style.setProperty("--display-card-end", `${end}%`);
+      displayCard.style.setProperty("--display-card-glow-bottom", `${glowBottom}%`);
+      
+      if (hasExited && displayCardExitStartPercentage !== null) {
+        // Exit phase: animate from 0 to exit translateY as scroll goes from exit start to 100%
+        const exitStart = displayCardExitStartPercentage;
+        const exitRange = 100 - exitStart;
+        // Handle edge case: if exitRange is 0 or negative, or scrollPercentage is less than exitStart
+        if (exitRange > 0 && scrollPercentage >= exitStart) {
+          const exitProgress = Math.min(1, Math.max(0, (scrollPercentage - exitStart) / exitRange));
+          cardTranslateY = 0 + (exitProgress * DISPLAY_CARD_EXIT_TRANSLATE_Y); // Interpolate from 0 to exit translateY
+        } else if (scrollPercentage < exitStart) {
+          // Edge case: scrollPercentage is less than exit start (shouldn't happen, but handle it)
+          // Stay at intermediate phase position (translateY = 0)
           cardTranslateY = 0;
-          cardScale = 1.0;
+        } else {
+          // Edge case: exitRange is 0 or negative, or we're at/ past 100%
+          cardTranslateY = DISPLAY_CARD_EXIT_TRANSLATE_Y; // Fully exited
         }
-        
-        // Apply both translateY and scale using vh units (flexbox handles horizontal centering)
-        displayCard.style.transform = `translateY(${cardTranslateY}vh) scale(${cardScale})`;
+        cardScale = 1.0; // Keep at full scale during exit
+      } else if (scrollPercentage <= DISPLAY_CARD_SCALE_THRESHOLD) {
+        // Entry phase: animate from -23vh to 0 and scale from 0.9 to 1 as scroll goes from 0% to threshold%
+        const progress = Math.min(1, Math.max(0, scrollPercentage / DISPLAY_CARD_SCALE_THRESHOLD));
+        cardTranslateY = cardStartTranslateY + (progress * -cardStartTranslateY); // Interpolate from -23 to 0
+        cardScale = DISPLAY_CARD_START_SCALE + (progress * (1.0 - DISPLAY_CARD_START_SCALE)); // Interpolate from 0.9 to 1
+      } else {
+        // Intermediate phase: keep translateY at 0 and scale at 1
+        cardTranslateY = 0;
+        cardScale = 1.0;
       }
+      
+      // Apply both translateY and scale using vh units (flexbox handles horizontal centering)
+      displayCard.style.transform = `translateY(${cardTranslateY}vh) scale(${cardScale})`;
     }
   }
   

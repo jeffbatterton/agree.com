@@ -23,9 +23,6 @@ const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where transl
 const DISPLAY_CARD_EXIT_TRANSLATE_Y = 18; // Final translateY in exit phase (vh) - for fine-tuning
 const DISPLAY_CARD_SCALE_THRESHOLD = 50; // Scroll percentage where scale reaches 1
 const DISPLAY_CARD_START_SCALE = 0.9; // Starting scale value
-const DISPLAY_CARD_GLOW_BOTTOM_START = 0; // Starting glow bottom position (%)
-const DISPLAY_CARD_GLOW_BOTTOM_END = 35; // Ending glow bottom position (%)
-const DISPLAY_CARD_GLOW_RATE = 0.75; // Rate factor for glow movement (1.0 = 100% scroll speed, 0.5 = 50%)
 
 // Display phase configuration
 const DISPLAY_PHASE_1_OPEN = 25; // Scroll percentage where phase-1 starts
@@ -410,8 +407,7 @@ function updateScroll() {
       const angle = lerp(243, 262, gradT);
       const mid = lerp(62.28, 14.69, gradT);
       const end = lerp(124.55, 29.38, gradT);
-      const glowT = Math.min(1, gradT * DISPLAY_CARD_GLOW_RATE); // Apply rate factor
-      const glowBottom = lerp(DISPLAY_CARD_GLOW_BOTTOM_START, DISPLAY_CARD_GLOW_BOTTOM_END, glowT);
+      const glowBottom = lerp(0, 45, gradT);
       displayCard.style.setProperty("--display-card-angle", `${angle}deg`);
       displayCard.style.setProperty("--display-card-mid", `${mid}%`);
       displayCard.style.setProperty("--display-card-end", `${end}%`);

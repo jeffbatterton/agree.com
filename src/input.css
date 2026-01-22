@@ -324,8 +324,8 @@
   }
 
   .text-heading-three {
-    /* 1.5rem (mobile) → 3.5rem (desktop) */
-    font-size: clamp(1.5rem, 2.5vw + 0.5rem, 3.5rem);
+    /* 1.75rem (mobile) → 3.5rem (desktop) */
+    font-size: clamp(1.75rem, 2.5vw + 0.5rem, 3.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 100%;

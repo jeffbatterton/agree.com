@@ -513,6 +513,12 @@
     --tw-scale-z: 75%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
+  .scale-80 {
+    --tw-scale-x: 80%;
+    --tw-scale-y: 80%;
+    --tw-scale-z: 80%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
   .rotate-45 {
     rotate: 45deg;
   }
@@ -839,9 +845,6 @@
   .py-8 {
     padding-block: calc(var(--spacing) * 8);
   }
-  .py-\[64px\] {
-    padding-block: 64px;
-  }
   .py-\[128px\] {
     padding-block: 128px;
   }
@@ -862,9 +865,6 @@
   }
   .pb-6 {
     padding-bottom: calc(var(--spacing) * 6);
-  }
-  .pb-\[128px\] {
-    padding-bottom: 128px;
   }
   .pl-8 {
     padding-left: calc(var(--spacing) * 8);
@@ -1303,6 +1303,11 @@
       gap: calc(var(--spacing) * 4);
     }
   }
+  .sm\:gap-6 {
+    @media (width >= 40rem) {
+      gap: calc(var(--spacing) * 6);
+    }
+  }
   .sm\:gap-8 {
     @media (width >= 40rem) {
       gap: calc(var(--spacing) * 8);
@@ -1353,10 +1358,24 @@
       border-radius: 28px;
     }
   }
+  .sm\:border {
+    @media (width >= 40rem) {
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+    }
+  }
   .sm\:border-b-0 {
     @media (width >= 40rem) {
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 0px;
+    }
+  }
+  .sm\:bg-white\/5 {
+    @media (width >= 40rem) {
+      background-color: color-mix(in srgb, #fff 5%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-white) 5%, transparent);
+      }
     }
   }
   .sm\:p-4 {
@@ -1447,6 +1466,11 @@
   .sm\:pl-2 {
     @media (width >= 40rem) {
       padding-left: calc(var(--spacing) * 2);
+    }
+  }
+  .sm\:text-center {
+    @media (width >= 40rem) {
+      text-align: center;
     }
   }
   .sm\:text-left {
@@ -1677,7 +1701,7 @@
 }
 @layer components {
   .text-body {
-    font-size: 1rem;
+    font-size: clamp(0.75rem, 0.25vw + 0.875rem, 1rem);
     font-style: normal;
     font-weight: 400;
     line-height: 1.25;

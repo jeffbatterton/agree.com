@@ -645,11 +645,227 @@ function initialize() {
     updateScroll();
   });
   
+  // Setup journey dots indicator for mobile horizontal scrolling
+  // Wait for DOM to be ready
+  function setupJourneyDots() {
+    const journeyScrollContainer = document.querySelector('[data-journey-scroll-container]');
+    const journeyDots = document.querySelectorAll('[data-journey-dot]');
+    
+    if (!journeyScrollContainer || journeyDots.length === 0) {
+      // Retry if elements aren't ready yet
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupJourneyDots);
+        return;
+      }
+      return;
+    }
+  
+    function updateJourneyDots() {
+      if (!journeyScrollContainer || journeyDots.length === 0) {
+        return;
+      }
+    
+      // Query sections - try from container first, then document
+      let journeySections = Array.from(journeyScrollContainer.querySelectorAll('[data-journey]'));
+      if (journeySections.length === 0) {
+        journeySections = Array.from(document.querySelectorAll('[data-journey]'));
+      }
+      if (journeySections.length === 0) {
+        return;
+      }
+    
+      // Use getBoundingClientRect for accurate positioning
+      const containerRect = journeyScrollContainer.getBoundingClientRect();
+      
+      // Check if container has valid dimensions
+      if (containerRect.width === 0 || containerRect.height === 0) {
+        return;
+      }
+      
+      const containerWidth = containerRect.width;
+      const containerLeft = containerRect.left;
+      const containerRight = containerRect.right;
+      const containerCenter = containerLeft + (containerWidth / 2);
+    
+      const scrollLeft = journeyScrollContainer.scrollLeft;
+      const viewportCenterScroll = scrollLeft + (containerWidth / 2);
+      
+      let activeJourney = null;
+      let bestScore = -Infinity;
+    
+      // Find the section that should be active based on scroll position and visibility
+      journeySections.forEach(section => {
+        const sectionRect = section.getBoundingClientRect();
+        
+        // Calculate section position in scroll coordinates
+        const sectionLeftScroll = (sectionRect.left - containerLeft) + scrollLeft;
+        const sectionWidth = sectionRect.width;
+        const sectionRightScroll = sectionLeftScroll + sectionWidth;
+        const sectionCenterScroll = sectionLeftScroll + (sectionWidth / 2);
+        
+        // Calculate how much of the section is visible in the container viewport
+        const visibleLeft = Math.max(sectionRect.left, containerLeft);
+        const visibleRight = Math.min(sectionRect.right, containerRight);
+        const visibleWidth = Math.max(0, visibleRight - visibleLeft);
+        
+        // Calculate distance from viewport center (in scroll coordinates)
+        const centerDistance = Math.abs(sectionCenterScroll - viewportCenterScroll);
+        
+        // Score based on:
+        // 1. How visible the section is (0 to sectionWidth)
+        // 2. How close to center it is (closer = higher score)
+        // Always calculate score, even if not visible, so we can find the closest section
+        const visibilityScore = visibleWidth;
+        const centerScore = Math.max(0, containerWidth - centerDistance);
+        const score = visibilityScore + (centerScore * 0.3);
+        
+        if (score > bestScore) {
+          bestScore = score;
+          activeJourney = section.getAttribute('data-journey');
+        }
+      });
+    
+      // Update dots if we found an active section
+      if (activeJourney !== null) {
+        journeyDots.forEach(dot => {
+          const dotJourney = dot.getAttribute('data-journey-dot');
+          if (dotJourney === activeJourney) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+    }
+  
+    if (journeyScrollContainer) {
+      // Use scroll event - update directly without throttling for more responsive updates
+      journeyScrollContainer.addEventListener('scroll', updateJourneyDots, { passive: true });
+    
+      // Use scrollend if available (not all browsers support it)
+      if ('onscrollend' in journeyScrollContainer) {
+        journeyScrollContainer.addEventListener('scrollend', updateJourneyDots);
+      }
+    
+      // Also update on resize
+      window.addEventListener('resize', () => {
+        setTimeout(updateJourneyDots, 50);
+      });
+    
+      // Also listen to touch events for better mobile support
+      journeyScrollContainer.addEventListener('touchmove', updateJourneyDots, { passive: true });
+    
+      journeyScrollContainer.addEventListener('touchend', () => {
+        // Small delay to ensure scroll position has settled
+        setTimeout(updateJourneyDots, 150);
+      }, { passive: true });
+      
+      // Use IntersectionObserver as additional way to detect section visibility
+      let journeySectionsForObserver = Array.from(journeyScrollContainer.querySelectorAll('[data-journey]'));
+      if (journeySectionsForObserver.length === 0) {
+        // Fallback to document query if not found in container
+        journeySectionsForObserver = Array.from(document.querySelectorAll('[data-journey]'));
+      }
+      
+      if (journeySectionsForObserver.length > 0 && 'IntersectionObserver' in window) {
+        const observerOptions = {
+          root: journeyScrollContainer,
+          rootMargin: '0px',
+          threshold: [0, 0.25, 0.5, 0.75, 1.0]
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+          // Update dots when intersection changes
+          updateJourneyDots();
+        }, observerOptions);
+        
+        journeySectionsForObserver.forEach(section => {
+          observer.observe(section);
+        });
+      }
+    
+      // Add click handlers to dots to scroll to corresponding section
+      journeyDots.forEach(dot => {
+        dot.addEventListener('click', function() {
+          const journeyId = this.getAttribute('data-journey-dot');
+          const targetSection = document.querySelector(`[data-journey="${journeyId}"]`);
+        
+          if (targetSection && journeyScrollContainer) {
+            // Get current scroll position
+            const currentScroll = journeyScrollContainer.scrollLeft;
+          
+            // Get container and section positions in viewport
+            const containerRect = journeyScrollContainer.getBoundingClientRect();
+            const sectionRect = targetSection.getBoundingClientRect();
+          
+            // Calculate section's absolute position within scroll container
+            // sectionRect.left is viewport position, containerRect.left is container's viewport position
+            // The difference gives us the relative position, then add current scroll to get absolute
+            const sectionLeftInContainer = (sectionRect.left - containerRect.left) + currentScroll;
+            const containerWidth = journeyScrollContainer.clientWidth;
+            const sectionWidth = sectionRect.width;
+          
+            // Calculate scroll position to center the section
+            const targetScroll = sectionLeftInContainer - (containerWidth / 2) + (sectionWidth / 2);
+          
+            journeyScrollContainer.scrollTo({
+              left: Math.max(0, targetScroll),
+              behavior: 'smooth'
+            });
+          
+            // Update dots after scroll completes
+            setTimeout(() => {
+              updateJourneyDots();
+            }, 300);
+          }
+        });
+      });
+    
+      // Initial update after layout is ready - wait longer to ensure everything is positioned
+      const doInitialUpdate = () => {
+        // Check if container is visible and has dimensions
+        const rect = journeyScrollContainer.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          updateJourneyDots();
+        } else {
+          // Retry if not ready yet
+          setTimeout(doInitialUpdate, 100);
+        }
+      };
+      
+      // Wait for both DOM and layout to be ready
+      if (document.readyState === 'complete') {
+        setTimeout(doInitialUpdate, 300);
+      } else {
+        window.addEventListener('load', () => {
+          setTimeout(doInitialUpdate, 300);
+        });
+      }
+      
+      // Also try after a few animation frames
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(doInitialUpdate, 100);
+        });
+      });
+      
+      // Backup: Also update periodically to catch any missed scroll events
+      // This ensures dots update even if scroll events aren't firing reliably
+      setInterval(() => {
+        updateJourneyDots();
+      }, 200);
+    }
+  }
+  
+  // Call setupJourneyDots
+  setupJourneyDots();
+  
   // Ensure updateScroll runs after DOM is ready and layout is calculated
   function runInitialScrollUpdate() {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         updateScroll();
+        // updateJourneyDots is called from within setupJourneyDots, not here
       });
     });
   }

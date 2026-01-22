@@ -250,8 +250,8 @@
         </div>
       </div>
     </section>
-    <div class="flex flex-col w-full relative z-2 -mb-32" data-button-tabs-container>
-      <section class="flex flex-col justify-center items-center pt-8 sm:pt-[20vh] relative" data-journey-0>
+    <div class="flex flex-col w-full relative z-2 mb-0 sm:-mb-32" data-button-tabs-container>
+      <section class="flex flex-col justify-center items-center py-4 sm:py-0 sm:pt-[20vh] h-[20vh] sm:h-auto relative" data-journey-0>
         <div class="container-width flex flex-col items-center justify-center" data-journey-0-content>
           <h1 class="text-heading-one text-center" data-button-tabs-opener>The fastest path from<br>signature to revenue.</h1>
         </div>
@@ -296,37 +296,38 @@
           </a>
         </div>
       </div>
-      <section class="relative flex px-16 py-16 pb-0 flex-col" data-parallax-system="journey--1" data-journey="agreements">
-        <div class="min-h-screen bg-linear-to-bl from-(--purple-dark) to-(--purple) rounded-[28px] w-full h-full grow flex items-center justify-center overflow-hidden">
-          <div class="container-width flex gap-8 m-6 w-full items-center">
-            <div class="flex-1 flex flex-col gap-8 relative z-0">
-              <h2 class="text-heading-two text-(--white)">Revenue starts<br>with a signature.</h2>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg data-journey-bullet="1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="journey-bullet journey-bullet-1 shrink-0 grow-0">
+      <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide items-stretch h-[72vh] sm:h-auto sm:flex-col sm:gap-0" data-journey-scroll-container style="scroll-snap-type: x mandatory; scroll-padding-left: 8vw; scroll-padding-right: 8vw; -webkit-overflow-scrolling: touch;">
+      <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] ml-[8vw] items-start sm:items-center h-full sm:h-auto sm:w-auto sm:ml-0 snap-start" data-parallax-system="journey--1" data-journey="agreements">
+        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--purple-dark) to-(--purple) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
+          <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+            <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
+              <h2 class="text-heading-two text-(--white) text-center sm:text-left">Revenue starts<br>with a signature.</h2>
+              <ul class="space-y-4 h-full sm:h-auto">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg data-journey-bullet="1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="journey-bullet journey-bullet-1 shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M16 29.3334C14.1556 29.3334 12.4222 28.9834 10.8 28.2834C9.1778 27.5834 7.76669 26.6334 6.56669 25.4334C5.36669 24.2334 4.41669 22.8222 3.71669 21.2C3.01669 19.5778 2.66669 17.8445 2.66669 16C2.66669 14.1556 3.01669 12.4222 3.71669 10.8C4.41669 9.1778 5.36669 7.76669 6.56669 6.56669C7.76669 5.36669 9.1778 4.41669 10.8 3.71669C12.4222 3.01669 14.1556 2.66669 16 2.66669C17.8445 2.66669 19.5778 3.01669 21.2 3.71669C22.8222 4.41669 24.2334 5.36669 25.4334 6.56669C26.6334 7.76669 27.5834 9.1778 28.2834 10.8C28.9834 12.4222 29.3334 14.1556 29.3334 16C29.3334 17.8445 28.9834 19.5778 28.2834 21.2C27.5834 22.8222 26.6334 24.2334 25.4334 25.4334C24.2334 26.6334 22.8222 27.5834 21.2 28.2834C19.5778 28.9834 17.8445 29.3334 16 29.3334ZM16 26.6667C18.9778 26.6667 21.5 25.6334 23.5667 23.5667C25.6334 21.5 26.6667 18.9778 26.6667 16C26.6667 13.0222 25.6334 10.5 23.5667 8.43335C21.5 6.36669 18.9778 5.33335 16 5.33335C13.0222 5.33335 10.5 6.36669 8.43335 8.43335C6.36669 10.5 5.33335 13.0222 5.33335 16C5.33335 18.9778 6.36669 21.5 8.43335 23.5667C10.5 25.6334 13.0222 26.6667 16 26.6667Z" fill="white"/>
                     <path class="journey-bullet--check" d="M14.1333 18.4L11.2667 15.5333C11.0222 15.2889 10.7111 15.1667 10.3333 15.1667C9.95555 15.1667 9.64444 15.2889 9.39999 15.5333C9.15555 15.7778 9.03333 16.0889 9.03333 16.4667C9.03333 16.8445 9.15555 17.1556 9.39999 17.4L13.2 21.2C13.4667 21.4667 13.7778 21.6 14.1333 21.6C14.4889 21.6 14.8 21.4667 15.0667 21.2L22.6 13.6667C22.8444 13.4222 22.9667 13.1111 22.9667 12.7333C22.9667 12.3556 22.8444 12.0445 22.6 11.8C22.3555 11.5556 22.0444 11.4333 21.6667 11.4333C21.2889 11.4333 20.9778 11.5556 20.7333 11.8L14.1333 18.4Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Import an existing agreement or write one from scratch</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg data-journey-bullet="2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="journey-bullet journey-bullet-2 shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg data-journey-bullet="2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="journey-bullet journey-bullet-2 shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M16 29.3334C14.1556 29.3334 12.4222 28.9834 10.8 28.2834C9.1778 27.5834 7.76669 26.6334 6.56669 25.4334C5.36669 24.2334 4.41669 22.8222 3.71669 21.2C3.01669 19.5778 2.66669 17.8445 2.66669 16C2.66669 14.1556 3.01669 12.4222 3.71669 10.8C4.41669 9.1778 5.36669 7.76669 6.56669 6.56669C7.76669 5.36669 9.1778 4.41669 10.8 3.71669C12.4222 3.01669 14.1556 2.66669 16 2.66669C17.8445 2.66669 19.5778 3.01669 21.2 3.71669C22.8222 4.41669 24.2334 5.36669 25.4334 6.56669C26.6334 7.76669 27.5834 9.1778 28.2834 10.8C28.9834 12.4222 29.3334 14.1556 29.3334 16C29.3334 17.8445 28.9834 19.5778 28.2834 21.2C27.5834 22.8222 26.6334 24.2334 25.4334 25.4334C24.2334 26.6334 22.8222 27.5834 21.2 28.2834C19.5778 28.9834 17.8445 29.3334 16 29.3334ZM16 26.6667C18.9778 26.6667 21.5 25.6334 23.5667 23.5667C25.6334 21.5 26.6667 18.9778 26.6667 16C26.6667 13.0222 25.6334 10.5 23.5667 8.43335C21.5 6.36669 18.9778 5.33335 16 5.33335C13.0222 5.33335 10.5 6.36669 8.43335 8.43335C6.36669 10.5 5.33335 13.0222 5.33335 16C5.33335 18.9778 6.36669 21.5 8.43335 23.5667C10.5 25.6334 13.0222 26.6667 16 26.6667Z" fill="white"/>
                     <path class="journey-bullet--check" d="M14.1333 18.4L11.2667 15.5333C11.0222 15.2889 10.7111 15.1667 10.3333 15.1667C9.95555 15.1667 9.64444 15.2889 9.39999 15.5333C9.15555 15.7778 9.03333 16.0889 9.03333 16.4667C9.03333 16.8445 9.15555 17.1556 9.39999 17.4L13.2 21.2C13.4667 21.4667 13.7778 21.6 14.1333 21.6C14.4889 21.6 14.8 21.4667 15.0667 21.2L22.6 13.6667C22.8444 13.4222 22.9667 13.1111 22.9667 12.7333C22.9667 12.3556 22.8444 12.0445 22.6 11.8C22.3555 11.5556 22.0444 11.4333 21.6667 11.4333C21.2889 11.4333 20.9778 11.5556 20.7333 11.8L14.1333 18.4Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Insert variables to keep contracts consistent and reusable</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg data-journey-bullet="3" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="journey-bullet journey-bullet-3 shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg data-journey-bullet="3" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="journey-bullet journey-bullet-3 shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M16 29.3334C14.1556 29.3334 12.4222 28.9834 10.8 28.2834C9.1778 27.5834 7.76669 26.6334 6.56669 25.4334C5.36669 24.2334 4.41669 22.8222 3.71669 21.2C3.01669 19.5778 2.66669 17.8445 2.66669 16C2.66669 14.1556 3.01669 12.4222 3.71669 10.8C4.41669 9.1778 5.36669 7.76669 6.56669 6.56669C7.76669 5.36669 9.1778 4.41669 10.8 3.71669C12.4222 3.01669 14.1556 2.66669 16 2.66669C17.8445 2.66669 19.5778 3.01669 21.2 3.71669C22.8222 4.41669 24.2334 5.36669 25.4334 6.56669C26.6334 7.76669 27.5834 9.1778 28.2834 10.8C28.9834 12.4222 29.3334 14.1556 29.3334 16C29.3334 17.8445 28.9834 19.5778 28.2834 21.2C27.5834 22.8222 26.6334 24.2334 25.4334 25.4334C24.2334 26.6334 22.8222 27.5834 21.2 28.2834C19.5778 28.9834 17.8445 29.3334 16 29.3334ZM16 26.6667C18.9778 26.6667 21.5 25.6334 23.5667 23.5667C25.6334 21.5 26.6667 18.9778 26.6667 16C26.6667 13.0222 25.6334 10.5 23.5667 8.43335C21.5 6.36669 18.9778 5.33335 16 5.33335C13.0222 5.33335 10.5 6.36669 8.43335 8.43335C6.36669 10.5 5.33335 13.0222 5.33335 16C5.33335 18.9778 6.36669 21.5 8.43335 23.5667C10.5 25.6334 13.0222 26.6667 16 26.6667Z" fill="white"/>
                     <path class="journey-bullet--check" d="M14.1333 18.4L11.2667 15.5333C11.0222 15.2889 10.7111 15.1667 10.3333 15.1667C9.95555 15.1667 9.64444 15.2889 9.39999 15.5333C9.15555 15.7778 9.03333 16.0889 9.03333 16.4667C9.03333 16.8445 9.15555 17.1556 9.39999 17.4L13.2 21.2C13.4667 21.4667 13.7778 21.6 14.1333 21.6C14.4889 21.6 14.8 21.4667 15.0667 21.2L22.6 13.6667C22.8444 13.4222 22.9667 13.1111 22.9667 12.7333C22.9667 12.3556 22.8444 12.0445 22.6 11.8C22.3555 11.5556 22.0444 11.4333 21.6667 11.4333C21.2889 11.4333 20.9778 11.5556 20.7333 11.8L14.1333 18.4Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Collect and track signatures securely in realtime</span>
                 </li>
               </ul>
-              <a href="#" class="button-shiny button-shiny-secondary" data-button-shiny>Explore Agreements</a>
+              <a href="#" class="button-shiny button-shiny-secondary w-full sm:w-auto sm:self-start" data-button-shiny>Explore Agreements</a>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center relative">
+            <div class="hidden sm:flex flex-1 flex-col items-center justify-center relative">
               <div class="journey-visuals--agreement hidden" data-journey-visual="agreements">
                 <h1>AGREEMENT</h1>
                 <p>This Agreement (“Agreement”) is entered into as of <span class="journey-visuals--agreement--variable journey-visuals--agreement--variable-1" data-text="Date">[Date]</span>, by and between Virello Labs, a California entity with its principal place of business in San Francisco (“Company”), and Xanterra Systems, with its principal place of business at <span class="journey-visuals--agreement--variable journey-visuals--agreement--variable-2" data-text="Address">[Address]</span> (“Customer”).</p>
@@ -362,34 +363,34 @@
           </div>
         </div>
       </section>
-      <section class="relative flex px-16 py-16 pb-0 flex-col" data-parallax-system="journey--2" data-journey="billing">
-        <div class="min-h-screen bg-linear-to-bl from-(--pink-dark) to-(--pink) rounded-[28px] w-full h-full grow flex items-center justify-center">
-          <div class="container-width flex gap-8 m-6 w-full items-center">
-            <div class="flex-1 flex flex-col gap-8 relative z-0">
-              <h2 class="text-heading-two text-(--white)">Billing that<br>builds itself.</h2>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+      <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--2" data-journey="billing">
+        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--pink-dark) to-(--pink) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
+          <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+            <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
+              <h2 class="text-heading-two text-(--white) text-center sm:text-left">Billing that<br>builds itself.</h2>
+              <ul class="space-y-4 h-full sm:h-auto">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Automatically generate billing schedules and revenue events from signed agreements</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Support one-time or recurring billing without manual setup</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Keep billing logic in sync as contracts change</span>
                 </li>
               </ul>
-              <a href="#" class="button-shiny button-shiny-secondary" data-button-shiny>Explore Billing</a>
+              <a href="#" class="button-shiny button-shiny-secondary w-full sm:w-auto sm:self-start" data-button-shiny>Explore Billing</a>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center relative">
+            <div class="hidden sm:flex flex-1 flex-col items-center justify-center relative">
               <div class="text-white border-2 border-dashed border-white opacity-40 rotate-45 aspect-square flex items-center justify-center p-8" style="min-width: 200px; min-height: 200px;">
                 VISUAL HERE
               </div>
@@ -400,34 +401,34 @@
           </div>
         </div>
       </section>
-      <section class="relative flex px-16 py-16 pb-0 flex-col" data-parallax-system="journey--3" data-journey="payments">
-        <div class="min-h-screen bg-linear-to-bl from-(--green-dark) to-(--green) rounded-[28px] w-full h-full grow flex items-center justify-center">
-          <div class="container-width flex gap-8 m-6 w-full items-center">
-            <div class="flex-1 flex flex-col gap-8 relative z-0">
-              <h2 class="text-heading-two text-(--white)">Get paid<br>faster.</h2>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+      <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--3" data-journey="payments">
+        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--green-dark) to-(--green) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
+          <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+            <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
+              <h2 class="text-heading-two text-(--white) text-center sm:text-left">Get paid<br>faster.</h2>
+              <ul class="space-y-4 h-full sm:h-auto">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Send invoices that include built-in payment options</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Trigger reminders automatically to keep payments moving</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">See funds settle and reconcile instantly</span>
                 </li>
               </ul>
-              <a href="#" class="button-shiny button-shiny-secondary" data-button-shiny>Explore Payments</a>
+              <a href="#" class="button-shiny button-shiny-secondary w-full sm:w-auto sm:self-start" data-button-shiny>Explore Payments</a>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center relative">
+            <div class="hidden sm:flex flex-1 flex-col items-center justify-center relative">
               <div class="text-white border-2 border-dashed border-white opacity-40 rotate-45 aspect-square flex items-center justify-center p-8" style="min-width: 200px; min-height: 200px;">
                 VISUAL HERE
               </div>
@@ -438,34 +439,34 @@
           </div>
         </div>
       </section>
-      <section class="relative flex px-16 py-16 pb-0 flex-col" data-parallax-system="journey--4" data-journey="collections">
-        <div class="min-h-screen bg-linear-to-bl from-(--orange-dark) to-(--orange) rounded-[28px] w-full h-full grow flex items-center justify-center">
-          <div class="container-width flex gap-8 m-6 w-full items-center">
-            <div class="flex-1 flex flex-col gap-8 relative z-0">
-              <h2 class="text-heading-two text-(--white)">Revenue that<br>runs itself.</h2>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+      <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--4" data-journey="collections">
+        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--orange-dark) to-(--orange) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
+          <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+            <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
+              <h2 class="text-heading-two text-(--white) text-center sm:text-left">Revenue that<br>runs itself.</h2>
+              <ul class="space-y-4 h-full sm:h-auto">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Automatically manage renewals, amendments, and contract changes as they happen</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Trigger dunning, retries, and reconciliation without manual intervention</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Keep revenue accurate, current, and compliant across the entire lifecycle</span>
                 </li>
               </ul>
-              <a href="#" class="button-shiny button-shiny-secondary" data-button-shiny>Explore Collections</a>
+              <a href="#" class="button-shiny button-shiny-secondary w-full sm:w-auto sm:self-start" data-button-shiny>Explore Collections</a>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center relative">
+            <div class="hidden sm:flex flex-1 flex-col items-center justify-center relative">
               <div class="text-white border-2 border-dashed border-white opacity-40 rotate-45 aspect-square flex items-center justify-center p-8" style="min-width: 200px; min-height: 200px;">
                 VISUAL HERE
               </div>
@@ -476,34 +477,34 @@
           </div>
         </div>
       </section>
-      <section class="relative flex px-16 py-16 pb-0 flex-col" data-parallax-system="journey--5" data-journey="reporting">
-        <div class="min-h-screen bg-linear-to-bl from-(--yellow-dark) to-(--yellow) rounded-[28px] w-full h-full grow flex items-center justify-center">
-          <div class="container-width flex gap-8 m-6 w-full items-center">
-            <div class="flex-1 flex flex-col gap-8 relative z-0">
-              <h2 class="text-heading-two text-(--white)">Visibility,<br>in realtime.</h2>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+      <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--5" data-journey="reporting">
+        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--yellow-dark) to-(--yellow) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
+          <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+            <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
+              <h2 class="text-heading-two text-(--white) text-center sm:text-left">Visibility,<br>in realtime.</h2>
+              <ul class="space-y-4 h-full sm:h-auto">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Surface live revenue data across contracts, invoices, and payments</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Stay accurate with continuous reconciliation and automated updates</span>
                 </li>
-                <li class="flex items-center gap-4 text-(--white)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                     <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                   </svg>
                   <span class="text-body text-body-large text-body-bullets">Get instant visibility into performance and exposure</span>
                 </li>
               </ul>
-              <a href="#" class="button-shiny button-shiny-secondary" data-button-shiny>Explore Reporting</a>
+              <a href="#" class="button-shiny button-shiny-secondary w-full sm:w-auto sm:self-start" data-button-shiny>Explore Reporting</a>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center relative">
+            <div class="hidden sm:flex flex-1 flex-col items-center justify-center relative">
               <div class="text-white border-2 border-dashed border-white opacity-40 rotate-45 aspect-square flex items-center justify-center p-8" style="min-width: 200px; min-height: 200px;">
                 VISUAL HERE
               </div>
@@ -514,36 +515,34 @@
           </div>
         </div>
       </section>
-      <div class="h-32"></div>
-    </div>
-    <section class="relative z-1 flex px-16 py-16 pb-0 flex-col" data-parallax-system="journey--6" data-journey="integrations">
-      <div class="min-h-screen bg-linear-to-bl from-(--charcoal-dark) to-(--charcoal) rounded-[28px] w-full h-full grow flex items-center justify-center">
-        <div class="container-width flex gap-8 m-6 w-full items-center">
-          <div class="flex-1 flex flex-col gap-8 relative z-0">
-            <h2 class="text-heading-two text-(--white)">Built for<br>your stack.</h2>
-            <ul class="space-y-4">
-              <li class="flex items-center gap-4 text-(--white)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+      <section class="relative z-1 flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] mr-[8vw] h-full sm:h-auto sm:w-auto sm:mr-0 items-start sm:items-center snap-start" data-parallax-system="journey--6" data-journey="integrations">
+      <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--charcoal-dark) to-(--charcoal) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
+        <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+          <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
+            <h2 class="text-heading-two text-(--white) text-center sm:text-left">Built for<br>your stack.</h2>
+            <ul class="space-y-4 h-full sm:h-auto">
+              <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                   <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                 </svg>
                 <span class="text-body text-body-large text-body-bullets">Connect Agree to your CRM, ERP, and accounting stack</span>
               </li>
-              <li class="flex items-center gap-4 text-(--white)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                   <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                 </svg>
                 <span class="text-body text-body-large text-body-bullets">Stream updates in real time as agreements, invoices, and payments change</span>
               </li>
-              <li class="flex items-center gap-4 text-(--white)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0">
+                <li class="flex items-center gap-2 sm:gap-4 text-(--white)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" class="shrink-0 grow-0 scale-75 sm:scale-100">
                   <path d="M14.1332 18.4001L11.2665 15.5334C11.0221 15.289 10.7109 15.1667 10.3332 15.1667C9.95539 15.1667 9.64428 15.289 9.39984 15.5334C9.15539 15.7779 9.03317 16.089 9.03317 16.4667C9.03317 16.8445 9.15539 17.1556 9.39984 17.4001L13.1998 21.2001C13.4665 21.4667 13.7776 21.6001 14.1332 21.6001C14.4887 21.6001 14.7998 21.4667 15.0665 21.2001L22.5998 13.6667C22.8443 13.4223 22.9665 13.1112 22.9665 12.7334C22.9665 12.3556 22.8443 12.0445 22.5998 11.8001C22.3554 11.5556 22.0443 11.4334 21.6665 11.4334C21.2887 11.4334 20.9776 11.5556 20.7332 11.8001L14.1332 18.4001ZM15.9998 29.3334C14.1554 29.3334 12.4221 28.9834 10.7998 28.2834C9.17761 27.5834 7.7665 26.6334 6.5665 25.4334C5.3665 24.2334 4.4165 22.8223 3.7165 21.2001C3.0165 19.5779 2.6665 17.8445 2.6665 16.0001C2.6665 14.1556 3.0165 12.4223 3.7165 10.8001C4.4165 9.17786 5.3665 7.76675 6.5665 6.56675C7.7665 5.36675 9.17761 4.41675 10.7998 3.71675C12.4221 3.01675 14.1554 2.66675 15.9998 2.66675C17.8443 2.66675 19.5776 3.01675 21.1998 3.71675C22.8221 4.41675 24.2332 5.36675 25.4332 6.56675C26.6332 7.76675 27.5832 9.17786 28.2832 10.8001C28.9832 12.4223 29.3332 14.1556 29.3332 16.0001C29.3332 17.8445 28.9832 19.5779 28.2832 21.2001C27.5832 22.8223 26.6332 24.2334 25.4332 25.4334C24.2332 26.6334 22.8221 27.5834 21.1998 28.2834C19.5776 28.9834 17.8443 29.3334 15.9998 29.3334ZM15.9998 26.6667C18.9776 26.6667 21.4998 25.6334 23.5665 23.5667C25.6332 21.5001 26.6665 18.9779 26.6665 16.0001C26.6665 13.0223 25.6332 10.5001 23.5665 8.43341C21.4998 6.36675 18.9776 5.33341 15.9998 5.33341C13.0221 5.33341 10.4998 6.36675 8.43317 8.43341C6.3665 10.5001 5.33317 13.0223 5.33317 16.0001C5.33317 18.9779 6.3665 21.5001 8.43317 23.5667C10.4998 25.6334 13.0221 26.6667 15.9998 26.6667Z" fill="white"/>
                 </svg>
                 <span class="text-body text-body-large text-body-bullets">Use APIs and webhooks to automate workflows unique to your business</span>
               </li>
             </ul>
-            <a href="#" class="button-shiny button-shiny-secondary" data-button-shiny>Explore Integrations</a>
+            <a href="#" class="button-shiny button-shiny-secondary w-full sm:w-auto sm:self-start" data-button-shiny>Explore Integrations</a>
           </div>
-          <div class="flex-1 flex flex-col items-center justify-center relative">
+          <div class="hidden sm:flex flex-1 flex-col items-center justify-center relative">
             <div class="text-white border-2 border-dashed border-white opacity-40 rotate-45 aspect-square flex items-center justify-center p-8" style="min-width: 200px; min-height: 200px;">
               VISUAL HERE
             </div>
@@ -553,7 +552,20 @@
           </div>
         </div>
       </div>
-    </section>
+      </section>
+      </div>
+      <div class="hidden sm:block h-32"></div>
+    </div>
+    <div class="flex justify-center items-center h-[8vh] sm:hidden" data-journey-dots>
+      <div class="flex gap-2">
+        <button class="journey-dot active" data-journey-dot="agreements" aria-label="Agreements"></button>
+        <button class="journey-dot" data-journey-dot="billing" aria-label="Billing"></button>
+        <button class="journey-dot" data-journey-dot="payments" aria-label="Payments"></button>
+        <button class="journey-dot" data-journey-dot="collections" aria-label="Collections"></button>
+        <button class="journey-dot" data-journey-dot="reporting" aria-label="Reporting"></button>
+        <button class="journey-dot" data-journey-dot="integrations" aria-label="Integrations"></button>
+      </div>
+    </div>
     <section class="min-h-screen flex flex-col justify-center items-center" data-qualities>
       <div class="relative z-1 container-width flex py-[200px]">
         <div class="w-1/3 relative shrink-0 grow-0">

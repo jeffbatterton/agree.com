@@ -14,8 +14,8 @@
 </head>
 <body class="antialiased h-full m-0 p-0">
   <div class="relative" data-ribbon>
-    <section class="relative z-1 w-full sm:h-[98vh] flex flex-col justify-start items-center pb-2 sm:pb-[13vh]" data-hero>
-      <p class="text-body text-body-small w-full hidden sm:flex items-center justify-center py-3 bg-(--black) text-(--white) text-center">
+    <section class="w-full h-[98vh] flex flex-col justify-start items-center pb-[13vh]" data-hero>
+      <p class="relative z-1 text-body text-body-small w-full hidden sm:flex items-center justify-center py-3 bg-(--black) text-(--white) text-center">
         <a href="#" class="no-underline">Agree raises $11M to Launch AI Agents that Run Your Revenue Stack</a>
       </p>
       <header class="site-header w-full flex flex-row items-center px-4 sm:px-8 py-4" data-site-header>
@@ -160,7 +160,7 @@
           <a href="#" class="button-flat w-full text-center">Get a demo</a>
         </div>
       </div>
-      <div class="container-width flex-1 flex flex-col items-center justify-center gap-6 pt-4 sm:pt-0">
+      <div class="container-width flex-1 flex flex-col items-center justify-center gap-6">
         <div class="pill">The agentic revenue OS</div>
         <h1 class="text-hero text-center">Revenue that<br>runs itself.</h1>
         <p class="text-body text-center text-(--slate)">From agreements to billing, payments, collections, and reporting.<br>Automate your entire contract-to-cash stack.</p>
@@ -171,7 +171,7 @@
       </div>
       <div class="customer-logos w-full sm:max-w-[1024px]">
         <div class="customer-logos-track flex" data-customer-logos>
-          <div class="flex grow shrink-0 gap-4 sm:gap-16 pr-4 sm:pr-16">
+          <div class="flex grow shrink-0 gap-4 sm:gap-16 pr-16">
             <img loading="lazy" src="public/img/logos/Google.svg" alt="" class="scale-75 sm:scale-100" />
             <img loading="lazy" src="public/img/logos/Deel.svg" alt="" class="scale-75 sm:scale-100" />
             <img loading="lazy" src="public/img/logos/Profound.svg" alt="" class="scale-75 sm:scale-100" />
@@ -187,10 +187,10 @@
         </div>
       </div>
     </section>
-    <section class="display relative w-full z-2 flex justify-center p-4 sm:py-[10vh] overflow-hidden sm:overflow-visible" data-display>
+    <section class="display relative w-full z-2 flex justify-center py-[10vh]" data-display>
       <div class="display-card w-fit h-fit relative z-1" data-display--card>
         <img src="public/img/screenshot.png" loading="lazy" alt="" />
-        <div class="notification-wrapper absolute top-8 -left-16 z-2 hidden sm:block">
+        <div class="notification-wrapper absolute top-8 -left-16 z-2">
           <div class="notification notification-1">
             <img src="public/img/avatars/Beehiiv.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
@@ -204,7 +204,7 @@
             </div>
           </div>
         </div>
-        <div class="notification-wrapper absolute top-[260px] -right-8 z-2 hidden sm:block">
+        <div class="notification-wrapper absolute top-[260px] -right-8 z-2">
           <div class="notification notification-2">
             <img src="public/img/avatars/Deel.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
@@ -218,7 +218,7 @@
             </div>
           </div>
         </div>
-        <div class="notification-wrapper absolute top-[360px] -left-8 z-2 hidden sm:block">
+        <div class="notification-wrapper absolute top-[360px] -left-8 z-2">
           <div class="notification notification-3">
             <img src="public/img/avatars/Anthropic.svg" loading="lazy" alt="" class="image" />
             <div class="flex-col flex-1 flex">
@@ -232,7 +232,7 @@
             </div>
           </div>
         </div>
-        <div class="notification-wrapper absolute top-[600px] right-[-64px] z-2 hidden sm:block">
+        <div class="notification-wrapper absolute top-[600px] right-[-64px] z-2">
           <div class="notification notification-4">
             <div class="h-12">
               <img src="public/img/avatars/Slack.svg" loading="lazy" alt="" class="image" />
@@ -586,7 +586,7 @@
               <path d="M24.0494 42C23.4828 42 23.0078 41.8083 22.6245 41.425C22.2411 41.0417 22.0494 40.5667 22.0494 40V37.7C20.5494 37.3667 19.2328 36.7833 18.0995 35.95C16.9661 35.1167 16.0495 33.95 15.3495 32.45C15.1161 31.9833 15.1078 31.4917 15.3245 30.975C15.5411 30.4583 15.9328 30.0833 16.4995 29.85C16.9661 29.65 17.4495 29.6583 17.9495 29.875C18.4495 30.0917 18.8328 30.45 19.0995 30.95C19.6661 31.95 20.3828 32.7083 21.2495 33.225C22.1161 33.7417 23.1828 34 24.4495 34C25.8161 34 26.9745 33.6917 27.9244 33.075C28.8744 32.4583 29.3495 31.5 29.3495 30.2C29.3495 29.0333 28.9828 28.1083 28.2495 27.425C27.5161 26.7417 25.8161 25.9667 23.1494 25.1C20.2828 24.2 18.3161 23.125 17.2495 21.875C16.1828 20.625 15.6495 19.1 15.6495 17.3C15.6495 15.1333 16.3495 13.45 17.7495 12.25C19.1495 11.05 20.5828 10.3667 22.0494 10.2V8C22.0494 7.43333 22.2411 6.95833 22.6245 6.575C23.0078 6.19167 23.4828 6 24.0494 6C24.6161 6 25.0911 6.19167 25.4745 6.575C25.8578 6.95833 26.0494 7.43333 26.0494 8V10.2C27.3161 10.4 28.4161 10.8083 29.3495 11.425C30.2828 12.0417 31.0495 12.8 31.6495 13.7C31.9495 14.1333 32.0078 14.6167 31.8245 15.15C31.6411 15.6833 31.2661 16.0667 30.6995 16.3C30.2328 16.5 29.7495 16.5083 29.2495 16.325C28.7495 16.1417 28.2828 15.8167 27.8495 15.35C27.4161 14.8833 26.9078 14.525 26.3245 14.275C25.7411 14.025 25.0161 13.9 24.1495 13.9C22.6828 13.9 21.5661 14.225 20.7995 14.875C20.0328 15.525 19.6495 16.3333 19.6495 17.3C19.6495 18.4 20.1495 19.2667 21.1495 19.9C22.1495 20.5333 23.8828 21.2 26.3495 21.9C28.6495 22.5667 30.3911 23.625 31.5745 25.075C32.7578 26.525 33.3495 28.2 33.3495 30.1C33.3495 32.4667 32.6495 34.2667 31.2495 35.5C29.8495 36.7333 28.1161 37.5 26.0494 37.8V40C26.0494 40.5667 25.8578 41.0417 25.4745 41.425C25.0911 41.8083 24.6161 42 24.0494 42Z" fill="white"/>
             </svg>
           </div>
-          <div class="notification-wrapper absolute top-[660px] right-[85px] hidden sm:block">
+          <div class="notification-wrapper absolute top-[660px] right-[85px]">
             <div class="notification notification-2">
               <img src="public/img/avatars/Beehiiv.svg" loading="lazy" alt="" class="image" />
               <div class="flex-col flex-1 flex">
@@ -664,7 +664,7 @@
                   Money 20/20 2x Finalist
                 </h5>
                 <p class="text-body text-center opacity-60">
-                  Recognized twice at Money 20/20 with Bronze awards in both Startup and Payments categories.
+                  The distinction of being the only company recognized twice, with Bronze awards in both the Startup and Payments categories.
                 </p>
               </div>
             </div>
@@ -678,7 +678,7 @@
                   Product of the Day/Week
                 </h5>
                 <p class="text-body text-center opacity-60">
-                  Awarded Product of the Day and Product of the Week by the Product Hunt community.
+                  The recognition of being awarded Product of the Day and Product of the Week by the Product Hunt community.
                 </p>
               </div>
             </div>
@@ -692,7 +692,7 @@
                   SOC2 Compliant
                 </h5>
                 <p class="text-body text-center opacity-60">
-                  SOC 2 Type II compliant, meeting rigorous standards for security, availability, and confidentiality.
+                  The achievement of SOC 2 Type II compliance, demonstrating a commitment to security, availability, and confidentiality.
                 </p>
               </div>
             </div>
@@ -803,7 +803,7 @@
         </div>
       </div>
     </section>
-    <canvas data-ribbon--canvas></canvas>
+    <canvas class="w-full h-full block absolute left-1/2 z-0 pointer-events-none -top-[10px] -translate-x-[730px]" data-ribbon--canvas></canvas>
   </div>
   <section class="cta flex flex-col items-center justify-center -mt-[20px] relative gap-10 py-[128px]">
     <div class="relative z-1 flex flex-col gap-4">

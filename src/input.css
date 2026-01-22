@@ -290,6 +290,14 @@
     line-height: var(--text-label-line-height);
   }
 
+  @media (max-width: 639px) {
+    .text-label {
+      font-size: calc(var(--text-label-font-size) * 0.75);
+    }
+  }
+
+
+
   .text-big-numbers {
     font-family: "Letterboard Lite";
     /* 3rem (mobile) → 6rem (desktop) */
@@ -340,8 +348,8 @@
   }
 
   .text-heading-five {
-    /* 1rem (mobile) → 1.25rem (desktop) */
-    font-size: clamp(1rem, 0.5vw + 0.75rem, 1.25rem);
+    /* .75rem (mobile) → 1.25rem (desktop) */
+    font-size: clamp(.75rem, 0.5vw + 0.75rem, 1.25rem);
     font-style: normal;
     font-weight: 700;
     line-height: 1.25;

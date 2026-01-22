@@ -485,12 +485,6 @@
     --tw-translate-y: calc(var(--spacing) * -2);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
-  .scale-70 {
-    --tw-scale-x: 70%;
-    --tw-scale-y: 70%;
-    --tw-scale-z: 70%;
-    scale: var(--tw-scale-x) var(--tw-scale-y);
-  }
   .scale-75 {
     --tw-scale-x: 75%;
     --tw-scale-y: 75%;
@@ -789,9 +783,6 @@
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
-  }
-  .px-8 {
-    padding-inline: calc(var(--spacing) * 8);
   }
   .px-16 {
     padding-inline: calc(var(--spacing) * 16);

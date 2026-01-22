@@ -308,8 +308,8 @@
   }
 
   .text-heading-one {
-    /* 2.25rem (mobile) → 5.5rem (desktop) */
-    font-size: clamp(2.25rem, 4.5vw + 0.75rem, 5.5rem);
+    /* 2rem (mobile) → 5.5rem (desktop) */
+    font-size: clamp(2rem, 4.5vw + 0.75rem, 5.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1;

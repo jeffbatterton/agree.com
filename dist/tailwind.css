@@ -314,9 +314,6 @@
   .z-50 {
     z-index: 50;
   }
-  .z-\[1\] {
-    z-index: 1;
-  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -824,6 +821,9 @@
   .pt-2 {
     padding-top: calc(var(--spacing) * 2);
   }
+  .pt-8 {
+    padding-top: calc(var(--spacing) * 8);
+  }
   .pt-\[20vh\] {
     padding-top: 20vh;
   }
@@ -1182,6 +1182,11 @@
       padding-block: 10vh;
     }
   }
+  .sm\:pt-\[20vh\] {
+    @media (width >= 40rem) {
+      padding-top: 20vh;
+    }
+  }
   .sm\:pr-16 {
     @media (width >= 40rem) {
       padding-right: calc(var(--spacing) * 16);
@@ -1444,7 +1449,7 @@
     line-height: 95%;
   }
   .text-heading-one {
-    font-size: clamp(2.25rem, 4.5vw + 0.75rem, 5.5rem);
+    font-size: clamp(2rem, 4.5vw + 0.75rem, 5.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1;

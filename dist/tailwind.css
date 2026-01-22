@@ -498,8 +498,12 @@
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
-  .-translate-x-\[730px\] {
-    --tw-translate-x: calc(730px * -1);
+  .-translate-x-\[70vw\] {
+    --tw-translate-x: calc(70vw * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .-translate-x-\[72vw\] {
+    --tw-translate-x: calc(72vw * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .-translate-y-1 {
@@ -570,9 +574,6 @@
   }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5);
-  }
-  .gap-1 {
-    gap: calc(var(--spacing) * 1);
   }
   .gap-2 {
     gap: calc(var(--spacing) * 2);
@@ -864,20 +865,11 @@
   .pr-1 {
     padding-right: calc(var(--spacing) * 1);
   }
-  .pr-16 {
-    padding-right: calc(var(--spacing) * 16);
+  .pr-4 {
+    padding-right: calc(var(--spacing) * 4);
   }
   .pb-0 {
     padding-bottom: calc(var(--spacing) * 0);
-  }
-  .pb-2 {
-    padding-bottom: calc(var(--spacing) * 2);
-  }
-  .pb-4 {
-    padding-bottom: calc(var(--spacing) * 4);
-  }
-  .pb-20 {
-    padding-bottom: calc(var(--spacing) * 20);
   }
   .pb-\[128px\] {
     padding-bottom: 128px;
@@ -1163,6 +1155,12 @@
       max-width: 1024px;
     }
   }
+  .sm\:-translate-x-\[730px\] {
+    @media (width >= 40rem) {
+      --tw-translate-x: calc(730px * -1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+  }
   .sm\:scale-100 {
     @media (width >= 40rem) {
       --tw-scale-x: 100%;
@@ -1184,6 +1182,16 @@
   .sm\:px-8 {
     @media (width >= 40rem) {
       padding-inline: calc(var(--spacing) * 8);
+    }
+  }
+  .sm\:py-0 {
+    @media (width >= 40rem) {
+      padding-block: calc(var(--spacing) * 0);
+    }
+  }
+  .sm\:pr-16 {
+    @media (width >= 40rem) {
+      padding-right: calc(var(--spacing) * 16);
     }
   }
   .sm\:pb-\[13vh\] {
@@ -1539,7 +1547,6 @@
     padding: 1rem 2rem;
     justify-content: center;
     align-items: center;
-    margin: 8px;
     gap: 0.5rem;
     border-radius: 12px;
     background: transparent;

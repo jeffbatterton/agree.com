@@ -358,8 +358,8 @@
 
   .container-width {
     max-width: 1120px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 4vw;
+    padding-right: 4vw;
   }
 
   @media (min-width: 640px) {

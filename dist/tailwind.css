@@ -182,9 +182,6 @@
   .invisible {
     visibility: hidden;
   }
-  .visible {
-    visibility: visible;
-  }
   .absolute {
     position: absolute;
   }
@@ -337,6 +334,9 @@
   }
   .m-0 {
     margin: calc(var(--spacing) * 0);
+  }
+  .mx-\[4vw\] {
+    margin-inline: 4vw;
   }
   .mx-auto {
     margin-inline: auto;
@@ -831,6 +831,9 @@
   .p-8 {
     padding: calc(var(--spacing) * 8);
   }
+  .p-\[4vw\] {
+    padding: 4vw;
+  }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
   }
@@ -1166,6 +1169,11 @@
   .sm\:left-auto {
     @media (width >= 40rem) {
       left: auto;
+    }
+  }
+  .sm\:mx-0 {
+    @media (width >= 40rem) {
+      margin-inline: calc(var(--spacing) * 0);
     }
   }
   .sm\:mr-0 {
@@ -1780,8 +1788,8 @@
   }
   .container-width {
     max-width: 1120px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 4vw;
+    padding-right: 4vw;
   }
   @media (min-width: 640px) {
     .container-width {

@@ -350,9 +350,6 @@
   .mr-\[8vw\] {
     margin-right: 8vw;
   }
-  .ml-4 {
-    margin-left: calc(var(--spacing) * 4);
-  }
   .ml-\[8vw\] {
     margin-left: 8vw;
   }
@@ -2303,11 +2300,10 @@
   padding: 0;
   padding-bottom: 1rem;
   cursor: pointer;
+  outline: none;
 }
 .footer-accordion-toggle:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: none;
 }
 .footer-accordion-content {
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;

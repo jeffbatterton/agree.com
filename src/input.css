@@ -973,12 +973,11 @@
   padding: 0;
   padding-bottom: 1rem;
   cursor: pointer;
+  outline: none;
 }
 
 .footer-accordion-toggle:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: none;
 }
 
 .footer-accordion-content {

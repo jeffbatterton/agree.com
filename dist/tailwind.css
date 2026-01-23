@@ -20,7 +20,6 @@
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --blur-xs: 4px;
-    --blur-sm: 8px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -413,9 +412,6 @@
   .h-auto {
     height: auto;
   }
-  .h-fit {
-    height: fit-content;
-  }
   .h-full {
     height: 100%;
   }
@@ -461,9 +457,6 @@
   .w-auto {
     width: auto;
   }
-  .w-fit {
-    width: fit-content;
-  }
   .w-full {
     width: 100%;
   }
@@ -487,9 +480,6 @@
   }
   .basis-0 {
     flex-basis: calc(var(--spacing) * 0);
-  }
-  .origin-top {
-    transform-origin: top;
   }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
@@ -584,9 +574,6 @@
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
-  }
-  .gap-6 {
-    gap: calc(var(--spacing) * 6);
   }
   .gap-8 {
     gap: calc(var(--spacing) * 8);
@@ -748,12 +735,6 @@
   }
   .bg-white {
     background-color: var(--color-white);
-  }
-  .bg-white\/50 {
-    background-color: color-mix(in srgb, #fff 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-white) 50%, transparent);
-    }
   }
   .bg-white\/75 {
     background-color: color-mix(in srgb, #fff 75%, transparent);
@@ -949,10 +930,6 @@
   .opacity-100 {
     opacity: 100%;
   }
-  .shadow-\[0_1px_0_0_\#fff_inset\,0_-1px_0_rgba\(255\,255\,255\,0\.25\)_inset\,0_0_64px_0_rgba\(21\,24\,44\,0\.16\)\] {
-    --tw-shadow: 0 1px 0 0 var(--tw-shadow-color, #fff) inset, 0 -1px 0 var(--tw-shadow-color, rgba(255,255,255,0.25)) inset, 0 0 64px 0 var(--tw-shadow-color, rgba(21,24,44,0.16));
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .shadow-\[0_4px_40px_rgba\(21\,24\,44\,0\.08\)\,0_-1px_0_\#fff\] {
     --tw-shadow: 0 4px 40px var(--tw-shadow-color, rgba(21,24,44,0.08)), 0 -1px 0 var(--tw-shadow-color, #fff);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -971,11 +948,6 @@
   .blur {
     --tw-blur: blur(8px);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-  }
-  .backdrop-blur-sm {
-    --tw-backdrop-blur: blur(var(--blur-sm));
-    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
   .backdrop-blur-xs {
     --tw-backdrop-blur: blur(var(--blur-xs));
@@ -1367,11 +1339,6 @@
       border-radius: 12px;
     }
   }
-  .sm\:rounded-\[28px\] {
-    @media (width >= 40rem) {
-      border-radius: 28px;
-    }
-  }
   .sm\:border {
     @media (width >= 40rem) {
       border-style: var(--tw-border-style);
@@ -1390,11 +1357,6 @@
       @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-white) 5%, transparent);
       }
-    }
-  }
-  .sm\:p-4 {
-    @media (width >= 40rem) {
-      padding: calc(var(--spacing) * 4);
     }
   }
   .sm\:p-8 {
@@ -1578,6 +1540,22 @@
   --display-card-mid: 62.28%;
   --display-card-end: 124.55%;
   --display-card-glow-bottom: 0%;
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, 1px 0 0 0 rgba(255, 255, 255, 0.2) inset, 0 -1px 0 rgba(255, 255, 255, 0.25) inset, 0 0 64px 0 rgba(21, 24, 44, 0.16);
+  backdrop-filter: blur(2px) saturate(110%);
+  transform-origin: top;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+@media (min-width: 640px) {
+  .display-card {
+    padding: 1rem;
+    border-radius: 28px;
+  }
 }
 @media (max-width: 639px) {
   .display-card {
@@ -1590,18 +1568,15 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient( var(--display-card-angle), rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.15) var(--display-card-mid), rgba(255, 255, 255, 0.00) var(--display-card-mid), rgba(255, 255, 255, 0.00) var(--display-card-end) );
+  background: linear-gradient( var(--display-card-angle), rgba(190, 164, 255, 0.50) 0%, rgba(190, 164, 255, 0.15) var(--display-card-mid), rgba(190, 164, 255, 0.00) var(--display-card-mid), rgba(190, 164, 255, 0.00) var(--display-card-end) );
 }
 .display-card::after {
+  z-index: 0;
   content: "";
   position: absolute;
-  width: 27.9375rem;
-  height: 700px;
-  width: 450px;
-  left: -200px;
-  bottom: var(--display-card-glow-bottom);
-  opacity: 0.6;
-  background: radial-gradient(50% 50% at 50% 50%, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 4px 0 6px rgba(190, 164, 255, 0.35), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 .notification {
   --tx: 6px;
@@ -1808,15 +1783,17 @@
     background-color: var(--yellow);
     width: fit-content;
     transition: all 0.125s linear;
+    color: var(--black);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5);
   }
   .button-flat:not(.button-flat-secondary):hover {
     background-image: linear-gradient( 0deg, var(--white) 0%, var(--white) 50%, var(--white) 50%, var(--white) 100% );
     @supports (color: color-mix(in lab, red, red)) {
       background-image: linear-gradient( 0deg, color-mix(in srgb, var(--white) 0%, transparent) 0%, color-mix(in srgb, var(--white) 0%, transparent) 50%, color-mix(in srgb, var(--white) 10%, transparent) 50%, color-mix(in srgb, var(--white) 40%, transparent) 100% );
     }
-    box-shadow: 0 0 24px var(--yellow);
+    box-shadow: 0 0 24px var(--yellow), inset 0 1px 0 rgba(255, 255, 255, .5);
     @supports (color: color-mix(in lab, red, red)) {
-      box-shadow: 0 0 24px color-mix(in srgb, var(--yellow) 50%, transparent);
+      box-shadow: 0 0 24px color-mix(in srgb, var(--yellow) 25%, transparent), inset 0 1px 0 rgba(255, 255, 255, .5);
     }
   }
   .button-flat-with-icon {
@@ -1827,7 +1804,9 @@
     opacity: .4;
   }
   .button-flat-secondary {
-    background: var(--white);
+    color: inherit;
+    background: none;
+    box-shadow: none;
   }
   .button-shiny {
     --glow-angle: 90deg;
@@ -1877,6 +1856,7 @@
     pointer-events: none;
     background: conic-gradient(from var(--glow-angle) at 50% 50%, #43BB5E 0deg, #EDA922 51.92307651042938deg, #DF4EA4 103.84615302085876deg, #4D3CFF 169.61538791656494deg, #3C9AFF 228.46153020858765deg, #43BB5E 360deg), var(--purple, #4D3CFF);
     transition: all 80ms linear;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
   }
   .button-shiny-secondary {
     color: var(--black);
@@ -1896,7 +1876,10 @@
     color: var(--black);
   }
   .button-shiny-tertiary::before {
-    background: var(--black-faint);
+    background: var(--white);
+    @supports (color: color-mix(in lab, red, red)) {
+      background: color-mix(in srgb, var(--white) 85%, transparent);
+    }
     box-shadow: none;
   }
   .button-shiny-tertiary:hover::before {
@@ -1913,7 +1896,7 @@
     opacity: 1;
   }
   .button-shiny-tertiary:hover::after {
-    opacity: .5;
+    opacity: 1;
   }
   .button-tab {
     position: relative;
@@ -1975,8 +1958,14 @@
     justify-content: center;
     align-items: center;
     border-radius: 6.25rem;
-    background: var(--purple-faint);
-    color: var(--purple);
+    background: var(--purple);
+    @supports (color: color-mix(in lab, red, red)) {
+      background: color-mix(in srgb, var(--purple) 25%, transparent);
+    }
+    color: var(--white);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in srgb, var(--white) 75%, transparent);
+    }
     font-size: var(--text-overline-font-size);
     font-style: var(--text-overline-font-style);
     font-weight: var(--text-overline-font-weight);
@@ -2192,6 +2181,7 @@
     background: var(--purple);
     background: conic-gradient(from var(--display-gradient-angle) at 50% 50%, rgba(244, 52, 172, 0.50) 0deg, rgba(77, 60, 255, 0.50) 180deg, rgba(77, 60, 255, 0.50) 230.19230604171753deg, rgba(65, 151, 243, 0.50) 287.30769395828247deg, rgba(67, 187, 93, 0.50) 323.6538362503052deg, rgba(244, 52, 172, 0.50) 360deg), var(--purple, #4D3CFF);
     animation: display 60s linear infinite;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
   }
   @keyframes display {
     from {

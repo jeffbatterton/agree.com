@@ -407,11 +407,9 @@ function updateScroll() {
       const angle = lerp(243, 262, gradT);
       const mid = lerp(62.28, 14.69, gradT);
       const end = lerp(124.55, 29.38, gradT);
-      const glowBottom = lerp(0, 45, gradT);
       displayCard.style.setProperty("--display-card-angle", `${angle}deg`);
       displayCard.style.setProperty("--display-card-mid", `${mid}%`);
       displayCard.style.setProperty("--display-card-end", `${end}%`);
-      displayCard.style.setProperty("--display-card-glow-bottom", `${glowBottom}%`);
       
       if (hasExited && displayCardExitStartPercentage !== null) {
         // Exit phase: animate from 0 to exit translateY as scroll goes from exit start to 100%

@@ -646,7 +646,6 @@ function initialize() {
   });
   
   // Setup journey dots indicator for mobile horizontal scrolling
-  // Wait for DOM to be ready
   function setupJourneyDots() {
     const journeyScrollContainer = document.querySelector('[data-journey-scroll-container]');
     const journeyDots = document.querySelectorAll('[data-journey-dot]');
@@ -660,129 +659,121 @@ function initialize() {
       return;
     }
   
-    function updateJourneyDots() {
-      if (!journeyScrollContainer || journeyDots.length === 0) {
-        return;
-      }
-    
-      // Query sections - try from container first, then document
+    // Simple function to find which section should be active
+    function getActiveJourney() {
       let journeySections = Array.from(journeyScrollContainer.querySelectorAll('[data-journey]'));
       if (journeySections.length === 0) {
         journeySections = Array.from(document.querySelectorAll('[data-journey]'));
       }
       if (journeySections.length === 0) {
-        return;
+        return null;
       }
     
-      // Use getBoundingClientRect for accurate positioning
       const containerRect = journeyScrollContainer.getBoundingClientRect();
-      
-      // Check if container has valid dimensions
-      if (containerRect.width === 0 || containerRect.height === 0) {
-        return;
-      }
-      
       const containerWidth = containerRect.width;
-      const containerLeft = containerRect.left;
-      const containerRight = containerRect.right;
-      const containerCenter = containerLeft + (containerWidth / 2);
-    
-      const scrollLeft = journeyScrollContainer.scrollLeft;
-      const viewportCenterScroll = scrollLeft + (containerWidth / 2);
+      const containerCenter = containerRect.left + (containerWidth / 2);
       
       let activeJourney = null;
-      let bestScore = -Infinity;
+      let closestDistance = Infinity;
+      let bestVisibleSection = null;
+      let bestVisibleDistance = Infinity;
     
-      // Find the section that should be active based on scroll position and visibility
-      journeySections.forEach(section => {
+      // Find section whose center is closest to viewport center
+      // Use getBoundingClientRect for more reliable results on iOS
+      for (let i = 0; i < journeySections.length; i++) {
+        const section = journeySections[i];
         const sectionRect = section.getBoundingClientRect();
+        const sectionCenter = sectionRect.left + (sectionRect.width / 2);
+        const distance = Math.abs(sectionCenter - containerCenter);
         
-        // Calculate section position in scroll coordinates
-        const sectionLeftScroll = (sectionRect.left - containerLeft) + scrollLeft;
-        const sectionWidth = sectionRect.width;
-        const sectionRightScroll = sectionLeftScroll + sectionWidth;
-        const sectionCenterScroll = sectionLeftScroll + (sectionWidth / 2);
+        const sectionLeft = sectionRect.left;
+        const sectionRight = sectionRect.right;
+        const containerLeft = containerRect.left;
+        const containerRight = containerRect.right;
+        const isVisible = sectionRight > containerLeft && sectionLeft < containerRight;
         
-        // Calculate how much of the section is visible in the container viewport
-        const visibleLeft = Math.max(sectionRect.left, containerLeft);
-        const visibleRight = Math.min(sectionRect.right, containerRight);
-        const visibleWidth = Math.max(0, visibleRight - visibleLeft);
+        if (isVisible && distance < bestVisibleDistance) {
+          bestVisibleDistance = distance;
+          bestVisibleSection = section.getAttribute('data-journey');
+        }
         
-        // Calculate distance from viewport center (in scroll coordinates)
-        const centerDistance = Math.abs(sectionCenterScroll - viewportCenterScroll);
-        
-        // Score based on:
-        // 1. How visible the section is (0 to sectionWidth)
-        // 2. How close to center it is (closer = higher score)
-        // Always calculate score, even if not visible, so we can find the closest section
-        const visibilityScore = visibleWidth;
-        const centerScore = Math.max(0, containerWidth - centerDistance);
-        const score = visibilityScore + (centerScore * 0.3);
-        
-        if (score > bestScore) {
-          bestScore = score;
+        if (distance < closestDistance) {
+          closestDistance = distance;
           activeJourney = section.getAttribute('data-journey');
         }
-      });
+      }
+      
+      return bestVisibleSection || activeJourney;
+    }
     
-      // Update dots if we found an active section
-      if (activeJourney !== null) {
-        journeyDots.forEach(dot => {
+    // Simple function to update dots: remove isActive from all, add to correct one
+    function updateJourneyDots() {
+      if (!journeyScrollContainer || journeyDots.length === 0) {
+        return;
+      }
+    
+      const activeJourney = getActiveJourney();
+      
+      // Step 1: Swap opacity-100 to opacity-25 for all dots (deactivate all)
+      for (let i = 0; i < journeyDots.length; i++) {
+        const dot = journeyDots[i];
+        // Remove opacity-100 and add opacity-25
+        dot.classList.remove('opacity-100');
+        dot.classList.add('opacity-25');
+        // Force iOS to repaint by toggling will-change
+        dot.style.willChange = 'opacity';
+      }
+      
+      // Step 2: Swap opacity-25 to opacity-100 for the appropriate dot (activate)
+      if (activeJourney) {
+        for (let i = 0; i < journeyDots.length; i++) {
+          const dot = journeyDots[i];
           const dotJourney = dot.getAttribute('data-journey-dot');
           if (dotJourney === activeJourney) {
-            dot.classList.add('active');
-          } else {
-            dot.classList.remove('active');
+            // Remove opacity-25 and add opacity-100
+            dot.classList.remove('opacity-25');
+            dot.classList.add('opacity-100');
+            // Force iOS to repaint
+            dot.style.willChange = 'opacity';
+            // Force a reflow
+            void dot.offsetHeight;
+            break;
           }
-        });
+        }
       }
+      
+      // Clear will-change after a brief moment to let browser optimize
+      setTimeout(() => {
+        for (let i = 0; i < journeyDots.length; i++) {
+          journeyDots[i].style.willChange = '';
+        }
+      }, 200);
     }
   
     if (journeyScrollContainer) {
-      // Use scroll event - update directly without throttling for more responsive updates
-      journeyScrollContainer.addEventListener('scroll', updateJourneyDots, { passive: true });
+      // Listen to scroll events - use requestAnimationFrame for smooth updates
+      journeyScrollContainer.addEventListener('scroll', () => {
+        requestAnimationFrame(updateJourneyDots);
+      }, { passive: true });
     
-      // Use scrollend if available (not all browsers support it)
+      // Listen to scrollend if available
       if ('onscrollend' in journeyScrollContainer) {
         journeyScrollContainer.addEventListener('scrollend', updateJourneyDots);
       }
     
-      // Also update on resize
+      // Update on resize
       window.addEventListener('resize', () => {
         setTimeout(updateJourneyDots, 50);
       });
     
-      // Also listen to touch events for better mobile support
-      journeyScrollContainer.addEventListener('touchmove', updateJourneyDots, { passive: true });
-    
-      journeyScrollContainer.addEventListener('touchend', () => {
-        // Small delay to ensure scroll position has settled
-        setTimeout(updateJourneyDots, 150);
+      // Update on touch events for mobile - use requestAnimationFrame for smooth updates
+      journeyScrollContainer.addEventListener('touchmove', () => {
+        requestAnimationFrame(updateJourneyDots);
       }, { passive: true });
-      
-      // Use IntersectionObserver as additional way to detect section visibility
-      let journeySectionsForObserver = Array.from(journeyScrollContainer.querySelectorAll('[data-journey]'));
-      if (journeySectionsForObserver.length === 0) {
-        // Fallback to document query if not found in container
-        journeySectionsForObserver = Array.from(document.querySelectorAll('[data-journey]'));
-      }
-      
-      if (journeySectionsForObserver.length > 0 && 'IntersectionObserver' in window) {
-        const observerOptions = {
-          root: journeyScrollContainer,
-          rootMargin: '0px',
-          threshold: [0, 0.25, 0.5, 0.75, 1.0]
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-          // Update dots when intersection changes
-          updateJourneyDots();
-        }, observerOptions);
-        
-        journeySectionsForObserver.forEach(section => {
-          observer.observe(section);
-        });
-      }
+      journeyScrollContainer.addEventListener('touchstart', () => {
+        requestAnimationFrame(updateJourneyDots);
+      }, { passive: true });
+      journeyScrollContainer.addEventListener('touchend', updateJourneyDots, { passive: true });
     
       // Add click handlers to dots to scroll to corresponding section
       journeyDots.forEach(dot => {
@@ -813,27 +804,32 @@ function initialize() {
               behavior: 'smooth'
             });
           
-            // Update dots after scroll completes
-            setTimeout(() => {
-              updateJourneyDots();
-            }, 300);
+            // Update after scroll completes
+            if ('onscrollend' in journeyScrollContainer) {
+              const scrollEndHandler = () => {
+                updateJourneyDots();
+                journeyScrollContainer.removeEventListener('scrollend', scrollEndHandler);
+              };
+              journeyScrollContainer.addEventListener('scrollend', scrollEndHandler, { once: true });
+            } else {
+              // Fallback for browsers without scrollend
+              setTimeout(updateJourneyDots, 500);
+              setTimeout(updateJourneyDots, 1000);
+            }
           }
         });
       });
     
-      // Initial update after layout is ready - wait longer to ensure everything is positioned
+      // Initial update
       const doInitialUpdate = () => {
-        // Check if container is visible and has dimensions
         const rect = journeyScrollContainer.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
           updateJourneyDots();
         } else {
-          // Retry if not ready yet
           setTimeout(doInitialUpdate, 100);
         }
       };
       
-      // Wait for both DOM and layout to be ready
       if (document.readyState === 'complete') {
         setTimeout(doInitialUpdate, 300);
       } else {
@@ -842,18 +838,8 @@ function initialize() {
         });
       }
       
-      // Also try after a few animation frames
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setTimeout(doInitialUpdate, 100);
-        });
-      });
+      // No polling needed - event handlers should be sufficient
       
-      // Backup: Also update periodically to catch any missed scroll events
-      // This ensures dots update even if scroll events aren't firing reliably
-      setInterval(() => {
-        updateJourneyDots();
-      }, 200);
     }
   }
   

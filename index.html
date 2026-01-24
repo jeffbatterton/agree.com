@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Agree.com</title>
+  <meta name="theme-color" content="#15182C">
   <link rel="icon" type="image/png" sizes="32x32" href="public/img/favicon@2x.png">
   <link rel="icon" type="image/png" sizes="16x16" href="public/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +13,7 @@
   <link rel="preload" href="public/fonts/LetterboardLite-Semibold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./dist/tailwind.css">
 </head>
-<body class="antialiased h-full m-0 p-0">
+<body class="antialiased m-0 p-0">
   <div class="relative" data-ribbon>
     <section class="section--hero w-full h-auto sm:h-[98vh] flex flex-col justify-start items-center pb-0 sm:pb-[13vh]" data-hero>
       <p class="relative z-1 text-body text-body-small w-full hidden sm:flex items-center justify-center py-3 bg-black text-(--white) text-center" style="box-shadow: 0 1px 0 rgba(255, 255, 255, .05);">
@@ -162,11 +163,11 @@
           <a href="#" class="button-flat w-full text-center">Get a demo</a>
         </div>
       </div>
-      <div class="relative z-1 container-width flex-1 flex flex-col items-center justify-center gap-8 py-4 sm:py-0">
+      <div class="relative z-1 max-w-[1120px] px-8 flex-1 flex flex-col items-center justify-center gap-8 py-4 sm:py-0">
         <div class="pill">The agentic revenue OS</div>
         <h1 class="text-hero text-center">Revenue that<br>runs itself.</h1>
-        <p class="text-body text-center text-(--slate)">From agreements to billing, payments, collections, and reporting.<br>Automate your entire contract-to-cash stack.</p>
-        <div class="flex flex-col sm:flex-row gap-4">
+        <p class="text-body text-center text-white opacity-75 sm:opacity-100 sm:text-(--slate)">From agreements to billing, payments, collections, and reporting. <br class="hidden sm:inline">Automate your entire contract-to-cash stack.</p>
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <a href="#" class="button-shiny w-full sm:w-auto" data-button-shiny>Talk to the team</a>
           <a href="#" class="button-shiny button-shiny-tertiary w-full sm:w-auto" data-button-shiny>Start for free</a>
         </div>
@@ -189,7 +190,7 @@
         </div>
       </div>
     </section>
-    <section class="display relative w-full z-2 flex justify-center p-[4vw] sm:py-[10vh] overflow-hidden sm:overflow-visible" data-display>
+    <section class="display relative w-full z-2 flex justify-center p-4 sm:py-[10vh] overflow-hidden sm:overflow-visible" data-display>
       <div class="display-card" data-display--card>
         <img src="public/img/screenshot.png" loading="lazy" alt="" class="relative z-1 rounded-[4px] sm:rounded-[12px]" />
         <div class="notification-wrapper absolute top-8 -left-16 z-2 hidden sm:block">
@@ -254,7 +255,7 @@
     </section>
     <div class="flex flex-col w-full relative z-2" data-button-tabs-container>
       <section class="flex flex-col justify-center items-center py-4 sm:py-0 sm:pt-[20vh] h-[20vh] sm:h-auto relative" data-journey-0>
-        <div class="container-width flex flex-col items-center justify-center" data-journey-0-content>
+        <div class="flex flex-col items-center justify-center" data-journey-0-content>
           <h1 class="text-heading-one text-center" data-button-tabs-opener>The fastest path from<br>signature to revenue.</h1>
         </div>
       </section>
@@ -300,8 +301,8 @@
       </div>
       <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide items-stretch h-[72vh] sm:h-auto sm:flex-col sm:gap-0" data-journey-scroll-container style="scroll-snap-type: x mandatory; scroll-padding-left: 8vw; scroll-padding-right: 8vw; -webkit-overflow-scrolling: touch;">
         <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] ml-[8vw] items-start sm:items-center h-full sm:h-auto sm:w-auto sm:ml-0 snap-start" data-parallax-system="journey--1" data-journey="agreements">
-          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--purple-dark) to-(--purple) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
-            <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--purple-dark) to-(--purple) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden p-8">
+            <div class="max-w-[1120px] flex gap-8 w-full items-center h-full sm:h-auto">
               <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
                 <h2 class="text-heading-two text-(--white) text-center sm:text-left">Revenue starts<br>with a signature.</h2>
                 <ul class="space-y-4 h-full sm:h-auto">
@@ -366,8 +367,8 @@
           </div>
         </section>
         <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--2" data-journey="billing">
-          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--pink-dark) to-(--pink) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
-            <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--pink-dark) to-(--pink) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden p-8">
+            <div class="max-w-[1120px] flex gap-8 w-full items-center h-full sm:h-auto">
               <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
                 <h2 class="text-heading-two text-(--white) text-center sm:text-left">Billing that<br>builds itself.</h2>
                 <ul class="space-y-4 h-full sm:h-auto">
@@ -404,8 +405,8 @@
           </div>
         </section>
         <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--3" data-journey="payments">
-          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--green-dark) to-(--green) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
-            <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--green-dark) to-(--green) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden p-8">
+            <div class="max-w-[1120px] flex gap-8 w-full items-center h-full sm:h-auto">
               <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
                 <h2 class="text-heading-two text-(--white) text-center sm:text-left">Get paid<br>faster.</h2>
                 <ul class="space-y-4 h-full sm:h-auto">
@@ -442,8 +443,8 @@
           </div>
         </section>
         <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--4" data-journey="collections">
-          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--orange-dark) to-(--orange) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
-            <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--orange-dark) to-(--orange) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden p-8">
+            <div class="max-w-[1120px] flex gap-8 w-full items-center h-full sm:h-auto">
               <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
                 <h2 class="text-heading-two text-(--white) text-center sm:text-left">Revenue that<br>runs itself.</h2>
                 <ul class="space-y-4 h-full sm:h-auto">
@@ -480,8 +481,8 @@
           </div>
         </section>
         <section class="relative flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] h-full sm:h-auto sm:w-auto items-start sm:items-center snap-start" data-parallax-system="journey--5" data-journey="reporting">
-          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--yellow-dark) to-(--yellow) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
-            <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+          <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--yellow-dark) to-(--yellow) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden p-8">
+            <div class="max-w-[1120px] flex gap-8 w-full items-center h-full sm:h-auto">
               <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
                 <h2 class="text-heading-two text-(--white) text-center sm:text-left">Visibility,<br>in realtime.</h2>
                 <ul class="space-y-4 h-full sm:h-auto">
@@ -518,8 +519,8 @@
           </div>
         </section>
         <section class="relative z-1 flex p-0 sm:px-16 sm:py-16 sm:pb-0 flex-col shrink-0 w-[84vw] mr-[8vw] h-full sm:h-auto sm:w-auto sm:mr-0 items-start sm:items-center snap-start" data-parallax-system="journey--6" data-journey="integrations">
-        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--charcoal-dark) to-(--charcoal) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden px-4 py-8">
-          <div class="container-width flex gap-8 w-full items-center h-full sm:h-auto">
+        <div class="h-full min-h-0 sm:min-h-screen sm:h-full bg-linear-to-bl from-(--charcoal-dark) to-(--charcoal) rounded-[28px] w-full flex items-start sm:items-center justify-start sm:justify-center overflow-hidden p-8">
+          <div class="max-w-[1120px] flex gap-8 w-full items-center h-full sm:h-auto">
             <div class="flex-1 flex flex-col gap-8 relative z-0 h-full sm:h-auto">
               <h2 class="text-heading-two text-(--white) text-center sm:text-left">Built for<br>your stack.</h2>
               <ul class="space-y-4 h-full sm:h-auto">
@@ -569,7 +570,7 @@
       </div>
     </div>
     <section class="min-h-screen flex flex-col justify-center items-center" data-qualities>
-      <div class="relative z-1 container-width flex py-8 sm:py-[200px]">
+      <div class="relative z-1 max-w-[1120px] px-8 flex py-8 sm:py-[200px]">
         <div class="hidden sm:block w-1/3 relative shrink-0 grow-0">
           <div class="icon-dot icon-dot-1 icon-dot-reporting -top-16 right-[295px]">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -663,9 +664,9 @@
     </section>
     <section class="h-auto sm:h-screen flex flex-col p-[4vw] sm:p-16">
       <div class="relative z-1 w-full h-full rounded-[28px] bg-(--temp) text-(--white) flex flex-col justify-center items-center">
-        <div class="container-width flex flex-col gap-4 sm:gap-14 p-8 sm:px-[80px]">
+        <div class="max-w-[1120px] px-8 flex flex-col gap-4 sm:gap-14 p-8 sm:px-[80px]">
           <h3 class="text-heading-two text-center">
-            Award-winning trust built-in.
+            Award-winning <br class="inline sm:hidden">trust built-in.
           </h3>
           <div class="flex flex-col sm:flex-row gap-0 sm:gap-8 w-full items-start">
             <div class="flex sm:flex-col gap-4 sm:gap-6 flex-1 basis-0 min-w-0 items-center text-center">
@@ -714,11 +715,11 @@
         </div>
       </div>
     </section>
-    <section class="relative p-4 py-8 sm:p-16 sm:pt-[64px] sm:pb-[128px] flex flex-col justify-center">
+    <section class="relative p-8 sm:p-16 sm:pb-32 flex flex-col justify-center">
       <div class="relative z-1 w-full sm:px-16 flex flex-col gap-8 sm:gap-20">
-        <h3 class="text-heading-three text-center">Tried. Trusted. 60k+ teams.</h3>
+        <h3 class="text-heading-three text-center">Tried. Trusted. <br class="inline sm:hidden">60k+ teams.</h3>
         <div class="sm:max-w-[1280px] mx-auto flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-stretch justify-center gap-4 sm:gap-10">
-          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#F36A21] text-white flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto mx-[4vw] sm:mx-0">
+          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#F36A21] text-white flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto">
             <div class="flex flex-col gap-2 flex-1">
               <svg class="hidden sm:block text-current" xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
                 <path d="M1.125 24C0.503679 24 0 23.4963 0 22.875V12.8393C0 12.6632 0.0413454 12.4895 0.120709 12.3323L6.03418 0.618025C6.22551 0.239016 6.61391 0 7.03847 0H10.0222C10.7771 0 11.3178 0.728687 11.0989 1.45111L8.51645 9.97746C8.29763 10.6999 8.8383 11.4286 9.59314 11.4286H11.5673C12.1886 11.4286 12.6923 11.9323 12.6923 12.5536V22.875C12.6923 23.4963 12.1886 24 11.5673 24H1.125ZM18.4327 24C17.8114 24 17.3077 23.4963 17.3077 22.875V12.8393C17.3077 12.6632 17.3491 12.4895 17.4284 12.3323L23.3419 0.618026C23.5332 0.239016 23.9216 0 24.3462 0H27.3299C28.0848 0 28.6254 0.728687 28.4066 1.45111L25.8241 9.97746C25.6053 10.6999 26.146 11.4286 26.9008 11.4286H28.875C29.4963 11.4286 30 11.9323 30 12.5536V22.875C30 23.4963 29.4963 24 28.875 24H18.4327Z" fill="currentColor"/>
@@ -738,7 +739,7 @@
             </div>
             <img src="public/img/avatars/mat-sherman.jpg" alt="" class="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 border-white absolute -left-6 bottom-5 sm:left-auto sm:bottom-auto sm:right-8 sm:-top-8" width="64" height="64" />
           </article>
-          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#BC57C1] text-white flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto mx-[4vw] sm:mx-0">
+          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#BC57C1] text-white flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto">
             <div class="flex flex-col gap-2 flex-1">
               <svg class="hidden sm:block text-current" xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
                 <path d="M1.125 24C0.503679 24 0 23.4963 0 22.875V12.8393C0 12.6632 0.0413454 12.4895 0.120709 12.3323L6.03418 0.618025C6.22551 0.239016 6.61391 0 7.03847 0H10.0222C10.7771 0 11.3178 0.728687 11.0989 1.45111L8.51645 9.97746C8.29763 10.6999 8.8383 11.4286 9.59314 11.4286H11.5673C12.1886 11.4286 12.6923 11.9323 12.6923 12.5536V22.875C12.6923 23.4963 12.1886 24 11.5673 24H1.125ZM18.4327 24C17.8114 24 17.3077 23.4963 17.3077 22.875V12.8393C17.3077 12.6632 17.3491 12.4895 17.4284 12.3323L23.3419 0.618026C23.5332 0.239016 23.9216 0 24.3462 0H27.3299C28.0848 0 28.6254 0.728687 28.4066 1.45111L25.8241 9.97746C25.6053 10.6999 26.146 11.4286 26.9008 11.4286H28.875C29.4963 11.4286 30 11.9323 30 12.5536V22.875C30 23.4963 29.4963 24 28.875 24H18.4327Z" fill="currentColor"/>
@@ -759,7 +760,7 @@
             </div>
             <img src="public/img/avatars/tyler-denk.jpg" alt="" class="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 border-white absolute -left-6 bottom-5 sm:left-auto sm:bottom-auto sm:right-8 sm:-top-8" width="64" height="64" />
           </article>
-          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#211F36] text-white flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto mx-[4vw] sm:mx-0">
+          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#211F36] text-white flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto">
             <div class="flex flex-col gap-2 flex-1">
               <svg class="hidden sm:block text-current" xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
                 <path d="M1.125 24C0.503679 24 0 23.4963 0 22.875V12.8393C0 12.6632 0.0413454 12.4895 0.120709 12.3323L6.03418 0.618025C6.22551 0.239016 6.61391 0 7.03847 0H10.0222C10.7771 0 11.3178 0.728687 11.0989 1.45111L8.51645 9.97746C8.29763 10.6999 8.8383 11.4286 9.59314 11.4286H11.5673C12.1886 11.4286 12.6923 11.9323 12.6923 12.5536V22.875C12.6923 23.4963 12.1886 24 11.5673 24H1.125ZM18.4327 24C17.8114 24 17.3077 23.4963 17.3077 22.875V12.8393C17.3077 12.6632 17.3491 12.4895 17.4284 12.3323L23.3419 0.618026C23.5332 0.239016 23.9216 0 24.3462 0H27.3299C28.0848 0 28.6254 0.728687 28.4066 1.45111L25.8241 9.97746C25.6053 10.6999 26.146 11.4286 26.9008 11.4286H28.875C29.4963 11.4286 30 11.9323 30 12.5536V22.875C30 23.4963 29.4963 24 28.875 24H18.4327Z" fill="currentColor"/>
@@ -785,7 +786,7 @@
             </div>
             <img src="public/img/avatars/sasha-orloff.jpg" alt="" class="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 border-white absolute -left-6 bottom-5 sm:left-auto sm:bottom-auto sm:right-8 sm:-top-8" width="64" height="64" />
           </article>
-          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#F0EEE6] text-(--black) flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto mx-[4vw] sm:mx-0">
+          <article class="relative rounded-[12px] p-4 pl-8 pb-6 sm:p-8 bg-[#F0EEE6] text-(--black) flex flex-col gap-2 sm:gap-8 flex-1 basis-0 min-w-0 h-auto">
             <div class="flex flex-col gap-2 flex-1">
               <svg class="hidden sm:block text-current" xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
                 <path d="M1.125 24C0.503679 24 0 23.4963 0 22.875V12.8393C0 12.6632 0.0413454 12.4895 0.120709 12.3323L6.03418 0.618025C6.22551 0.239016 6.61391 0 7.03847 0H10.0222C10.7771 0 11.3178 0.728687 11.0989 1.45111L8.51645 9.97746C8.29763 10.6999 8.8383 11.4286 9.59314 11.4286H11.5673C12.1886 11.4286 12.6923 11.9323 12.6923 12.5536V22.875C12.6923 23.4963 12.1886 24 11.5673 24H1.125ZM18.4327 24C17.8114 24 17.3077 23.4963 17.3077 22.875V12.8393C17.3077 12.6632 17.3491 12.4895 17.4284 12.3323L23.3419 0.618026C23.5332 0.239016 23.9216 0 24.3462 0H27.3299C28.0848 0 28.6254 0.728687 28.4066 1.45111L25.8241 9.97746C25.6053 10.6999 26.146 11.4286 26.9008 11.4286H28.875C29.4963 11.4286 30 11.9323 30 12.5536V22.875C30 23.4963 29.4963 24 28.875 24H18.4327Z" fill="currentColor"/>
@@ -819,18 +820,18 @@
     </section>
     <canvas class="w-full h-full block absolute left-1/2 z-0 pointer-events-none -top-[10px] -translate-x-[330px] sm:-translate-x-[730px]" data-ribbon--canvas></canvas>
   </div>
-  <section class="cta flex flex-col items-center justify-center relative gap-10 p-4 py-[128px]">
+  <section class="cta flex flex-col items-center justify-center relative gap-6 sm:gap-10 p-8 sm:py-[128px]">
     <div class="relative z-1 flex flex-col gap-4">
-      <h3 class="text-heading-three text-(--white) text-center">Agentic revenue starts here.</h3>
-      <p class="text-body text-center text-(--slate)">Agree orchestrates contracts, billing, and revenue—so you don&apos;t have to.</p>
+      <h3 class="text-heading-three text-(--white) text-center">Agentic revenue <br class="inline sm:hidden">starts here.</h3>
+      <p class="text-body text-center text-white opacity-75 sm:opacity-100 sm:text-(--slate)">Agree orchestrates contracts, billing, and revenue—so you don&apos;t have to.</p>
     </div>
     <div class="relative z-1 flex flex-col gap-2 items-center w-full">
-      <a href="#" class="button-shiny" data-button-shiny>Talk to the team</a>
+      <a href="#" class="button-shiny w-full sm:w-auto" data-button-shiny>Talk to the team</a>
       <p class="text-body text-body-small italic opacity-80 text-center text-(--slate)">15&dash;30 min &middot; No forms &middot; No pressure</p>
     </div>
   </section>
   <footer class="bg-(--black) py-4 sm:py-[64px] sm:pb-[128px] flex flex-col items-center justify-center text-(--white) shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--purple)_40%,transparent)]">
-    <div class="container-width w-full mx-auto flex flex-col gap-16 items-center sm:items-start">
+    <div class="max-w-[1120px] px-8 w-full mx-auto flex flex-col gap-16 items-center sm:items-start">
       <div class="flex flex-col sm:flex-row w-full gap-4 sm:gap-8 items-stretch">
         <div class="flex-1 basis-0 min-w-0 flex flex-col gap-1 items-start">
           <button type="button" class="footer-accordion-toggle w-full flex items-center gap-2 text-body font-bold border-b border-white/20 pb-4 sm:border-b-0 sm:pb-0 sm:pointer-events-none" data-footer-accordion="platform" aria-expanded="false">

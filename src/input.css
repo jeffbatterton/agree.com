@@ -63,6 +63,12 @@
   /* transform/opacity are scroll-scrubbed in JS (no transition animation) */
 }
 
+@media (max-width: 639px) {
+  .site-header {
+    background-image: linear-gradient(to bottom, var(--black), transparent);
+  }
+}
+
 /* Hero section */
 @property --gradient-stop {
   syntax: "<percentage>";
@@ -311,7 +317,6 @@
 
 @layer components {
   .text-body {
-    /* 0.75rem (mobile) → 1rem (desktop) */
     font-size: clamp(0.75rem, 0.25vw + 0.875rem, 1rem);
     font-style: normal;
     font-weight: 400;
@@ -323,12 +328,10 @@
   }
 
   .text-body-large {
-    /* 1.125rem (mobile) → 1.5rem (desktop) */
     font-size: clamp(1.125rem, 0.5vw + 0.9rem, 1.5rem);
   }
 
   .text-body-bullets {
-    /* 1rem (mobile) → 1.2rem (desktop) */
     font-size: clamp(1rem, 0.25vw + 0.9rem, 1.2rem);
   }
 
@@ -349,7 +352,6 @@
 
   .text-big-numbers {
     font-family: "Letterboard Lite";
-    /* 3rem (mobile) → 6rem (desktop) */
     font-size: clamp(3rem, 4vw + 1rem, 6rem);
     font-style: normal;
     font-weight: 400;
@@ -357,7 +359,6 @@
   }
 
   .text-hero {
-    /* 3rem (mobile) → 6.5rem (desktop) */
     font-size: clamp(3rem, 5vw + 1rem, 6.5rem);
     font-style: normal;
     font-weight: 800;
@@ -365,7 +366,6 @@
   }
 
   .text-heading-one {
-    /* 2rem (mobile) → 5.5rem (desktop) */
     font-size: clamp(2rem, 4.5vw + 0.75rem, 5.5rem);
     font-style: normal;
     font-weight: 800;
@@ -373,23 +373,20 @@
   }
 
   .text-heading-two {
-    /* 1.75rem (mobile) → 3.75rem (desktop) */
-    font-size: clamp(1.75rem, 3vw + 0.5rem, 3.75rem);
+    font-size: clamp(1.85rem, 3vw + 0.5rem, 3.75rem);
     font-style: normal;
     font-weight: 800;
     line-height: 1;
   }
 
   .text-heading-three {
-    /* 1.75rem (mobile) → 3.5rem (desktop) */
-    font-size: clamp(1.75rem, 2.5vw + 0.5rem, 3.5rem);
+    font-size: clamp(1.85rem, 2.5vw + 0.5rem, 3.5rem);
     font-style: normal;
     font-weight: 800;
     line-height: 100%;
   }
 
   .text-heading-four {
-    /* 1.25rem (mobile) → 2rem (desktop) */
     font-size: clamp(1.25rem, 1vw + 0.75rem, 2rem);
     font-style: normal;
     font-weight: 800;
@@ -397,25 +394,12 @@
   }
 
   .text-heading-five {
-    /* .75rem (mobile) → 1.25rem (desktop) */
     font-size: clamp(.75rem, 0.5vw + 0.75rem, 1.25rem);
     font-style: normal;
     font-weight: 700;
     line-height: 1.25;
   }
 
-  .container-width {
-    max-width: 1120px;
-    padding-left: 4vw;
-    padding-right: 4vw;
-  }
-
-  @media (min-width: 640px) {
-    .container-width {
-      padding-left: 32px;
-      padding-right: 32px;
-    }
-  }
 
   .button-flat {
     font-size: var(--text-label-font-size);
@@ -566,6 +550,8 @@
     opacity: 1;
   }
 
+
+
   .button-tab {
     position: relative;
     font-size: var(--text-label-font-size);
@@ -638,6 +624,8 @@
     font-weight: var(--text-overline-font-weight);
     line-height: var(--text-overline-line-height); 
     text-transform: var(--text-overline-text-transform);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
   .customer-logos {

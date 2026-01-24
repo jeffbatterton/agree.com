@@ -63,6 +63,30 @@
   /* transform/opacity are scroll-scrubbed in JS (no transition animation) */
 }
 
+/* Hero section */
+@property --gradient-stop {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.section--hero {
+  --gradient-stop: 0%;
+  background-color: var(--black);
+  color: var(--white);
+  background-image: radial-gradient(circle at top right, color-mix(in srgb, var(--purple) 25%, transparent) 0%, transparent var(--gradient-stop));
+  animation: section--hero 20s ease-in-out infinite;
+}
+
+@keyframes section--hero {
+  0%, 100% {
+    --gradient-stop: 50%;
+  }
+  50% {
+    --gradient-stop: 100%;
+  }
+}
+
 /* Keep the sticky button tabs tucked under the header when it reveals. */
 [data-button-tabs] {
   top: var(--header-reveal) !important;

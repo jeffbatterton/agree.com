@@ -989,15 +989,56 @@ if (!canvas) {
   let frameCount = 0;
   let skipFrames = 0;
 
+  // Calculate the actual width needed for the ribbon
+  function calculateRibbonWidth() {
+    // Calculate maximum ribbon extent in object space
+    const maxOffset = ((LINES - 1) / 2) * SPACING; // ~112px - maximum ribbon width from center
+    const maxExitRight = EXIT_RIGHT_PX + MID_RIPPLE_WAVE; // 700 + 40 = 740px max rightward movement
+    const maxLoopPull = EXIT_LOOP_AMPLITUDE; // 180px max leftward pull from loop
+    
+    // Account for perspective projection
+    // Objects with negative z (closer) expand, max z is around maxOffset
+    const maxZ = maxOffset;
+    const maxProjectionFactor = PERSPECTIVE / Math.max(1, PERSPECTIVE - maxZ);
+    
+    // Calculate extents in projected space
+    // The ribbon starts at some x0, moves right by exitRight, and can loop left
+    // We'll calculate the maximum extent needed
+    
+    // Maximum right extent: exitRight + ribbon width (with projection)
+    const maxRightExtent = (maxExitRight + maxOffset) * maxProjectionFactor;
+    
+    // Maximum left extent: loop pull + ribbon width (with projection)  
+    const maxLeftExtent = (maxLoopPull + maxOffset) * maxProjectionFactor;
+    
+    // Total width needed (we'll center the ribbon in the canvas)
+    const ribbonWidth = maxRightExtent + maxLeftExtent;
+    
+    // Add padding for safety and to account for animation variations
+    const padding = 200;
+    
+    // For mobile, scale down since the viewport is smaller
+    const isMobile = window.innerWidth < 640;
+    if (isMobile) {
+      // Mobile uses 72vw transform, so we need proportionally less width
+      return Math.max(ribbonWidth * 0.5, window.innerWidth * 1.3) + padding;
+    }
+    
+    return ribbonWidth + padding;
+  }
+
   // INITIALIZATION
   function init() {
     dpr = Math.min(2, window.devicePixelRatio || 1);
-    width = canvas.offsetWidth;
     height = canvas.offsetHeight;
 
-    if (width <= 0 || height <= 0) {
+    if (height <= 0) {
       return;
     }
+    
+    // Calculate the actual width needed for the ribbon instead of using container width
+    const ribbonWidth = calculateRibbonWidth();
+    width = Math.max(ribbonWidth, 800); // Minimum width to ensure ribbon fits
     
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';

@@ -1565,6 +1565,20 @@ document.querySelectorAll("[data-button-shiny]").forEach((btn) => {
     const h = header.offsetHeight || 0;
     const canReveal = heroOutOfView && displayOutOfView;
 
+    // During programmatic scroll (button tabs), always hide the header
+    if (isProgrammaticScroll) {
+      setClosingTransition(true);
+      hiddenPx = h;
+      if (closeT) window.clearTimeout(closeT);
+      closeT = window.setTimeout(() => {
+        closeT = 0;
+        if (!pastHeader) return;
+        setClosingTransition(false);
+      }, 140);
+      applyScrub();
+      return;
+    }
+
     if (dy > 0) {
       setClosingTransition(true);
       hiddenPx = h;

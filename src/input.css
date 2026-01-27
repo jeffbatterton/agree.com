@@ -58,19 +58,11 @@
   left: 0;
   right: 0;
   z-index: 60;
-  background-color: var(--white);
-  color: var(--black);
-  box-shadow: 0 12px 48px rgba(21, 24, 44, 0.12);
-  /* transform/opacity are scroll-scrubbed in JS (no transition animation) */
-}
-
-@media (max-width: 639px) {
-  .site-header {
-    color: var(--white) !important;
-    background-color: transparent !important;
-    background-image: linear-gradient(to bottom, var(--black), transparent);
-    box-shadow: none !important;
-  }
+  background-image: linear-gradient(
+    to bottom, 
+    color-mix(in srgb, var(--black) 100%, transparent) 5%,
+    color-mix(in srgb, var(--black) 0%, transparent)
+  );
 }
 
 /* Hero section */

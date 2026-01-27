@@ -1525,6 +1525,14 @@
     background-image: linear-gradient( to bottom, color-mix(in srgb, var(--black) 100%, transparent) 5%, color-mix(in srgb, var(--black) 0%, transparent) );
   }
 }
+@media (max-width: 639px) {
+  .site-header {
+    background-image: linear-gradient( to bottom, var(--black) 5%, var(--black) );
+    @supports (color: color-mix(in lab, red, red)) {
+      background-image: linear-gradient( to bottom, color-mix(in srgb, var(--black) 100%, transparent) 5%, color-mix(in srgb, var(--black) 0%, transparent) );
+    }
+  }
+}
 @property --gradient-stop {
   syntax: "<percentage>";
   inherits: false;

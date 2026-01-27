@@ -65,6 +65,16 @@
   );
 }
 
+@media (max-width: 639px) {
+  .site-header {
+    background-image: linear-gradient(
+      to bottom, 
+      color-mix(in srgb, var(--black) 100%, transparent) 5%,
+      color-mix(in srgb, var(--black) 0%, transparent)
+    );
+  }
+}
+
 /* Hero section */
 @property --gradient-stop {
   syntax: "<percentage>";

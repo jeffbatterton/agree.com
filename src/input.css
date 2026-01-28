@@ -57,21 +57,7 @@
   left: 0;
   right: 0;
   z-index: 60;
-  background-image: linear-gradient(
-    to bottom, 
-    color-mix(in srgb, var(--black) 100%, transparent) 5%,
-    color-mix(in srgb, var(--black) 0%, transparent)
-  );
-}
-
-@media (max-width: 639px) {
-  .site-header {
-    background-image: linear-gradient(
-      to bottom, 
-      color-mix(in srgb, var(--black) 100%, transparent) 5%,
-      color-mix(in srgb, var(--black) 0%, transparent)
-    );
-  }
+  background-color: var(--page-theme);
 }
 
 /* Hero section */

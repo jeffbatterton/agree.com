@@ -13,9 +13,9 @@
   <link rel="preload" href="public/fonts/LetterboardLite-Semibold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./dist/tailwind.css">
 </head>
-<body class="antialiased m-0 p-0 bg-(--purple)">
+<body class="antialiased m-0 p-0 bg-(--purple)" style="--page-theme: #4D3CFF;">
   <div class="relative">
-    <section class="relative w-full flex flex-col justify-start items-center text-white bg-linear-to-bl from-(--purple-dark) to-(--purple)" data-hero>
+    <section class="relative z-1 w-full flex flex-col justify-start items-center text-white bg-linear-to-bl from-(--purple-dark) to-(--purple)" data-hero>
       <canvas class="absolute inset-0 w-full h-full pointer-events-none z-0" data-ribbon-secondary--canvas></canvas>
       <header class="relative z-1 site-header w-full flex flex-row items-center px-4 sm:px-8 py-4" data-site-header>
         <div class="flex-1 flex items-center">
@@ -162,69 +162,69 @@
           <a href="#" class="button-flat w-full text-center">Get a demo</a>
         </div>
       </div>
-      <div class="w-full relative z-1 max-w-[1120px] px-8 flex-1 py-4 sm:py-32 flex gap-16">
-        <div class="flex flex-col items-start justify-center gap-8">
+      <div class="w-full relative z-1 max-w-[1120px] flex-1 p-8 sm:py-32 flex gap-16">
+        <div class="flex flex-col items-start justify-center gap-4 sm:gap-8">
           <div class="flex flex-col gap-4">
             <div class="text-overline">Agreements</div>
             <h1 class="text-heading-one text-left">Revenue starts<br>with a signature</h1>
           </div>
           <p class="text-body text-left text-white opacity-75">Create agreements that don&apos;t just get signed—they define pricing, trigger billing, and power your entire contract-to-cash workflow.</p>
         </div>
-        <div class="w-[400px] h-[300px] border border-dashed border-white/40 text-white flex items-center justify-center shrink-0 grow-0">visual</div>
+        <div class="hidden sm:flex w-[400px] h-[300px] border border-dashed border-white/40 text-white items-center justify-center shrink-0 grow-0">visual</div>
       </div>
     </section>
-    <div class="bg-white">
+    <div class="bg-white relative z-0">
       <section class="flex flex-col justify-center items-center">
-        <div class="max-w-[1120px] px-8 flex-1 py-4 sm:py-32 flex flex-col">
-          <div class="flex flex-col gap-16">
+        <div class="w-full max-w-[1120px] p-8 flex-1 sm:py-32 flex flex-col">
+          <div class="flex flex-col gap-8 sm:gap-16">
             <div class="flex flex-col gap-4">
-              <div class="pill text-(--purple) bg-(--purple)/10 w-auto self-center">Agreements as Infrastructure</div>
-              <h3 class="text-heading-two text-center">Agreements are systems — not documents.</h3>
-              <p class="text-body text-body-large text-(--slate) text-center">Structured agreements turn pricing, terms, and timing into inputs your systems can act on.</p>
+              <div class="hidden sm:block pill text-(--purple) bg-(--purple)/10 w-auto self-center">Agreements as Infrastructure</div>
+              <h3 class="text-heading-two sm:text-center">Agreements are systems — not documents.</h3>
+              <p class="text-body text-body-large text-(--slate) sm:text-center">Structured agreements turn pricing, terms, and timing into inputs your systems can act on.</p>
             </div>
-            <div class="flex gap-16">
+            <div class="flex flex-col sm:flex-row gap-8 sm:gap-16">
               <div class="flex flex-col gap-8 flex-1">
-                <div class="w-full h-[300px] border border-dashed border-(--purple)/40 text-(--purple) flex items-center justify-center">visual</div>
+                <div class="w-full h-[100px] sm:h-[300px] border border-dashed border-(--purple)/40 text-(--purple) flex items-center justify-center">visual</div>
                 <div class="flex flex-col gap-4">
                   <h4 class="text-heading-four">Standardize how agreements are created</h4>
                   <p class="text-body">Turn contracts into systems, not documents. <strong>Structured templates</strong> keep pricing, terms, and variables consistent from draft to execution—so every agreement is built on the same foundation.</p>
                 </div>
               </div>
               <div class="flex flex-col gap-8 flex-1">
-                <div class="w-full h-[300px] border border-dashed border-(--purple)/40 text-(--purple) flex items-center justify-center">visual</div>
+                <div class="w-full h-[100px] sm:h-[300px] border border-dashed border-(--purple)/40 text-(--purple) flex items-center justify-center">visual</div>
                 <div class="flex flex-col gap-4">
                   <h4 class="text-heading-four">Eliminate friction between teams</h4>
                   <p class="text-body"><strong>One source of truth</strong> from sales to finance. Structured agreements carry pricing and terms forward automatically, reducing handoffs, rework, and internal coordination across teams.</p>
                 </div>
               </div>
               <div class="flex flex-col gap-8 flex-1">
-                <div class="w-full h-[300px] border border-dashed border-(--purple)/40 text-(--purple) flex items-center justify-center">visual</div>
+                <div class="w-full h-[100px] sm:h-[300px] border border-dashed border-(--purple)/40 text-(--purple) flex items-center justify-center">visual</div>
                 <div class="flex flex-col gap-4">
                   <h4 class="text-heading-four">Reduce downstream billing issues</h4>
                   <p class="text-body"><strong>What you sign is what you bill.</strong> When agreements flow cleanly into billing, invoices reflect exactly what was agreed—without surprises or cleanup. That consistency reduces disputes, accelerates collections, and improves confidence in revenue data.</p>
                 </div>
               </div>
             </div>
-            <div class="flex gap-16 rounded-xl bg-(--purple)/20 p-8 -mx-8"> 
-              <div class="flex flex-col gap-4 flex-1">
-                <div class="text-big-numbers text-(--purple)"><span data-number="35">25</span>%+</div>
+            <div class="flex flex-col sm:flex-row gap-8 sm:gap-16 rounded-xl bg-(--purple)/20 p-8 sm:-mx-8"> 
+              <div class="flex flex-col gap-2 sm:gap-4 flex-1">
+                <div class="text-big-numbers text-(--purple) text-center sm:text-left"><span data-number="35">25</span>%+</div>
                 <div class="flex flex-col gap-2">
-                  <h5 class="text-heading-five">Faster <br class="sm:hidden">contract setup</h5>
-                  <p class="text-body text-body-mobile-small">Time saved from draft to send using structured agreement workflows</p>
+                  <h5 class="text-heading-five text-center sm:text-left">Faster contract setup</h5>
+                  <p class="text-body text-body-mobile-small text-center sm:text-left">Time saved from draft to send using structured agreement workflows</p>
                 </div>
               </div>
-              <div class="flex flex-col gap-4 flex-1">
-                <div class="text-big-numbers text-(--purple)"><span data-number="15">5</span>%</div>
+              <div class="flex flex-col gap-2 sm:gap-4 flex-1">
+                <div class="text-big-numbers text-(--purple) text-center sm:text-left"><span data-number="15">5</span>%</div>
                 <div class="flex flex-col gap-2">
-                  <h5 class="text-heading-five">Less <br class="sm:hidden">operational drag</h5>
-                  <p class="text-body text-body-mobile-small">Reduction in manual coordination across sales, finance, and operations</p>
+                  <h5 class="text-heading-five text-center sm:text-left">Less operational drag</h5>
+                  <p class="text-body text-body-mobile-small text-center sm:text-left">Reduction in manual coordination across sales, finance, and operations</p>
                 </div>
               </div>
-              <div class="flex flex-col gap-4 flex-1">
-                <div class="text-big-numbers text-(--purple)"><span data-number="20">12</span>%</div>
+              <div class="flex flex-col gap-2 sm:gap-4 flex-1">
+                <div class="text-big-numbers text-(--purple) text-center sm:text-left"><span data-number="20">12</span>%</div>
                 <div class="flex flex-col gap-2">
-                  <h5 class="text-heading-five">Fewer <br class="sm:hidden">billing disputes</h5>
-                  <p class="text-body text-body-mobile-small">Fewer invoice corrections caused by contract mismatches</p>
+                  <h5 class="text-heading-five text-center sm:text-left">Fewer billing disputes</h5>
+                  <p class="text-body text-body-mobile-small text-center sm:text-left">Fewer invoice corrections caused by contract mismatches</p>
                 </div>
               </div>
             </div>

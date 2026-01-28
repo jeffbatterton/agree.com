@@ -59,6 +59,7 @@ let programmaticScrollTarget = null;
 let programmaticScrollTargetY = null;
 let programmaticScrollStartedAt = 0;
 const qualitiesNumbersAnimated = new Set(); // Track which number elements have been animated
+const allNumbersAnimated = new Set(); // Track all animated number elements across the page
 let qualitiesStaggerStarted = false;
 const qualitiesClassTimeouts = new Map();
 
@@ -148,6 +149,42 @@ function animateNumber(element, startValue, endValue, suffix) {
   };
   
   animate();
+}
+
+// General function to handle data-number animations for any section
+function handleNumberAnimations(container) {
+  const numberElements = container.querySelectorAll('[data-number]');
+  const viewportHeight = window.innerHeight;
+  
+  numberElements.forEach(element => {
+    // Skip if already animated
+    if (allNumbersAnimated.has(element)) {
+      return;
+    }
+    
+    // Check if element is in viewport
+    const elementRect = element.getBoundingClientRect();
+    const isInViewport = elementRect.top < viewportHeight && elementRect.bottom > 0;
+    
+    if (isInViewport) {
+      // Get target value from data-number attribute
+      const endValue = parseFloat(element.getAttribute('data-number'));
+      if (!isNaN(endValue)) {
+        // Get current displayed value
+        const currentText = element.textContent.trim();
+        const numericMatch = currentText.match(/[\d.]+/);
+        if (numericMatch) {
+          const startValue = parseFloat(numericMatch[0]);
+          // Preserve suffix (like "+" in "90%+")
+          const suffix = currentText.replace(/[\d.]+/, '');
+          
+          // Mark as animated and start animation
+          allNumbersAnimated.add(element);
+          animateNumber(element, startValue, endValue, suffix);
+        }
+      }
+    }
+  });
 }
 
 function handleQualitiesSection(section, scrollPercentage, isInViewport) {
@@ -539,6 +576,9 @@ function updateScroll() {
       tab.classList.remove('isActive');
     }
   });
+  
+  // Handle number animations for all sections
+  handleNumberAnimations(document.body);
 }
 
 // ============================================
@@ -1195,6 +1235,343 @@ if (!canvas) {
         updateScroll();
       }
     });
+  });
+}
+
+// SECONDARY RIBBON
+// ============================================
+
+const secondaryCanvas = document.querySelector("[data-ribbon-secondary--canvas]");
+if (secondaryCanvas) {
+  const ctx = secondaryCanvas.getContext("2d");
+
+  // CONFIGURATION
+  const ENABLE_MOTION = true;
+  const LINES = 60;
+  const LINE_WIDTH = 1;
+  const SEED = Math.random() * 10000;
+  const TIME_SPEED = 0.003;
+  const PHASE_DRIFT_SPEED = 0.5;
+  
+  // Opacity gradient configuration - tune these values
+  const RIBBON_OPACITY_MIN = 0.075; // Minimum opacity (at top and bottom edges)
+  const RIBBON_OPACITY_MAX = 0.45; // Maximum opacity (at vertical middle)
+  
+  // 3D Perspective configuration
+  const PERSPECTIVE = 800; // Perspective distance
+  const RIBBON_DEPTH = 420; // Depth of ribbon in 3D space (increased for more spacing)
+  const WAVE_FREQUENCY = 0.015; // Frequency of waves
+  const WAVE_AMPLITUDE = 40; // Amplitude of waves
+  const RIBBON_HEIGHT_RATIO = 0.8; // Ribbon should cover 80% of container height
+  
+  // Randomized twist configuration - different for each page load
+  // Generate random twist amounts between 0.25 (90 degrees) and 1.0 (180 degrees)
+  const TWIST_1_AMOUNT = Math.random() * 0.75 + 0.25; // 90-180 degrees
+  const TWIST_2_AMOUNT = Math.random() * 0.75 + 0.25; // 90-180 degrees
+  // Randomize which section gets which twist
+  const TWIST_1_POSITION = Math.random() * 0.3 + 0.2; // First twist region (20-50% along ribbon)
+  const TWIST_2_POSITION = Math.random() * 0.3 + 0.5; // Second twist region (50-80% along ribbon)
+  const TWIST_REGION_WIDTH = 0.15; // Width of each twist region (15% of ribbon)
+
+  // HELPER FUNCTIONS
+  function hash1(n) {
+    const s = Math.sin(n * 127.1) * 43758.5453123;
+    return s - Math.floor(s);
+  }
+
+  function smoothstep(t) {
+    return t * t * (3 - 2 * t);
+  }
+  
+  // Project 3D point to 2D screen
+  function project3D(x, y, z) {
+    const scale = PERSPECTIVE / (PERSPECTIVE + z);
+    return {
+      x: x * scale,
+      y: y * scale,
+      z: z
+    };
+  }
+  
+  // Map 3D x coordinate to screen x coordinate
+  function mapXToScreen(x3d, z3d) {
+    const projected = project3D(x3d, 0, z3d);
+    // The projection centers at 0, so we need to offset by half width
+    // But we want x=0 to map to screen x=0 and x=width to map to screen x=width
+    return projected.x + width * 0.5;
+  }
+
+  // STATE
+  let width = 0, height = 0, dpr = 1;
+  let t = 0;
+  let isAnimating = false;
+  let frameCount = 0;
+  let skipFrames = 0;
+
+  // INITIALIZATION
+  function init() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    
+    // Get dimensions from parent section since canvas is absolutely positioned
+    const parentSection = secondaryCanvas.closest('section');
+    if (!parentSection) {
+      return;
+    }
+    
+    height = parentSection.offsetHeight || parentSection.getBoundingClientRect().height;
+    width = parentSection.offsetWidth || parentSection.getBoundingClientRect().width;
+
+    if (height <= 0 || width <= 0) {
+      return;
+    }
+    
+    secondaryCanvas.style.width = width + 'px';
+    secondaryCanvas.style.height = height + 'px';
+
+    const maxHeight = 5000;
+    if (height > maxHeight) {
+      height = maxHeight;
+    }
+
+    if (height > 3000) {
+      skipFrames = 1;
+    } else if (height > 2000) {
+      skipFrames = 0;
+    } else {
+      skipFrames = 0;
+    }
+
+    secondaryCanvas.width = Math.floor(width * dpr);
+    secondaryCanvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    if (!ENABLE_MOTION) {
+      draw();
+    }
+  }
+
+  // DRAWING
+  function draw() {
+    if (width <= 0 || height <= 0) {
+      if (ENABLE_MOTION) {
+        isAnimating = false;
+      }
+      return;
+    }
+
+    frameCount++;
+    const shouldDraw = skipFrames === 0 || frameCount % (skipFrames + 1) === 0;
+
+    if (shouldDraw) {
+      ctx.clearRect(0, 0, width, height);
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.lineWidth = LINE_WIDTH;
+    }
+
+    // Position ribbon at bottom of container, covering 80% of height
+    const ribbonHeight = height * RIBBON_HEIGHT_RATIO;
+    const yBase = height - ribbonHeight * 0.5; // Position at bottom, centered on the ribbon's height
+    // Extend 10% beyond edges to avoid gaps
+    const xStart = -width * 0.1;
+    const xEnd = width * 1.1;
+    const STEPS = 300; // Number of segments for smooth curves
+    
+    // Motion phase
+    const drift = ENABLE_MOTION ? (t * PHASE_DRIFT_SPEED) : 0;
+    const TAU = Math.PI * 2;
+
+    if (shouldDraw) {
+      // Store line data for z-sorting
+      const lineData = [];
+
+      // Calculate line spacing
+      const lineSpacing = RIBBON_DEPTH / (LINES - 1);
+      const midLine = (LINES - 1) / 2;
+      
+      for (let i = 0; i < LINES; i++) {
+        const zOffset = (i - midLine) * lineSpacing; // Z position in 3D space
+        
+        const points = [];
+        
+        // Calculate points for this line in 3D space
+        for (let j = 0; j <= STEPS; j++) {
+          const u = j / STEPS;
+          const x = xStart + (xEnd - xStart) * u;
+          
+          // Create 3D wave pattern with twist
+          const wavePhase = x * WAVE_FREQUENCY + drift;
+          const waveY = Math.sin(wavePhase) * WAVE_AMPLITUDE;
+          
+          // Add twist rotation - lines rotate around X axis as they progress
+          // This creates the crossover effect with two randomized twist regions
+          let twistAmount = 0;
+          
+          // Calculate distance from each twist region center
+          const dist1 = Math.abs(u - TWIST_1_POSITION) / TWIST_REGION_WIDTH;
+          const dist2 = Math.abs(u - TWIST_2_POSITION) / TWIST_REGION_WIDTH;
+          
+          // Apply twist from region 1 (with smooth falloff)
+          // Use smoothstep for smoother envelope
+          if (dist1 < 1) {
+            const envelope1 = 1 - smoothstep(Math.min(1, dist1)); // Smooth falloff
+            // Use different phase for variety
+            const twist1 = Math.sin(u * Math.PI * 2 + drift * 0.5) * TWIST_1_AMOUNT * envelope1;
+            twistAmount += twist1;
+          }
+          
+          // Apply twist from region 2 (with smooth falloff and different phase)
+          if (dist2 < 1) {
+            const envelope2 = 1 - smoothstep(Math.min(1, dist2)); // Smooth falloff
+            // Use different phase offset (PI/2) to make it distinct from twist 1
+            const twist2 = Math.sin(u * Math.PI * 2 + drift * 0.5 + Math.PI * 0.5) * TWIST_2_AMOUNT * envelope2;
+            twistAmount += twist2;
+          }
+          
+          const twistAngle = twistAmount * Math.PI;
+          
+          // Rotate the line around X axis based on position
+          // This makes lines cross over each other
+          const cosTwist = Math.cos(twistAngle);
+          const sinTwist = Math.sin(twistAngle);
+          
+          // Original position in ribbon's local space
+          const localY = waveY;
+          const localZ = zOffset;
+          
+          // Apply rotation around X axis
+          const y3d = localY * cosTwist - localZ * sinTwist;
+          const z3d = localY * sinTwist + localZ * cosTwist;
+          const x3d = x;
+          
+          // Project to 2D
+          // For x coordinate: convert from screen space (0 to width) to centered space, project, then convert back
+          const xCentered = x3d - width * 0.5;
+          const xProjected = xCentered * (PERSPECTIVE / (PERSPECTIVE + z3d));
+          const screenX = width * 0.5 + xProjected;
+          
+          // For y coordinate, use standard projection and scale to cover 80% of height
+          const projected = project3D(0, y3d, z3d);
+          // Scale the y projection to match the desired ribbon height
+          const yScale = ribbonHeight / (RIBBON_DEPTH + WAVE_AMPLITUDE * 2);
+          const screenY = yBase + projected.y * yScale;
+          
+          // Calculate opacity gradient based on vertical position
+          // Lower opacity at top and bottom edges, higher opacity in the middle
+          const ribbonTop = yBase - ribbonHeight * 0.5;
+          const ribbonBottom = yBase + ribbonHeight * 0.5;
+          const ribbonCenter = (ribbonTop + ribbonBottom) * 0.5;
+          const distanceFromCenter = Math.abs(screenY - ribbonCenter);
+          const maxDistance = ribbonHeight * 0.5;
+          const normalizedDistance = Math.min(1, distanceFromCenter / maxDistance);
+          
+          // Use smoothstep for smooth gradient transition
+          const smoothT = normalizedDistance * normalizedDistance * (3 - 2 * normalizedDistance);
+          
+          // Interpolate from max opacity (center) to min opacity (top/bottom edges)
+          const finalOpacity = RIBBON_OPACITY_MAX - (RIBBON_OPACITY_MAX - RIBBON_OPACITY_MIN) * smoothT;
+          
+          points.push({ 
+            x: screenX, 
+            y: screenY, 
+            z: z3d,
+            opacity: finalOpacity
+          });
+        }
+        
+        // Calculate average z for sorting
+        const avgZ = points.reduce((sum, p) => sum + p.z, 0) / points.length;
+        
+        lineData.push({
+          points: points,
+          avgZ: avgZ
+        });
+      }
+      
+      // Sort by z-depth (closer lines render last)
+      lineData.sort((a, b) => a.avgZ - b.avgZ);
+      
+      // Draw lines with vertical gradient opacity
+      for (const line of lineData) {
+        // Find min/max y positions for vertical gradient
+        const yPositions = line.points.map(p => p.y);
+        const minY = Math.min(...yPositions);
+        const maxY = Math.max(...yPositions);
+        
+        // Create vertical gradient from top to bottom
+        const gradient = ctx.createLinearGradient(0, minY, 0, maxY);
+        
+        // Get opacity at top, middle, and bottom of the line
+        const topPoint = line.points.reduce((min, p) => p.y < min.y ? p : min, line.points[0]);
+        const bottomPoint = line.points.reduce((max, p) => p.y > max.y ? p : max, line.points[0]);
+        const middleIndex = Math.floor(line.points.length / 2);
+        const middlePoint = line.points[middleIndex];
+        
+        const topOpacity = topPoint.opacity;
+        const middleOpacity = middlePoint.opacity;
+        const bottomOpacity = bottomPoint.opacity;
+        
+        // Create gradient stops: top and bottom lower opacity, middle higher
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${topOpacity.toFixed(3)})`);
+        gradient.addColorStop(0.5, `rgba(255, 255, 255, ${middleOpacity.toFixed(3)})`);
+        gradient.addColorStop(1, `rgba(255, 255, 255, ${bottomOpacity.toFixed(3)})`);
+        
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
+        
+        for (let j = 0; j < line.points.length; j++) {
+          const p = line.points[j];
+          if (j === 0) {
+            ctx.moveTo(p.x, p.y);
+          } else {
+            ctx.lineTo(p.x, p.y);
+          }
+        }
+        
+        ctx.stroke();
+      }
+    }
+
+    if (ENABLE_MOTION) {
+      t += TIME_SPEED;
+      isAnimating = true;
+      requestAnimationFrame(draw);
+    } else {
+      isAnimating = false;
+    }
+  }
+
+  function startAnimation() {
+    if (ENABLE_MOTION && !isAnimating) {
+      isAnimating = true;
+      requestAnimationFrame(draw);
+    }
+  }
+
+  // Wait for layout and initialize
+  function tryInit() {
+    init();
+    if (width > 0 && height > 0) {
+      startAnimation();
+    } else {
+      // Retry if dimensions aren't ready yet
+      requestAnimationFrame(() => {
+        requestAnimationFrame(tryInit);
+      });
+    }
+  }
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(tryInit);
+  });
+
+  // Handle resize
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      init();
+    }, 100);
   });
 }
 

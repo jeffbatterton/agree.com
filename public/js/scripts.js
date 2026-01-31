@@ -18,6 +18,14 @@ const JOURNEY_VISUAL_AGREEMENTS_EXIT_END_SCALE = 0.25; // Scale at the end of ex
 const JOURNEY_VISUAL_AGREEMENTS_EXIT_RATE = 3.5; // Exit easing strength (2 = faster at start, slower at end; does NOT change start/end scroll positions)
 const JOURNEY_VISUAL_AGREEMENTS_EXIT_END_OPACITY = .75; // Opacity at the end of exit animation
 
+// Billing visual: entry from top down (negative initial translateY), same exit as agreements
+const JOURNEY_VISUAL_BILLING_ENTRY_INITIAL_TRANSLATE_Y_FACTOR = -0.5; // negative = start above, animate down
+const JOURNEY_VISUAL_BILLING_ENTRY_START_AT_SCROLL_PROGRESS = 0.275; // delay entry until scroll progress reaches this (0..1)
+const JOURNEY_VISUAL_BILLING_ENTRY_COMPLETE_AT_SCROLL_PROGRESS = 0.5;
+const JOURNEY_VISUAL_BILLING_ENTRY_START_SCALE = 0.25;
+const JOURNEY_VISUAL_BILLING_SCROLL_SECTION_HEIGHT_FACTOR = 0.5;
+const BILLING_AMOUNT_ANIMATION_DURATION_MS = 750; // Duration for phase-3 amount count-up (USD)
+
 // Display card animation configuration
 const DISPLAY_CARD_TRANSLATE_Y_THRESHOLD = 50; // Scroll percentage where translateY reaches 0
 const DISPLAY_CARD_EXIT_TRANSLATE_Y = 18; // Final translateY in exit phase (vh) - for fine-tuning
@@ -60,6 +68,7 @@ let programmaticScrollTargetY = null;
 let programmaticScrollStartedAt = 0;
 const qualitiesNumbersAnimated = new Set(); // Track which number elements have been animated
 const allNumbersAnimated = new Set(); // Track all animated number elements across the page
+const billingAmountAnimated = new Set(); // Track billing amount elements currently showing phase-3 (target) value; reverted when phase-3 removed
 let qualitiesStaggerStarted = false;
 const qualitiesClassTimeouts = new Map();
 
@@ -149,6 +158,31 @@ function animateNumber(element, startValue, endValue, suffix) {
   };
   
   animate();
+}
+
+function formatUSD(value) {
+  return '$' + Math.round(value).toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+
+function parseUSDText(text) {
+  if (text == null) return NaN;
+  const match = String(text).replace(/[$,]/g, '').match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : NaN;
+}
+
+function animateNumberToUSD(element, startValue, endValue, durationMs) {
+  const valueDifference = endValue - startValue;
+  const startTime = performance.now();
+
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(1, elapsed / durationMs);
+    const currentValue = startValue + valueDifference * progress;
+    element.textContent = formatUSD(currentValue);
+    if (progress < 1) requestAnimationFrame(tick);
+    else element.textContent = formatUSD(endValue);
+  }
+  requestAnimationFrame(tick);
 }
 
 // General function to handle data-number animations for any section
@@ -260,10 +294,12 @@ function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight)
   const sectionTop = sectionRect.top;
   
   let scrollProgress = 0;
-  if (sectionTop <= viewportHeight && sectionTop >= -sectionHeight) {
-    const denomFactor = visualJourneyId === 'agreements'
-      ? JOURNEY_VISUAL_AGREEMENTS_SCROLL_SECTION_HEIGHT_FACTOR
+  const denomFactor = visualJourneyId === 'agreements'
+    ? JOURNEY_VISUAL_AGREEMENTS_SCROLL_SECTION_HEIGHT_FACTOR
+    : visualJourneyId === 'billing'
+      ? JOURNEY_VISUAL_BILLING_SCROLL_SECTION_HEIGHT_FACTOR
       : 0.5;
+  if (sectionTop <= viewportHeight && sectionTop >= -sectionHeight) {
     scrollProgress = Math.max(
       0,
       Math.min(1, (viewportHeight - sectionTop) / (viewportHeight + sectionHeight * denomFactor))
@@ -274,29 +310,40 @@ function handleJourneyVisuals(visual, parentSection, sectionRect, sectionHeight)
   
   const initialTranslateYFactor = visualJourneyId === 'agreements'
     ? JOURNEY_VISUAL_AGREEMENTS_ENTRY_INITIAL_TRANSLATE_Y_FACTOR
-    : 0.5;
+    : visualJourneyId === 'billing'
+      ? JOURNEY_VISUAL_BILLING_ENTRY_INITIAL_TRANSLATE_Y_FACTOR
+      : 0.5;
   const initialTranslateY = sectionHeight * initialTranslateYFactor;
   
   const entryCompleteAt = visualJourneyId === 'agreements'
     ? JOURNEY_VISUAL_AGREEMENTS_ENTRY_COMPLETE_AT_SCROLL_PROGRESS
-    : 0.5;
-  const animationProgress = Math.min(1, scrollProgress / entryCompleteAt);
+    : visualJourneyId === 'billing'
+      ? JOURNEY_VISUAL_BILLING_ENTRY_COMPLETE_AT_SCROLL_PROGRESS
+      : 0.5;
+  const entryStartAt = visualJourneyId === 'billing'
+    ? JOURNEY_VISUAL_BILLING_ENTRY_START_AT_SCROLL_PROGRESS
+    : 0;
+  const entryRange = Math.max(0.001, entryCompleteAt - entryStartAt);
+  const animationProgress = scrollProgress < entryStartAt
+    ? 0
+    : Math.min(1, (scrollProgress - entryStartAt) / entryRange);
   let translateY = initialTranslateY * (1 - animationProgress);
   let opacity = animationProgress;
   const entryStartScale = visualJourneyId === 'agreements'
     ? JOURNEY_VISUAL_AGREEMENTS_ENTRY_START_SCALE
-    : 0.25;
+    : visualJourneyId === 'billing'
+      ? JOURNEY_VISUAL_BILLING_ENTRY_START_SCALE
+      : 0.25;
   let scale = entryStartScale + (animationProgress * (1 - entryStartScale));
 
-  // Agreements-only exit animation driven by scroll percentage
-  if (visualJourneyId === 'agreements') {
+  // Exit animation (agreements and billing): drive translateY, scale, opacity by scroll percentage
+  if (visualJourneyId === 'agreements' || visualJourneyId === 'billing') {
     const scrollPercentage = calculateJourneyScrollPercentage(sectionRect, sectionHeight);
     if (scrollPercentage >= JOURNEY_EXIT_PERCENTAGE) {
       const exitRange = 100 - JOURNEY_EXIT_PERCENTAGE;
       const baseExitProgress = exitRange > 0
         ? Math.min(1, Math.max(0, (scrollPercentage - JOURNEY_EXIT_PERCENTAGE) / exitRange))
         : 1;
-      // Ease-out curve controlled by rate (keeps start/end positions the same)
       const exitProgress = 1 - Math.pow(1 - baseExitProgress, JOURNEY_VISUAL_AGREEMENTS_EXIT_RATE);
 
       translateY = exitProgress * (viewportHeight * JOURNEY_VISUAL_AGREEMENTS_EXIT_TRANSLATE_VIEWPORTS);
@@ -526,7 +573,35 @@ function updateScroll() {
     const isInViewport = rect.top <= viewportHeight && rect.bottom >= 0;
     handleJourneyPhaseClasses(section, scrollPercentage, isInViewport);
   });
-  
+
+  // Billing section phase-3: animate amount from initial to target (USD); reversible when phase-3 removed
+  const billingSection = document.querySelector('[data-journey="billing"]');
+  if (billingSection) {
+    const hasPhase3 = billingSection.classList.contains('journey-visuals--phase-3');
+    const amountEls = billingSection.querySelectorAll('[data-journey-visuals--billing-amount]');
+    if (hasPhase3) {
+      amountEls.forEach(function (el) {
+        if (billingAmountAnimated.has(el)) return;
+        const initialAttr = el.getAttribute('data-journey-visuals--billing-amount-initial');
+        const targetAttr = el.getAttribute('data-journey-visuals--billing-amount');
+        const startValue = initialAttr != null ? parseFloat(initialAttr) : parseUSDText(el.textContent);
+        const endValue = targetAttr != null ? parseFloat(targetAttr) : NaN;
+        if (!isNaN(endValue) && !isNaN(startValue)) {
+          billingAmountAnimated.add(el);
+          animateNumberToUSD(el, startValue, endValue, BILLING_AMOUNT_ANIMATION_DURATION_MS);
+        }
+      });
+    } else {
+      billingAmountAnimated.forEach(function (el) {
+        if (!billingSection.contains(el)) return;
+        const initialAttr = el.getAttribute('data-journey-visuals--billing-amount-initial');
+        const initialValue = initialAttr != null ? parseFloat(initialAttr) : NaN;
+        if (!isNaN(initialValue)) el.textContent = formatUSD(initialValue);
+        billingAmountAnimated.delete(el);
+      });
+    }
+  }
+
   // Handle journey visuals
   const journeyVisuals = document.querySelectorAll('[data-journey-visual]');
   journeyVisuals.forEach(visual => {
@@ -663,6 +738,19 @@ function initialize() {
     const tabs = document.querySelectorAll('[data-button-tab]');
     tabs.forEach(tab => {
       tab.addEventListener('click', handleTabClick);
+    });
+
+    // Billing visual dates: Card 1 = this month, Card 2 = next month, Card 3 = month after next (month only)
+    const MONTH_ABBR = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const today = new Date();
+    const months = [
+      new Date(today.getFullYear(), today.getMonth(), 1),
+      new Date(today.getFullYear(), today.getMonth() + 1, 1),
+      new Date(today.getFullYear(), today.getMonth() + 2, 1)
+    ];
+    [1, 2, 3].forEach(function(i) {
+      const el = document.querySelector('[data-journey-visuals--billing-date="' + i + '"]');
+      if (el) el.textContent = MONTH_ABBR[months[i - 1].getMonth()];
     });
     
     // Randomize notification card animation variables

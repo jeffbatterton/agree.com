@@ -371,9 +371,6 @@
   .inline-flex {
     display: inline-flex;
   }
-  .aspect-square {
-    aspect-ratio: 1 / 1;
-  }
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
@@ -418,9 +415,6 @@
   }
   .h-\[300px\] {
     height: 300px;
-  }
-  .h-\[600px\] {
-    height: 600px;
   }
   .h-auto {
     height: auto;
@@ -536,9 +530,6 @@
     --tw-scale-y: 75%;
     --tw-scale-z: 75%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
-  }
-  .rotate-45 {
-    rotate: 45deg;
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
@@ -974,9 +965,6 @@
   }
   .opacity-0 {
     opacity: 0%;
-  }
-  .opacity-5 {
-    opacity: 5%;
   }
   .opacity-10 {
     opacity: 10%;
@@ -2380,7 +2368,7 @@
   }
   .journey-visuals--phase-2 .journey-visuals--billing--invoice {
     transform: scale(.75);
-    opacity: .9;
+    opacity: .95;
   }
   .journey-visuals--billing--invoice h1 {
     font-size: 1.5rem;
@@ -2714,6 +2702,31 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+.journey-background-ribbon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 800px;
+  height: 800px;
+  max-width: 800px;
+  max-height: 800px;
+  transform: translate(-50%, -50%);
+  opacity: 0.1;
+  flex-shrink: 0;
+  -webkit-mask-image: radial-gradient(circle, white 0%, transparent 70%);
+  mask-image: radial-gradient(circle, white 0%, transparent 70%);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+@media (min-width: 640px) {
+  .journey-background-ribbon {
+    opacity: 0.4;
+  }
 }
 @property --tw-translate-x {
   syntax: "*";

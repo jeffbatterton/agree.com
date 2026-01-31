@@ -925,7 +925,7 @@
 
   .journey-visuals--phase-2 .journey-visuals--billing--invoice {
     transform: scale(.75);
-    opacity: .9;
+    opacity: .95;
   }
 
   .journey-visuals--billing--invoice h1 {
@@ -1318,4 +1318,31 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
+}
+
+.journey-background-ribbon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 800px;
+  height: 800px;
+  max-width: 800px;
+  max-height: 800px;
+  transform: translate(-50%, -50%);
+  opacity: 0.1;
+  flex-shrink: 0;
+  -webkit-mask-image: radial-gradient(circle, white 0%, transparent 70%);
+  mask-image: radial-gradient(circle, white 0%, transparent 70%);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+@media (min-width: 640px) {
+  .journey-background-ribbon {
+    opacity: 0.4;
+  }
 }

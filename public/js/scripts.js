@@ -161,7 +161,7 @@ function animateNumber(element, startValue, endValue, suffix) {
 }
 
 function formatUSD(value) {
-  return '$' + Math.round(value).toLocaleString('en-US', { maximumFractionDigits: 0 });
+  return Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function parseUSDText(text) {
@@ -170,7 +170,13 @@ function parseUSDText(text) {
   return match ? parseFloat(match[0]) : NaN;
 }
 
+function getBillingAmountUnit(element) {
+  const unit = element.getAttribute('data-journey-visuals--billing-amount-unit');
+  return unit != null ? unit : '';
+}
+
 function animateNumberToUSD(element, startValue, endValue, durationMs) {
+  const unit = getBillingAmountUnit(element);
   const valueDifference = endValue - startValue;
   const startTime = performance.now();
 
@@ -178,9 +184,9 @@ function animateNumberToUSD(element, startValue, endValue, durationMs) {
     const elapsed = now - startTime;
     const progress = Math.min(1, elapsed / durationMs);
     const currentValue = startValue + valueDifference * progress;
-    element.textContent = formatUSD(currentValue);
+    element.textContent = unit + formatUSD(currentValue);
     if (progress < 1) requestAnimationFrame(tick);
-    else element.textContent = formatUSD(endValue);
+    else element.textContent = unit + formatUSD(endValue);
   }
   requestAnimationFrame(tick);
 }
@@ -596,7 +602,7 @@ function updateScroll() {
         if (!billingSection.contains(el)) return;
         const initialAttr = el.getAttribute('data-journey-visuals--billing-amount-initial');
         const initialValue = initialAttr != null ? parseFloat(initialAttr) : NaN;
-        if (!isNaN(initialValue)) el.textContent = formatUSD(initialValue);
+        if (!isNaN(initialValue)) el.textContent = getBillingAmountUnit(el) + formatUSD(initialValue);
         billingAmountAnimated.delete(el);
       });
     }

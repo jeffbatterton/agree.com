@@ -876,7 +876,7 @@
     display: block;
   }
 
-  .journey-visuals--phase-3 .journey-visuals--agreement--signature path {
+  .journey-visuals--phase-3 .journey-visuals--agreement--signature.is-animated path {
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
     animation: journey-visuals--agreement--signature 1.5s ease-out forwards;
@@ -899,214 +899,6 @@
     to {
       stroke-dashoffset: 0;
     }
-  }
-
-  .journey-visuals--billing {
-    position: relative;
-  }
-
-  .journey-visuals--billing--invoice {
-    position: relative;
-    z-index: 1;
-    isolation: isolate;
-    display: flex;
-    width: 24rem;
-    height: 30.9375rem;
-    padding: 2rem 1.5rem 1.5rem 1.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
-    border-radius: 1.75rem;
-    background: linear-gradient(180deg, rgba(77, 60, 255, 0.00) 0%, rgba(77, 60, 255, 0.05) 100%), #F6F7FB;
-    box-shadow: 0 16px 48px 0 rgba(21, 24, 44, 0.05);
-    transition: all 0.25s ease-out;
-    transform-origin: left center;
-  }
-
-  .journey-visuals--phase-2 .journey-visuals--billing--invoice {
-    transform: scale(.75);
-    opacity: .95;
-  }
-
-  .journey-visuals--billing--invoice h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 110%;
-    width: 100%;
-  }
-
-  .journey-visuals--billing--invoice--body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2rem;
-    flex: 1 0 0;
-    align-self: stretch;
-  }
-
-  .journey-visuals--billing--invoice--paragraph {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .75rem;
-    align-self: stretch;
-    width: 100%;
-  }
-
-  .journey-visuals--billing--invoice--line {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-    transition: all 0.125s ease-out;
-  }
-
-  .journey-visuals--billing--invoice--skeleton {
-    height: 1rem;
-    align-self: stretch;
-    background: #DDDFE5;
-    width: 100%;
-    transition: all 0.125s ease-out;
-    border-radius: 1rem;
-  }
-
-  .journey-visuals--billing--invoice--top-line {
-    height: .5rem;
-    align-self: stretch;
-    background: var(--pink);
-    width: 100%;
-    border-radius: 1rem;
-  }
-
-  .journey-visuals--billing--card-container {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 1rem;
-    align-self: stretch;
-    z-index: 1;
-  }
-
-  .journey-visuals--billing--card {
-    width: 15rem;
-    padding: 0.75rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, rgba(244, 52, 172, 0.00) 0%, rgba(244, 52, 172, 0.05) 100%), #F6F7FB;
-    box-shadow: 0 8px 24px 0 rgba(21, 24, 44, 0.11);
-    display: none;
-    transform: scale(0);
-    transition: all 0.25s ease-out;
-    animation: journey-visuals--billing--card .25s ease-in-out forwards;
-  }
-
-  .journey-visuals--phase-2 .journey-visuals--billing--card {
-    display: flex;
-  }
-
-  .journey-visuals--billing--card:nth-child(2) {
-    animation-delay: 0.1s !important;
-  }
-
-  .journey-visuals--billing--card:nth-child(3) {
-    animation-delay: 0.2s !important;
-  }
-
-  @keyframes journey-visuals--billing--card {
-    80% {
-      transform: scale(1.1);
-    }
-
-    90% {
-      transform: scale(.9);
-    }
-
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .journey-visuals--billing--card--header {
-    display: flex;
-    align-items: center;
-    align-self: stretch;
-    gap: 0.25rem;
-  }
-
-  .journey-visuals--billing--card--header-amount {
-    width: fit-content;
-    flex: 0 0 auto;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: color 0.25s ease-out;
-    position: relative;
-  }
-
-  .journey-visuals--phase-3 .journey-visuals--billing--card--header-amount:after {
-    display: block;
-    position: absolute;
-    background: var(--green);
-    content: "";
-    height: 8px;
-    width: 8px;
-    border-radius: 100%;
-    background: var(--green);
-    top: 8px;
-    left: 59px;
-    opacity: 0;
-    transform: scale(0);
-    animation: journey-visuals--billing--card--header-amount 2s ease-out forwards;
-  }
-  
-  .journey-visuals--billing--card:nth-child(2) .journey-visuals--billing--card--header-amount:after {
-    animation-delay: 0.15s !important;
-  }
-
-  .journey-visuals--billing--card:nth-child(3) .journey-visuals--billing--card--header-amount:after {
-    animation-delay: 0.3s !important;
-  }
-
-  @keyframes journey-visuals--billing--card--header-amount {
-    10%,
-    90% {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    to {
-      opacity: 0;
-      transform: scale(0);
-    }
-  }
-
-  .journey-visuals--billing--card--header-date {
-    flex: 1 1 0;
-    min-width: 0;
-    text-align: right;
-    font-size: 0.75rem;
-    font-weight: 500;
-    opacity: .5;
-  }
-
-  .journey-visuals--billing--card--pill {
-    display: flex;
-    padding: 0.25rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.25rem;
-    border-radius: 0.25rem;
-    background: color-mix(in srgb, var(--black) 10%, transparent);
-    font-size: 0.625rem;
-    font-weight: 600;
-    line-height: 100%;
-    color: color-mix(in srgb, var(--black) 70%, transparent);
   }
 
   .journey-bullet {
@@ -1345,4 +1137,121 @@
   .journey-background-ribbon {
     opacity: 0.4;
   }
+}
+
+.journey-visuals--card {
+  display: flex;
+  width: 15rem;
+  padding: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  background: #F6F7FB;
+  box-shadow: 0 8px 24px 0 rgba(21, 24, 44, 0.11);
+}
+
+.journey-visuals--card--header {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  align-self: stretch;
+  color: color-mix(in srgb, var(--black) 40%, transparent);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 110%; 
+}
+
+.journey-visuals--card--billing-event {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  align-self: stretch;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.journey-visuals--card--billing-event--timestamp {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+.journey-visuals--attachment {
+  display: flex;
+  padding: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--black) 10%, transparent);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 100%;
+  color: color-mix(in srgb, var(--black) 70%, transparent);
+}
+
+/* .animation--bounce-in {
+  animation: animation--bounce-in 0.25s ease-in-out forwards;
+} */
+
+@keyframes animation--bounce-in {
+  0% {
+    visibility: visible;
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  80% {
+    transform: scale(1.1);
+  }
+
+  90% {
+    transform: scale(.9);
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.journey-visuals--phase-1--item,
+.journey-visuals--phase-2--item,
+.journey-visuals--phase-3--item {
+  display: none;
+  visibility: hidden;
+}
+
+.journey-visuals--phase-1 .journey-visuals--phase-1--item, 
+.journey-visuals--phase-2 .journey-visuals--phase-2--item,
+.journey-visuals--phase-3 .journey-visuals--phase-3--item {
+  display: flex;
+}
+
+.journey-visuals--phase-1 .journey-visuals--phase-1--item:not(.animation--bounce-in), 
+.journey-visuals--phase-2 .journey-visuals--phase-2--item:not(.animation--bounce-in),
+.journey-visuals--phase-3 .journey-visuals--phase-3--item:not(.animation--bounce-in) {
+  visibility: visible;
+}
+
+.journey-visuals--phase-1 .journey-visuals--phase-1--item.animation--bounce-in, 
+.journey-visuals--phase-2 .journey-visuals--phase-2--item.animation--bounce-in,
+.journey-visuals--phase-3 .journey-visuals--phase-3--item.animation--bounce-in {
+  animation-name: animation--bounce-in;
+  animation-duration: 0.25s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.animation-delay--100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay--150 {
+  animation-delay: 150ms;
 }
